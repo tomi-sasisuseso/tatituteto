@@ -16,8 +16,7 @@
 int game_state;
 int game_timer;
 
-
-Sprite* sprBack;
+bool isPaused;
 
 int bgmNo;
 
@@ -28,6 +27,8 @@ void game_init()
 {
     game_state = 0;
     game_timer = 0;
+
+    isPaused = false;
 }
 
 //--------------------------------------
@@ -35,7 +36,7 @@ void game_init()
 //--------------------------------------
 void game_deinit()
 {
-    safe_delete(sprBack);
+    
 }
 
 //--------------------------------------
@@ -43,12 +44,12 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
+
+
     switch (game_state)
     {
     case 0:
         //////// 初期設定 ////////
-
-        sprBack = sprite_load(L"./Data/Images/DJ-booth.jpg");
 
         game_state++;
         /*fallthrough*/
@@ -65,16 +66,17 @@ void game_update()
 
     case 2:
         //////// 通常時 ////////
+        //デバッグ
+        debug::setString("game_timer: %d", game_timer);
+
         if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_TITLE;
             break;
         }
-
-        if (STATE(0) & PAD_TRG1)
-        {
-
-        }
+        //ポーズ中ならここでリターン
+        if (isPaused)    return;
+        
 
         break;
     }
@@ -88,12 +90,4 @@ void game_update()
 void game_render()
 {
     GameLib::clear(0.2f, 0.2f, 0.4f);
-
-    //sprite_render(sprBack, 0, 0);
-
-    //primitive::rect(
-    //    0, 32, 320, 650, 
-    //    0, 0, ToRadian(0), 
-    //    0, 0, 0, 0.7f
-    //);
 }

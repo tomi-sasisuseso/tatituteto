@@ -1,9 +1,7 @@
 #include "all.h"
 
-int title_state=0;
-int title_timer=0;
-
-Sprite* sprCar;
+int title_state;
+int title_timer;
 
 void title_init()
 {
@@ -14,8 +12,6 @@ void title_init()
 void title_deinit()
 {
     music::stop(0);
-
-    safe_delete(sprCar);
 }
 
 void title_update()
@@ -24,7 +20,6 @@ void title_update()
     {
     case 0:
         //////// ‰Šúİ’è ////////
-        sprCar = sprite_load(L"./Data/Images/right.png");
         title_state++;
         /*fallthrough*/
 
@@ -58,5 +53,4 @@ void title_render()
 {
     // ‰æ–Ê‚ğÂ‚Å“h‚è‚Â‚Ô‚·
     GameLib::clear(0.3f, 0.5f, 1.0f);
-    sprite_render(sprCar, 200, 200);
 }

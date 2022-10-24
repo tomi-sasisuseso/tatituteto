@@ -18,7 +18,7 @@ int nextScene   = SCENE_TITLE;
 //------------------------------------------------------------------------------
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-    GameLib::init(L"ゲームプログラミングⅠ", SCREEN_W, SCREEN_H, true);
+    GameLib::init(L"ゲームプログラミングⅠ", SCREEN_W, SCREEN_H);
 
     // オーディオの初期設定
     audio_init();
@@ -71,6 +71,8 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             game_render();
             break;
         }
+
+        debug::display(1.0f, 0.4f, 0.6f, 1, 1);
 
         // バックバッファの内容を表示
         GameLib::present(1, 0);
