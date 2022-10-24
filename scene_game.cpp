@@ -44,6 +44,7 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
+
     debug::setString("game_state:%d", game_state);
     debug::setString("game_timer:%d", game_timer);
 
@@ -71,6 +72,10 @@ void game_update()
         debug::setString("game_timer: %d", game_timer);
 
         if (TRG(0) & PAD_SELECT)
+
+        //デバッグ
+        debug::setString("game_timer: %d", game_timer);
+
 
         if (TRG(0) & PAD_START)
         {
