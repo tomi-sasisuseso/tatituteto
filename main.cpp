@@ -58,9 +58,6 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
         // 入力を更新する
         input::update();
 
-        //TODO_10 音楽の更新処理
-        music::update();
-
         // 現在のシーンに応じた更新・描画処理
         switch (curScene)
         {
@@ -74,11 +71,6 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             game_render();
             break;
         }
-
-        // デバッグ文字列の描画
-        debug::display(1.0f, 0.4f, 0.6f, 1, 1);
-
-        //debug::setString("GP1_07 SAMPLE");
 
         // バックバッファの内容を表示
         GameLib::present(1, 0);
