@@ -16,6 +16,7 @@
 int game_state;
 int game_timer;
 
+
 Sprite* sprBack;
 
 int bgmNo;
@@ -68,6 +69,11 @@ void game_update()
         {
             nextScene = SCENE_TITLE;
             break;
+        }
+
+        if (STATE(0) & PAD_TRG1)
+        {
+
         }
 
         break;
