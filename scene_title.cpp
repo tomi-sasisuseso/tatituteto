@@ -2,11 +2,10 @@
 
 int title_state;
 int title_timer;
-<<<<<<< HEAD
-=======
+
 
 Sprite* sprCar;
->>>>>>> tomy
+
 
 void title_init()
 {
