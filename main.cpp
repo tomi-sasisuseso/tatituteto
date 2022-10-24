@@ -38,6 +38,10 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             case SCENE_GAME:
                 game_deinit();
                 break;
+
+            case SCENE_SCORE:
+                score_deinit();
+                break;
             }
 
             // 次のシーンに応じた初期設定処理
@@ -50,6 +54,11 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             case SCENE_GAME:
                 game_init();
                 break;
+
+            case SCENE_SCORE:
+                score_init();
+                break;
+            
             }
 
             curScene = nextScene;
@@ -70,7 +79,14 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             game_update();
             game_render();
             break;
+
+        case SCENE_SCORE:
+            score_update();
+            score_render();
+            break;
+
         }
+        debug::display(1.0f, 0.4f, 0.6f, 1, 1);
 
         // バックバッファの内容を表示
         GameLib::present(1, 0);
@@ -86,6 +102,11 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
     case SCENE_GAME:
         game_deinit();
         break;
+
+    case SCENE_SCORE:
+        score_deinit();
+        break;
+
     }
 
     // オーディオの終了処理

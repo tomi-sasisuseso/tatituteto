@@ -43,6 +43,8 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
+    debug::setString("game_state:%d", game_state);
+    debug::setString("game_timer:%d", game_timer);
     switch (game_state)
     {
     case 0:
@@ -65,9 +67,9 @@ void game_update()
 
     case 2:
         //////// �ʏ펞 ////////
-        if (TRG(0) & PAD_SELECT)
+        if (TRG(0) & PAD_START)
         {
-            nextScene = SCENE_TITLE;
+            nextScene = SCENE_SCORE;
             break;
         }
 
