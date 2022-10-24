@@ -18,7 +18,7 @@ int nextScene   = SCENE_TITLE;
 //------------------------------------------------------------------------------
 int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-    GameLib::init(L"ゲームプログラミングⅠ", SCREEN_W, SCREEN_H);
+    GameLib::init(L"ゲームプログラミングⅠ", SCREEN_W, SCREEN_H, true);
 
     // オーディオの初期設定
     audio_init();
@@ -57,6 +57,11 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 
         // 入力を更新する
         input::update();
+<<<<<<< HEAD
+=======
+
+        //TODO_10 音楽の更新処理
+>>>>>>> 6e12d91da27aaf14c00cfb05940db99fdef61a32
         music::update();
 
         // 現在のシーンに応じた更新・描画処理
