@@ -1,7 +1,7 @@
 #include "all.h"
 
-int title_state;
-int title_timer;
+int title_state=0;
+int title_timer=0;
 
 Sprite* sprCar;
 
