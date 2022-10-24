@@ -19,6 +19,7 @@
 #include "audio.h"
 #include "scene_game.h"
 #include "scene_title.h"
+#include "scene_score.h"
 
 // namespace
 using namespace GameLib;

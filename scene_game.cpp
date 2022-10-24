@@ -44,8 +44,13 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
+<<<<<<< HEAD
 
 
+=======
+    debug::setString("game_state:%d", game_state);
+    debug::setString("game_timer:%d", game_timer);
+>>>>>>> tomy
     switch (game_state)
     {
     case 0:
@@ -66,12 +71,16 @@ void game_update()
 
     case 2:
         //////// 通常時 ////////
+<<<<<<< HEAD
         //デバッグ
         debug::setString("game_timer: %d", game_timer);
 
         if (TRG(0) & PAD_SELECT)
+=======
+        if (TRG(0) & PAD_START)
+>>>>>>> tomy
         {
-            nextScene = SCENE_TITLE;
+            nextScene = SCENE_SCORE;
             break;
         }
         //ポーズ中ならここでリターン

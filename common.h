@@ -17,6 +17,7 @@
 #define SCENE_NONE      -1
 #define SCENE_TITLE     0
 #define SCENE_GAME      1
+#define SCENE_SCORE     2
 
 // É}ÉNÉç
 #define ToRadian( x )   DirectX::XMConvertToRadians( x )
