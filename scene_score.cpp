@@ -45,5 +45,5 @@ void score_update() {
 }
 
 void score_render() {
-    //
+    GameLib::clear(0.2f, 0.7f, 0.0f);
 }
