@@ -3,13 +3,15 @@
 int title_state;
 int title_timer;
 
-Sprite* sprCar;
-
+Sprite* Easing_test;
+VECTOR2 Easing_test_pos;
 
 void title_init()
 {
     title_state = 0;
     title_timer = 0;
+
+    Easing_test = sprite_load(L"./Data/Images/Easing_test.png");
 }
 
 void title_deinit()
@@ -31,6 +33,8 @@ void title_update()
         GameLib::setBlendMode(Blender::BS_ALPHA);
         music::play(0, FALSE);
 
+        Easing_test_pos = { 100, 100 };
+
         title_state++;
         /*fallthrough*/
 
@@ -41,6 +45,10 @@ void title_update()
         {
             nextScene = SCENE_GAME;
             break;
+        }
+        if (TRG(0) & PAD_TRG1)
+        {
+            Easing_test_pos = Easing::linear()
         }
 
         break;
@@ -56,4 +64,14 @@ void title_render()
 {
     // âÊñ Çê¬Ç≈ìhÇËÇ¬Ç‘Ç∑
     GameLib::clear(0.3f, 0.5f, 1.0f);
+
+    sprite_render(
+        Easing_test,
+        Easing_test_pos.x, Easing_test_pos.y,
+        1, 1,
+        0, 0,
+        256, 256,
+        0, 0,
+        0
+    );
 }

@@ -14,6 +14,8 @@
 
 // 共通で使われるようなヘッダー
 #include "common.h"
+#include "math.h"
+#include "Easing.h"
 
 // 個々のヘッダーファイルは下の方へ
 #include "audio.h"
