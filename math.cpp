@@ -27,5 +27,5 @@ float p_to_p_angle(VECTOR2 pos1, VECTOR2 pos2)
     float dx = (pos1.x - pos2.x);
     float dy = (pos1.y - pos2.y);
 
-    return atan2((double)dy, (double)dx);
+    return atan2(dy, dx);
 }

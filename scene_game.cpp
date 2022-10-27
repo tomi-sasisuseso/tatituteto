@@ -47,18 +47,23 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
-
+    //デバッグ用
     debug::setString("game_state:%d", game_state);
     debug::setString("game_timer:%d", game_timer);
+
+    //ゲームをポーズ
+    if (TRG(0) & PAD_START)
+        isPaused = !isPaused;       // 0コンのスタートボタンが押されたらポーズ状態が反転
+    if (isPaused) return;           // この時点でポーズ中ならリターン
 
     switch (game_state)
     {
     case 0:
         //////// 初期設定 ////////
-        Buck[0] = sprite_load(L"Data/images/仮1.png");
-        Buck[1] = sprite_load(L"Data/images/仮2.png");
-        Buck[2] = sprite_load(L"Data/images/仮３.png");
-        Buck[3] = sprite_load(L"Data/images/仮4.png");
+        Buck[0] = sprite_load(L"./Data/images/仮1.png");
+        Buck[1] = sprite_load(L"./Data/images/仮2.png");
+        Buck[2] = sprite_load(L"./Data/images/仮3.png");
+        Buck[3] = sprite_load(L"./Data/images/仮4.png");
         game_state++;
         /*fallthrough*/
 
@@ -82,19 +87,10 @@ void game_update()
         debug::setString("game_timer: %d", game_timer);
 
         if (TRG(0) & PAD_SELECT)
-
-        //デバッグ
-        debug::setString("game_timer: %d", game_timer);
-
-
-        if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_SCORE;
             break;
         }
-        //ポーズ中ならここでリターン
-        if (isPaused)    return;
-        
 
         break;
     }
@@ -108,6 +104,7 @@ void game_update()
 void game_render()
 {
     GameLib::clear(0.2f, 0.2f, 0.4f);
+
    
     sprite_render(Buck[0],
         1920/2, 1080/2,
@@ -136,5 +133,15 @@ void game_render()
         0, 0,
         1920, 1080,
         1920 / 2, 1080 / 2);
+
+    //ポーズ中
+    if (isPaused)    font::textOut(
+        3,
+        "PAUSE",
+        CENTER,
+        { 3,3 },
+        { 0,0,0,1 },
+        TEXT_ALIGN::MIDDLE
+    );
 
 }

@@ -45,10 +45,8 @@ void score_update() {
     score_timer++;
 }
 
-void score_render() {
-<<<<<<< HEAD
+void score_render() 
+{
     GameLib::clear(0.2f, 0.7f, 0.0f);
-=======
-    GameLib::clear(0.2f, 0.2f, 0.4f);
->>>>>>> tomy
+
 }
