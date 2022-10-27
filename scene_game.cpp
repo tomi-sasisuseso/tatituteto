@@ -20,6 +20,9 @@ bool isPaused;
 
 int bgmNo;
 
+Sprite* Buck[MAX_GAMES];
+
+
 //--------------------------------------
 //  èâä˙ê›íË
 //--------------------------------------
@@ -52,7 +55,10 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
-
+        Buck[0] = sprite_load(L"Data/images/âº1.png");
+        Buck[1] = sprite_load(L"Data/images/âº2.png");
+        Buck[2] = sprite_load(L"Data/images/âºÇR.png");
+        Buck[3] = sprite_load(L"Data/images/âº4.png");
         game_state++;
         /*fallthrough*/
 
@@ -61,7 +67,11 @@ void game_update()
 
         GameLib::setBlendMode(Blender::BS_ALPHA);
 
-        bgmNo = 0;
+        
+
+
+
+
 
         game_state++;
         /*fallthrough*/
@@ -77,7 +87,7 @@ void game_update()
         debug::setString("game_timer: %d", game_timer);
 
 
-        if (TRG(0) & PAD_START)
+        if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_SCORE;
             break;
@@ -98,4 +108,33 @@ void game_update()
 void game_render()
 {
     GameLib::clear(0.2f, 0.2f, 0.4f);
+   
+    sprite_render(Buck[0],
+        1920/2, 1080/2,
+        1, 1,
+        0, 0,
+        1920, 1080,
+        1920 / 2, 1080 / 2);
+
+    sprite_render(Buck[1],
+        1920/2, 1080/2,
+        1, 1,
+        0, 0,
+        1920, 1080,
+        1920 / 2, 1080 / 2);
+
+    sprite_render(Buck[2],
+        1920/2, 1080/2,
+        1, 1,
+        0, 0,
+        1920, 1080,
+        1920 / 2, 1080 / 2);
+    
+    sprite_render(Buck[3],
+        1920/2, 1080/2,
+        1, 1,
+        0, 0,
+        1920, 1080,
+        1920 / 2, 1080 / 2);
+
 }
