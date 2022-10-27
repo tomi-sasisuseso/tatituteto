@@ -42,8 +42,9 @@ void score_update() {
 
         break;
     }
+    score_timer++;
 }
 
 void score_render() {
-    //
+    GameLib::clear(0.2f, 0.2f, 0.4f);
 }
