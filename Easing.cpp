@@ -38,6 +38,7 @@
 #include "Easing.h"
 
 float Easing::step(int type, float start, float end, float v)
+
 {
 	//ŠJn‚ÆI—¹‚ª“¯‚¶
 	if (start == end)	return start;

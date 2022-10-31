@@ -18,7 +18,9 @@
 #include "math.h"
 #include "Easing.h"
 #include "obj2d.h"
+
 #include "texture.h"
+
 
 // 個々のヘッダーファイルは下の方へ
 #include "audio.h"
