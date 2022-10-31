@@ -11,7 +11,7 @@ void title_init()
     title_state = 0;
     title_timer = 0;
 
-    Easing_test = sprite_load(L"./Data/Images/Easing_test.png");
+    //Easing_test = sprite_load(L"./Data/Images/Easing_test.png");
 }
 
 void title_deinit()
@@ -46,10 +46,7 @@ void title_update()
             nextScene = SCENE_GAME;
             break;
         }
-        if (TRG(0) & PAD_TRG1)
-        {
-            Easing_test_pos = Easing::linear()
-        }
+        
 
         break;
     }
