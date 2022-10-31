@@ -47,10 +47,6 @@ void game_deinit()
 //--------------------------------------
 void game_update()
 {
-    //デバッグ用
-    debug::setString("game_state:%d", game_state);
-    debug::setString("game_timer:%d", game_timer);
-
     //ゲームをポーズ
     if (TRG(0) & PAD_START)
         isPaused = !isPaused;       // 0コンのスタートボタンが押されたらポーズ状態が反転
@@ -83,8 +79,11 @@ void game_update()
 
     case 2:
         //////// 通常時 ////////
-        //デバッグ
-        debug::setString("game_timer: %d", game_timer);
+        //デバッグ用
+        debug::setString("game_state:%d", game_state);
+        debug::setString("game_timer:%d", game_timer);
+        debug::setString("");
+        debug::setString("ENTER:PAUSE");
 
         if (TRG(0) & PAD_SELECT)
         {
