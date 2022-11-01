@@ -10,7 +10,7 @@
 //******************************************************************************
 
 // ‰æ–Ê‚Ì‘å‚«‚³
-#define SCREEN_W        1980
+#define SCREEN_W        1920
 #define SCREEN_H        1080
 #define CENTER          {SCREEN_W / 2, SCREEN_H / 2}
 

@@ -10,12 +10,7 @@ void title_init()
 {
     title_state = 0;
     title_timer = 0;
-<<<<<<< HEAD
-    ease_timer = INT_MAX;
-=======
 
-    //Easing_test = sprite_load(L"./Data/Images/Easing_test.png");
->>>>>>> tomy
 }
 
 void title_deinit()
@@ -48,10 +43,6 @@ void title_update()
             nextScene = SCENE_GAME;
             break;
         }
-<<<<<<< HEAD
-=======
-        
->>>>>>> tomy
 
         break;
     }
