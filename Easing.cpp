@@ -41,9 +41,27 @@ namespace Easing
 {
 	float step(int type, float start, float end, float v)
 
+<<<<<<< HEAD
 	{
 		//開始と終了が同じ
 		if (start == end)	return start;
+=======
+	float a = start;
+	float b = end;
+
+	//if (start > end)
+	//{
+	//	//開始と終了が逆転
+	//	a = end;
+	//	b = start;
+	//}
+	//
+	// 
+	//開始より小さい
+	if (v <= 0.0)	return start;
+	//終了より大きい
+	if (v >= 1.0)	return end;
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 
 		float a = start;
 		float b = end;

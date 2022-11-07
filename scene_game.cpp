@@ -18,6 +18,8 @@ int game_timer;
 
 bool isPaused;
 
+
+int scroll_timer;
 int bgmNo;
 
 Sprite* Back[MAX_GAMES];
@@ -32,7 +34,7 @@ void game_init()
 {
     game_state = 0;
     game_timer = 0;
-
+    scroll_timer = 100;
     isPaused = false;
 }
 
@@ -58,11 +60,20 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
+<<<<<<< HEAD
         Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
         Back[1] = sprite_load(L"./Data/Images/âº1.png");
         Back[2] = sprite_load(L"./Data/Images/âº3.png");
         //Back[3] = sprite_load(L"Data/Images/îwåi1.png");
         Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
+=======
+
+        Back[0] = sprite_load(L"Data/Images/îwåi2.png");
+        Back[1] = sprite_load(L"Data/Images/âº1.png");
+        Back[2] = sprite_load(L"Data/Images/âº3.png");
+        //Back[3] = sprite_load(L"Data/images/îwåi1.png");
+        Ball = sprite_load(L"Data/images/É{Å[Éã_âE.png");
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 
         game_state++;
         /*fallthrough*/
@@ -77,9 +88,19 @@ void game_update()
         back[0].pos = { 0,0};
         back[0].scale = { 2, 2 };
 
+        //back[0].pos = { 1920 / 2, 1080 / 2 };
+        //back[0].pivot = { 640/2,460/2 };
+
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
+<<<<<<< HEAD
+=======
+        back[1].scale = { 1,1 };
+        
+        //back[1].pivot = { 960 / 2, 1080 / 2 };
+        //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -122,20 +143,47 @@ void game_update()
 
 void back_update() {
     //back[0].pos.x -= 2;
-    if (back[0].pos.x > -960) {
-        if (game_timer > 200) {
-            back[0].pos.x -= 5;
-            back[1].pos.x -= 5;
+    //if (back[1].pos.x >= SCREEN_W / 2) {
+    //    if (game_timer > 200) {
+    //        //back[0].pos.x -= 5;
+    //        back[1].pos.x -= 5;
+    //    }
+
+    //}
+
+
+    if (game_timer == 200) scroll_timer = 0;
+
+    const float duration = 60;
+    if (scroll_timer < duration)
+    {
+        scroll_timer++;
+        float t = (float)scroll_timer / duration;
+        back[1].pos.x = Easing::step(eType::BACK_OUT, SCREEN_W, SCREEN_W / 2, t);
+    }
+
+    if (back[0].scale.x >= 1) {
+        if (game_timer > 500) {
+            back[0].scale.x *= 0.99;
+            back[0].scale.y *= 0.99;
+            back[1].scale.x *= 0.99;
+            back[1].scale.y *= 0.99;
         }
-        
     }
 }
+
 //--------------------------------------
 //  ï`âÊèàóù
 //--------------------------------------
+
 void game_render()
 {
+<<<<<<< HEAD
     GameLib::clear(1,1,1);
+=======
+
+    GameLib::clear(0.2f, 0.2f, 0.4f);
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
    
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -146,12 +194,30 @@ void game_render()
 
     sprite_render(Back[1],
         back[1].pos.x, back[1].pos.y,
-        1, 1,
+        back[1].scale.x, back[1].scale.y,
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
+<<<<<<< HEAD
     ball_render();
+=======
+    /*sprite_render(Back[0],
+        back[2].pos.x, back[2].pos.y,
+        1, 1,
+        0, 0,
+        back[2].texSize.x, back[2].texSize.y,
+        back[2].pivot.x, back[2].pivot.y);
+    
+    sprite_render(Back[2],
+        back[3].pos.x, back[3].pos.y,
+        1, 1,
+        0, 0,
+        back[3].texSize.x, back[3].texSize.y,
+        back[3].pivot.x, back[3].pivot.y);*/
+
+    //ball_render();
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 
     //É|Å[ÉYíÜ
     if (isPaused)    font::textOut(

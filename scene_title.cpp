@@ -21,8 +21,11 @@ void title_init()
     title_state = 0;
     title_timer = 0;
 
+<<<<<<< HEAD
     stage_sprite = sprite_load(L"./Data/Images/–_.png");
     ball1_sprite = sprite_load(L"./Data/Images/ƒ{[ƒ‹.png");
+=======
+>>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 }
 
 void title_deinit()
