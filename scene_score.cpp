@@ -4,9 +4,9 @@ int score_state;
 int score_timer;
 
 bool showRanking;
+int scorePanel_easeTimer = 100;
 
 OBJ2D scorePanel;
-int scorePanel_easeTimer;
 
 int text_easeTimer;
 float text_alpha;
@@ -32,6 +32,7 @@ void score_update() {
     //デバッグ用
     debug::setString("score_state:%d", score_state);
     debug::setString("score_timer:%d", score_timer);
+    debug::setString("panel.pos.x: %f", scorePanel.pos.x);
 
     switch (score_state)
     {
@@ -63,13 +64,14 @@ void score_update() {
         }
 
         //スコアの背景を移動
-        if (score_timer == 10)      scorePanel_easeTimer = 0;
+        if (score_timer == 10 || TRG(0) & PAD_TRG1)      scorePanel_easeTimer = 0;
         const float duration = 40;
         if (scorePanel_easeTimer < duration)
         {
             scorePanel_easeTimer++;
             float t = (float)scorePanel_easeTimer / duration;
-            scorePanel.pos.x = Easing::step(eType::BACK_OUT, -600, SCREEN_W / 2, t);
+            scorePanel.pos.x = Easing::step(eType::ELASTIC_INOUT, 1920, SCREEN_W / 2, t);
+            //scorePanel.pos.x = SCREEN_W - SCREEN_W / 2 * Easing::linear(t);
         }
 
         //ランキングを表示（仮）
@@ -84,7 +86,6 @@ void score_update() {
     score_timer++;
 }
 
-<<<<<<< HEAD
 void score_render() 
 {
     GameLib::clear(0.2f, 0.7f, 0.0f);
@@ -155,12 +156,4 @@ void text_render()
             false
         );
     }
-=======
-void score_render() {
-
-    GameLib::clear(0.2f, 0.7f, 0.0f);
-
-    GameLib::clear(0.2f, 0.2f, 0.4f);
-
->>>>>>> tomy
 }

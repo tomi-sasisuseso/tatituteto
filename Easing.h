@@ -41,9 +41,9 @@ enum eType {
     ELASTIC_INOUT,
 };
 
-class Easing
+
+namespace Easing
 {
-public:
     /// <summary>
     /// 開始地点と終了地点を指定
     /// </summary>
@@ -51,58 +51,57 @@ public:
     /// <param name="start">初期値</param>
     /// <param name="end">終了値</param>
     /// <param name="v">タイマー</param>
-    /// <returns></returns>
-    static float step(int type, float start, float end, float v);
+    /// <returns>変化量（0~1）</returns>
+    float step(int type, float start, float end, float v);
 
     //１次関数
-    static float linear(float);
+    float linear(float);
     //２次関数
-    static float quad_in(float);
-    static float quad_out(float);
-    static float quad_in_out(float);
+    float quad_in(float);
+    float quad_out(float);
+    float quad_in_out(float);
     //３次関数
-    static float cube_in(float t);
-    static float cube_out(float t);
-    static float cube_in_out(float t);
+    float cube_in(float t);
+    float cube_out(float t);
+    float cube_in_out(float t);
     //４次関数
-    static float quart_in(float t);
-    static float quart_out(float t);
-    static float quart_in_out(float t);
+    float quart_in(float t);
+    float quart_out(float t);
+    float quart_in_out(float t);
     //５次関数
-    static float quint_in(float t);
-    static float quint_out(float t);
-    static float quint_in_out(float t);
+    float quint_in(float t);
+    float quint_out(float t);
+    float quint_in_out(float t);
     //スムース関数
-    static float smooth_step_in(float t);
-    static float smooth_step_out(float t);
-    static float smooth_step_in_out(float t);
+    float smooth_step_in(float t);
+    float smooth_step_out(float t);
+    float smooth_step_in_out(float t);
     //よりスムースな曲線
-    static float smoother_step_in(float t);
-    static float smoother_step_out(float t);
-    static float smoother_step_in_out(float t);
+    float smoother_step_in(float t);
+    float smoother_step_out(float t);
+    float smoother_step_in_out(float t);
     //サイン関数
-    static float sine_in(float t);
-    static float sine_out(float t);
-    static float sine_in_out(float t);
+    float sine_in(float t);
+    float sine_out(float t);
+    float sine_in_out(float t);
     //円
-    static float circ_in(float t);
-    static float circ_out(float t);
-    static float circ_in_out(float t);
+    float circ_in(float t);
+    float circ_out(float t);
+    float circ_in_out(float t);
     //バウンス関数
-    static float bounce_in(float t);
-    static float bounce_out(float t);
-    static float bounce_in_out(float t);
+    float bounce_in(float t);
+    float bounce_out(float t);
+    float bounce_in_out(float t);
     //バック
-    static float back_in(float t);
-    static float back_out(float t);
-    static float back_in_out(float t);
+    float back_in(float t);
+    float back_out(float t);
+    float back_in_out(float t);
     //指数関数
-    static float expo_in(float);
-    static float expo_out(float);
-    static float expo_in_out(float);
+    float expo_in(float);
+    float expo_out(float);
+    float expo_in_out(float);
     //弾力関数
-    static float elastic_in(float);
-    static float elastic_out(float t);
-    static float elastic_in_out(float t);
-};
-
+    float elastic_in(float);
+    float elastic_out(float t);
+    float elastic_in_out(float t);
+}

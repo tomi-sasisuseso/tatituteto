@@ -58,18 +58,12 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
-<<<<<<< HEAD
-        Buck[0] = sprite_load(L"./Data/images/âº1.png");
-        Buck[1] = sprite_load(L"./Data/images/âº2.png");
-        Buck[2] = sprite_load(L"./Data/images/âº3.png");
-        Buck[3] = sprite_load(L"./Data/images/âº4.png");
-=======
-        Back[0] = sprite_load(L"Data/images/îwåi1.png");
-        Back[1] = sprite_load(L"Data/images/âº1.png");
-        Back[2] = sprite_load(L"Data/images/âº3.png");
-        //Back[3] = sprite_load(L"Data/images/îwåi1.png");
-        Ball = sprite_load(L"Data/images/É{Å[Éã_âE.png");
->>>>>>> tomy
+        Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
+        Back[1] = sprite_load(L"./Data/Images/âº1.png");
+        Back[2] = sprite_load(L"./Data/Images/âº3.png");
+        //Back[3] = sprite_load(L"Data/Images/îwåi1.png");
+        Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
+
         game_state++;
         /*fallthrough*/
 
@@ -79,17 +73,13 @@ void game_update()
         GameLib::setBlendMode(Blender::BS_ALPHA);
 
         back[0].texSize = { 1280,540 };
-        //back[0].pivot = { 640/2,460/2 };
         back[0].pivot = { 0,0 };
-        //back[0].pos = { 1920 / 2, 1080 / 2 };
         back[0].pos = { 0,0};
         back[0].scale = { 2, 2 };
 
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
-        //back[1].pivot = { 960 / 2, 1080 / 2 };
         back[1].pos = { SCREEN_W,0 };
-        //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -124,10 +114,6 @@ void game_update()
 
 
         back_update();
-
-
-
-
         break;
     }
 
@@ -149,13 +135,7 @@ void back_update() {
 //--------------------------------------
 void game_render()
 {
-<<<<<<< HEAD
-    GameLib::clear(0.2f, 0.2f, 0.4f);
-=======
     GameLib::clear(1,1,1);
-
->>>>>>> tomy
-
    
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -170,20 +150,6 @@ void game_render()
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
-
-    /*sprite_render(Back[0],
-        back[2].pos.x, back[2].pos.y,
-        1, 1,
-        0, 0,
-        back[2].texSize.x, back[2].texSize.y,
-        back[2].pivot.x, back[2].pivot.y);
-    
-    sprite_render(Back[2],
-        back[3].pos.x, back[3].pos.y,
-        1, 1,
-        0, 0,
-        back[3].texSize.x, back[3].texSize.y,
-        back[3].pivot.x, back[3].pivot.y);*/
 
     ball_render();
 
