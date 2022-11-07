@@ -45,12 +45,15 @@ float Easing::step(int type, float start, float end, float v)
 
 	float a = start;
 	float b = end;
-	if (start > end)
-	{
-		//開始と終了が逆転
-		a = end;
-		b = start;
-	}
+
+	//if (start > end)
+	//{
+	//	//開始と終了が逆転
+	//	a = end;
+	//	b = start;
+	//}
+	//
+	// 
 	//開始より小さい
 	if (v <= 0.0)	return start;
 	//終了より大きい

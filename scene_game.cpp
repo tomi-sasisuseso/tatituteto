@@ -85,8 +85,10 @@ void game_update()
 
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
-        //back[1].pivot = { 960 / 2, 1080 / 2 };
         back[1].pos = { SCREEN_W,0 };
+        back[1].scale = { 1,1 };
+        
+        //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
         
         back[2].texSize = { 1920, 1080 };
@@ -145,7 +147,7 @@ void back_update() {
 
     if (game_timer == 200) scroll_timer = 0;
 
-    const float duration = 50;
+    const float duration = 60;
     if (scroll_timer < duration)
     {
         scroll_timer++;
@@ -153,11 +155,13 @@ void back_update() {
         back[1].pos.x = Easing::step(eType::BACK_OUT, SCREEN_W, SCREEN_W / 2, t);
     }
 
-    if (game_timer == 500) {
-        back[0].scale.x = 1;
-        back[0].scale.y = 1;
-        back[1].scale.x = 1;
-        back[1].scale.y = 1;
+    if (back[0].scale.x >= 1) {
+        if (game_timer > 500) {
+            back[0].scale.x *= 0.99;
+            back[0].scale.y *= 0.99;
+            back[1].scale.x *= 0.99;
+            back[1].scale.y *= 0.99;
+        }
     }
 }
 
@@ -179,7 +183,7 @@ void game_render()
 
     sprite_render(Back[1],
         back[1].pos.x, back[1].pos.y,
-        1, 1,
+        back[1].scale.x, back[1].scale.y,
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
