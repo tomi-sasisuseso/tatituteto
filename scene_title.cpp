@@ -21,11 +21,10 @@ void title_init()
     title_state = 0;
     title_timer = 0;
 
-<<<<<<< HEAD
+
     stage_sprite = sprite_load(L"./Data/Images/棒.png");
     ball1_sprite = sprite_load(L"./Data/Images/ボール.png");
-=======
->>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
+
 }
 
 void title_deinit()
@@ -65,7 +64,7 @@ void title_update()
         //デバッグ用
         debug::setString("title_state:%d", title_state);
         debug::setString("title_timer:%d", title_timer);
-        debug::setString("velocity: %f", stage.velocity);
+        debug::setString("velocity: %f", stage.velocity.x);
 
         if (TRG(0) & PAD_START)
         {
