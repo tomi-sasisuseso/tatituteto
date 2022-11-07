@@ -3,6 +3,17 @@
 //インクルード
 #include "all.h"
 
+struct BOX
+{
+	float fLeft, fTop, fRight, fBottom;
+};
+
+struct CIRCLE
+{
+	float x, y, r;
+};
+
+
 //プロトタイプ宣言
 
 /// <summary>

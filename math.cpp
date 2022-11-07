@@ -29,3 +29,4 @@ float p_to_p_angle(VECTOR2 pos1, VECTOR2 pos2)
 
     return atan2(dy, dx);
 }
+

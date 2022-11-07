@@ -60,20 +60,17 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
-<<<<<<< HEAD
         Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
         Back[1] = sprite_load(L"./Data/Images/âº1.png");
         Back[2] = sprite_load(L"./Data/Images/âº3.png");
         //Back[3] = sprite_load(L"Data/Images/îwåi1.png");
         Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
-=======
 
         Back[0] = sprite_load(L"Data/Images/îwåi2.png");
         Back[1] = sprite_load(L"Data/Images/âº1.png");
         Back[2] = sprite_load(L"Data/Images/âº3.png");
         //Back[3] = sprite_load(L"Data/images/îwåi1.png");
         Ball = sprite_load(L"Data/images/É{Å[Éã_âE.png");
->>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 
         game_state++;
         /*fallthrough*/
@@ -94,13 +91,12 @@ void game_update()
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
-=======
+
         back[1].scale = { 1,1 };
         
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
->>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
+
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -178,13 +174,8 @@ void back_update() {
 
 void game_render()
 {
-<<<<<<< HEAD
-    GameLib::clear(1,1,1);
-=======
-
     GameLib::clear(0.2f, 0.2f, 0.4f);
->>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
-   
+
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
         back[0].scale.x,back[0].scale.y,
@@ -199,9 +190,8 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-<<<<<<< HEAD
     ball_render();
-=======
+
     /*sprite_render(Back[0],
         back[2].pos.x, back[2].pos.y,
         1, 1,
@@ -217,7 +207,6 @@ void game_render()
         back[3].pivot.x, back[3].pivot.y);*/
 
     //ball_render();
->>>>>>> 648788432114e43e25373147bd9ea4406e5cc164
 
     //É|Å[ÉYíÜ
     if (isPaused)    font::textOut(
