@@ -18,5 +18,6 @@ void game_render();
 void back_update();
 
 void ball_render();
+void square_render();
 
 #endif//SCENE_GAME_H

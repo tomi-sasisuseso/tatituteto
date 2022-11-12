@@ -87,4 +87,35 @@ struct OBJ2DE {
     //VECTOR2 offset;
 
 };
+
+
+class Squares {
+public:
+    Squares() {}
+    Squares(float x, float y);
+
+    void pos_Init(float x, float y);
+    void scale_Init(float x, float y);
+    void texP_Init(float x, float y);
+    void texS_Init(float x, float y);
+    void pivot_Init(float x, float y);
+    
+    void update();
+
+    /*privateにOBJ2D a[4]を入れてget関数を作って試してみたけど背景を動かすときに
+    posも動かしたかったからpublicに戻した。drowで描画するときも
+    getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
+    こういう場合はprivateよりpublicのほうがいいの？
+    */
+    
+    VECTOR2 getPos();
+    VECTOR2 getScale();
+    VECTOR2 getTexP();
+    VECTOR2 getTexS();
+    VECTOR2 getPivot();
+
+    OBJ2D a[4];
+private:
+};
+
 #endif

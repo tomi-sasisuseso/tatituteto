@@ -18,15 +18,20 @@ int game_timer;
 
 bool isPaused;
 
-
+const float duration = 60;
 int scroll_timer[MAX_GAMES];
+
 int bgmNo;
 
 Sprite* Back[MAX_GAMES];
 Sprite* Ball;
+Sprite* Square;
+
 OBJ2D back[MAX_GAMES];
 OBJ2D ball;
+Squares square;
 
+#define ball_error  0//ball.texSize.x/(2.0f/ball.scale.x)
 //--------------------------------------
 //  初期設定
 //--------------------------------------
@@ -69,7 +74,11 @@ void game_update()
         Back[1] = sprite_load(L"./Data/Images/仮1.png");
         Back[2] = sprite_load(L"./Data/Images/仮14.png");
         Back[3] = sprite_load(L"Data/Images/仮4.png");
+        Back[4] = sprite_load(L"Data/Images/仮8.png");
+        Back[5] = sprite_load(L"Data/Images/仮10.png");
+
         Ball = sprite_load(L"./Data/Images/ボール_右.png");
+        texture::load(0,L"Data/images/四角.png",1U);
 
         game_state++;
         /*fallthrough*/
@@ -84,6 +93,7 @@ void game_update()
         back[0].pos = { 0,0};
         back[0].scale = { 2, 2 };
 
+
         //back[0].pos = { 1920 / 2, 1080 / 2 };
         //back[0].pivot = { 640/2,460/2 };
 
@@ -92,6 +102,7 @@ void game_update()
         back[1].pos = { SCREEN_W,0 };
         back[1].scale = { 1,1 };
         
+
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
 
@@ -107,12 +118,29 @@ void game_update()
         back[3].scale = { 1,1 };
 
 
+        back[4].texSize = { 640, 540 };
+        back[4].pivot = { 0,0 };
+        back[4].pos = { SCREEN_W,0 };
+        back[4].scale = { 1,1 };
+        
+
+        back[5].texSize = { 640, 540 };
+        back[5].pivot = { 0,0 };
+        back[5].pos = { SCREEN_W,SCREEN_H/2 };
+        back[5].scale = { 1,1 };
+
+
         ball.texPos = { 0,0 };
         ball.texSize = { 150,150 };
-        ball.pos = { SCREEN_W / 2 - ball.texSize.x/2,SCREEN_H /2 - ball.texSize.y / 2 };
-        ball.pivot = { 0,0};
+        ball.pos = { SCREEN_W / 2 ,SCREEN_H / 2 };
+        ball.pivot = { 150/2,150/2 };
         ball.scale = { 1,1 };
         
+        square.pos_Init(SCREEN_W , SCREEN_H / 2);
+        square.scale_Init(1,1);
+        square.texP_Init(0,0);
+        square.texS_Init(100,100);
+        square.pivot_Init(100 / 2, 100 / 2);
 
 
         game_state++;
@@ -158,24 +186,23 @@ void back_update() {
 
     /////// 1回目のスライド処理 ///////
     if (game_timer == 200) scroll_timer[0] = 0;
-    const float duration = 60;
-
     if (scroll_timer[0] < duration)
     {
         scroll_timer[0]++;
         float t = (float)scroll_timer[0] / duration;
+        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 3, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
 
-        if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
-        else ball.pos.x = SCREEN_W / 4;
-        
+        if (ball.pos.x > SCREEN_W / 4 ) ball.pos.x -= 16;
+        else ball.pos.x = SCREEN_W / 4 ;
+        if (square.a[0].pos.x > SCREEN_W - SCREEN_W / 4)square.a[0].pos.x -= 16;
+        else square.a[0].pos.x = SCREEN_W - SCREEN_W / 4;
     }
 
     /////// 2回目のスライド処理 ///////
-    if (game_timer == 400) scroll_timer[1] = 0;
-
+    if (game_timer == 40000) scroll_timer[1] = 0;
     if (back[0].scale.x >= 1) {
-        if (game_timer > 400) {
+        if (game_timer > 40000) {
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
             back[1].scale.x *= 0.99;
@@ -189,6 +216,7 @@ void back_update() {
             {
                 scroll_timer[1]++;
                 float t = (float)scroll_timer[1] / duration;
+                back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_W/3, 0, t);
                 back[2].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_H, SCREEN_H/2, t);
             }
 
@@ -196,14 +224,38 @@ void back_update() {
         }
     }
 
-
-    if (game_timer == 600) scroll_timer[2] = 0;
+    /////// 3回目のスライド処理 ///////
+    if (game_timer == 60000) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
         back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
     }
-        
+
+    /////// 4回目のスライド処理 ///////
+    if (game_timer == 80000)scroll_timer[3] = 0;
+    if (scroll_timer[3] < duration) {
+        scroll_timer[3]++;
+        float t = (float)scroll_timer[3] / duration;
+        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
+        back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
+        back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
+
+        if (ball.pos.x > SCREEN_W / 6 ) ball.pos.x -= 8;
+        else ball.pos.x = SCREEN_W / 6 ;
+
+    }
+
+    /////// 5回目のスライド処理 ///////
+    if (game_timer == 100000)scroll_timer[4] = 0;
+    if (scroll_timer[4] < duration) {
+        scroll_timer[4]++;
+        float t = (float)scroll_timer[4] / duration;
+        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
+        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2 - SCREEN_W / 6, t);
+        back[5].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
+
+    }
 }
 
 //--------------------------------------
@@ -235,6 +287,8 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
+    square_render();
+
 
     sprite_render(Back[2],
         back[2].pos.x, back[2].pos.y,
@@ -250,6 +304,22 @@ void game_render()
         0, 0,
         back[3].texSize.x, back[3].texSize.y,
         back[3].pivot.x, back[3].pivot.y);
+    
+    
+    sprite_render(Back[4],
+        back[4].pos.x, back[4].pos.y,
+        back[4].scale.x, back[4].scale.y,
+        0, 0,
+        back[4].texSize.x, back[4].texSize.y,
+        back[4].pivot.x, back[4].pivot.y);
+    
+    
+    sprite_render(Back[5],
+        back[5].pos.x, back[5].pos.y,
+        back[5].scale.x, back[5].scale.y,
+        0, 0,
+        back[5].texSize.x, back[5].texSize.y,
+        back[5].pivot.x, back[5].pivot.y);
 
 
     //ball_render();
@@ -272,4 +342,16 @@ void ball_render() {
         ball.texPos.x, ball.texPos.x,
         ball.texSize.x, ball.texSize.y,
         ball.pivot.x, ball.pivot.y);
+}
+
+void square_render() {
+    texture::begin(0);
+    texture::draw(0,
+        square.getPos(),
+        square.getScale(),
+        square.getTexP(),
+        square.getTexS(),
+        square.getPivot()
+    );
+    texture::end(0);
 }
