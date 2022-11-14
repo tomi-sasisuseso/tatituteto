@@ -27,10 +27,11 @@ int bgmNo;
 Sprite* Back[MAX_GAMES];
 Sprite* Ball;
 Sprite* Square;
+Sprite* Frame;
 
 OBJ2D back[MAX_GAMES];
 OBJ2D ball;
-Squares square[4];
+Squares square(SCREEN_W + 50, SCREEN_H / 2 );
 
 SHOOTER shot;
 
@@ -84,8 +85,9 @@ void game_update()
         Back[4] = sprite_load(L"Data/Images/仮8.png");
         Back[5] = sprite_load(L"Data/Images/仮10.png");
 
+        Square = sprite_load(L"./Data/images/ゲーム2_四角.png");
+        Frame = sprite_load(L"./Data/images/ゲーム2_枠.png");
         Ball = sprite_load(L"./Data/Images/ボール_右.png");
-        texture::load(0, L"Data/images/ゲーム2_四角.png", 4U);
         texture::load(1, L"Data/images/ゲーム2_弾.png", SHOT_MAX);
 
         game_state++;
@@ -144,15 +146,14 @@ void game_update()
         ball.pivot = { 150 / 2,150 / 2 };
         ball.scale = { 1,1 };
 
-        square[0].pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
-        square[1].pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 50);
-        square[2].pos_Init(SCREEN_W + 50, SCREEN_H / 2 + 50);
-        square[3].pos_Init(SCREEN_W + 50, SCREEN_H / 2 + 150);
-
-        square[0].scale_Init(1, 1);
-        square[0].texP_Init(0, 0);
-        square[0].texS_Init(100, 100);
-        square[0].pivot_Init(100 / 2, 100 / 2);
+        /*Squares square(SCREEN_W + 50, SCREEN_H / 2 - 150);
+          ゲームループの中でクラスの実態宣言はできない？
+          */
+        square.pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
+        square.scale_Init(1, 1);
+        square.texP_Init(0, 0);
+        square.texS_Init(100, 100);
+        square.pivot_Init(100 / 2, 100 / 2);
 
 
         game_state++;
@@ -187,8 +188,8 @@ void game_update()
 
         shot.Update();
         shot.Shot(shot_pos[rand() % 2], height, rand() % 3);// 出現位置を決めてそのまま発射してる
-        
 
+        square.update();
         back_update();
         break;
     }
@@ -219,24 +220,14 @@ void back_update() {
 
         if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
         else ball.pos.x = SCREEN_W / 4;
-        if (square[0].a.pos.x > SCREEN_W - SCREEN_W / 4) {
-            square[0].a.pos.x -= 16;
-            square[1].a.pos.x -= 16;
-            square[2].a.pos.x -= 16;
-            square[3].a.pos.x -= 16;
-        }
-        else {
-            square[0].a.pos.x = SCREEN_W - SCREEN_W / 4;
-            square[1].a.pos.x = SCREEN_W - SCREEN_W / 4;
-            square[2].a.pos.x = SCREEN_W - SCREEN_W / 4;
-            square[3].a.pos.x = SCREEN_W - SCREEN_W / 4;
-        }
+        square.square_slide();
+
     }
 
     /////// 2回目のスライド処理 ///////
-    if (game_timer == 400) scroll_timer[1] = 0;
+    if (game_timer == 40000) scroll_timer[1] = 0;
     if (back[0].scale.x >= 1) {
-        if (game_timer > 400) {
+        if (game_timer > 40000) {
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
             back[1].scale.x *= 0.99;
@@ -247,6 +238,7 @@ void back_update() {
             ball.pos.y -= 4;
 
             shot.game2_shrink();
+            
 
             if (scroll_timer[1] < duration)
             {
@@ -261,7 +253,7 @@ void back_update() {
     }
 
     /////// 3回目のスライド処理 ///////
-    if (game_timer == 600) scroll_timer[2] = 0;
+    if (game_timer == 60000) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
@@ -269,7 +261,7 @@ void back_update() {
     }
 
     /////// 4回目のスライド処理 ///////
-    if (game_timer == 800)scroll_timer[3] = 0;
+    if (game_timer == 80000)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -283,7 +275,7 @@ void back_update() {
     }
 
     /////// 5回目のスライド処理 ///////
-    if (game_timer == 1000)scroll_timer[4] = 0;
+    if (game_timer == 100000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
@@ -323,7 +315,7 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-    square_render();
+    square.square_render();
 
     shot.shot_render();
 
@@ -381,35 +373,4 @@ void ball_render() {
         ball.pivot.x, ball.pivot.y);
 }
 
-void square_render() {
-    texture::begin(0);
-    texture::draw(0,
-        square[0].getPos(),
-        square[0].getScale(),
-        square[0].getTexP(),
-        square[0].getTexS(),
-        square[0].getPivot()
-    ); 
-    texture::draw(0,
-        square[1].getPos(),
-        square[0].getScale(),
-        square[0].getTexP(),
-        square[0].getTexS(),
-        square[0].getPivot()
-    ); 
-    texture::draw(0,
-        square[2].getPos(),
-        square[0].getScale(),
-        square[0].getTexP(),
-        square[0].getTexS(),
-        square[0].getPivot()
-    );
-    texture::draw(0,
-        square[3].getPos(),
-        square[0].getScale(),
-        square[0].getTexP(),
-        square[0].getTexS(),
-        square[0].getPivot()
-    );
-    texture::end(0);
-}
+

@@ -1,5 +1,8 @@
 #include "obj2d.h"
 
+extern Sprite* Square;
+extern Sprite* Frame;
+
 const VECTOR2 square_offsets[4] =
 {
     {0, 0},
@@ -10,7 +13,16 @@ const VECTOR2 square_offsets[4] =
 
 Squares::Squares(float x, float y)
 {
-    pos_Init(x, y);
+    /*Square = sprite_load(L"./Data/images/ゲーム2_四角.png");
+    Frame = sprite_load(L"./Data/images/ゲーム2_枠.png");
+    　画像の読み込みもコンストラクタではできない？
+    */
+
+    frame.pos = { x,y };
+    frame.scale = { 1,1 };
+    frame.texPos = { 0,0 };
+    frame.texSize = { 102,402 };
+    frame.pivot = { 102/2,402/2 };
 }
 
 void Squares::pos_Init(float x, float y)
@@ -41,6 +53,24 @@ void Squares::pivot_Init(float x, float y)
 
 void Squares::update()
 {
+    if (TRG(0) & PAD_UP) {
+        a.pos.y -= a.texSize.y;
+    }
+    if (TRG(0) & PAD_DOWN) {
+        a.pos.y += a.texSize.y;
+    }
+}
+
+void Squares::square_slide()
+{
+    if (a.pos.x > SCREEN_W - SCREEN_W / 4) {
+        a.pos.x -= 16;
+        frame.pos.x -= 16;
+    }
+    else {
+        a.pos.x = SCREEN_W - SCREEN_W / 4;
+        frame.pos.x = SCREEN_W - SCREEN_W / 4;
+    }
 }
 
 VECTOR2 Squares::getPos(){
@@ -61,6 +91,26 @@ VECTOR2 Squares::getTexS(){
 
 VECTOR2 Squares::getPivot(){
     return a.pivot; 
+}
+
+void Squares::square_render()
+{    
+    sprite_render(Square,
+        a.pos.x, a.pos.y,
+        a.scale.x, a.scale.y,
+        a.texPos.x, a.texPos.y,
+        a.texSize.x, a.texSize.y,
+        a.pivot.x, a.pivot.y
+        );
+    
+    sprite_render(Frame,
+        frame.pos.x, frame.pos.y,
+        frame.scale.x, frame.scale.y,
+        frame.texPos.x, frame.texPos.y,
+        frame.texSize.x, frame.texSize.y,
+        frame.pivot.x, frame.pivot.y
+        );
+    
 }
 
 SHOOTER::SHOOTER()

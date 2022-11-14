@@ -154,7 +154,8 @@ public:
             if (bullet[i].parameter.pos.x == game2_center) 
             {
                 bullet[i].parameter.isLiving = false;
-                // 
+
+                // ’e‚ª”½“]‚µ‚Ä‚¢‚½‚ç -1 ‚©‚¯‚ÄŒ³‚ÌŒü‚«‚É–ß‚· //
                 if (bullet[i].parameter.scale.x < 0) {
                     bullet[i].parameter.scale.x *= -1;
                 }
@@ -180,6 +181,8 @@ public:
     void texS_Init(float x, float y);
     void pivot_Init(float x, float y);
     
+    void square_render();
+    void square_slide();
     void update();
 
     /*private‚ÉOBJ2D a[4]‚ð“ü‚ê‚ÄgetŠÖ”‚ðì‚Á‚ÄŽŽ‚µ‚Ä‚Ý‚½‚¯‚Ç”wŒi‚ð“®‚©‚·‚Æ‚«‚É
@@ -195,6 +198,7 @@ public:
 
     OBJ2D a;
 private:
+    OBJ2D frame;
 };
 
 
