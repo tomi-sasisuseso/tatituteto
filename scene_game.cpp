@@ -10,6 +10,7 @@
 #include "all.h"
 
 //------< 定数 >----------------------------------------------------------------
+#define GAME2_CENTER buck[1].pos.x+buck[4].pos.x/2
 
 //------< 変数 >----------------------------------------------------------------
 int game_state;
@@ -19,6 +20,7 @@ bool isPaused;
 
 const float duration = 60;
 int scroll_timer[MAX_GAMES];
+float game2_center;
 
 int bgmNo;
 
@@ -48,6 +50,8 @@ void game_init()
     scroll_timer[3] = 50000;
     scroll_timer[4] = 50000;
     scroll_timer[5] = 50000;
+    game2_center = 0;
+
     isPaused = false;
 }
 
@@ -169,6 +173,7 @@ void game_update()
 
         debug::setString("bullet_timer:%d", shot.bullet_timer);
         debug::setString("shot.spwaonFlag:%d", shot.spwaonFlag);
+        debug::setString("game2_center:%f", game2_center);
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -178,11 +183,12 @@ void game_update()
 
         VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
         float height = back[1].texSize.y * back[1].scale.y; // tex_size.y * scale
+        game2_center = (back[1].pos.x + back[4].pos.x) / 2;
 
         shot.Update();
-
-        shot.Shot(shot_pos[rand() % 1], height, rand() % 3);// 出現位置を決めてそのまま発射してる
+        shot.Shot(shot_pos[rand() % 2], height, rand() % 3);// 出現位置を決めてそのまま発射してる
         
+
         back_update();
         break;
     }
@@ -228,9 +234,9 @@ void back_update() {
     }
 
     /////// 2回目のスライド処理 ///////
-    if (game_timer == 40000) scroll_timer[1] = 0;
+    if (game_timer == 400) scroll_timer[1] = 0;
     if (back[0].scale.x >= 1) {
-        if (game_timer > 40000) {
+        if (game_timer > 400) {
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
             back[1].scale.x *= 0.99;
@@ -239,6 +245,8 @@ void back_update() {
             ball.scale.x *= 0.99;
             ball.scale.y *= 0.99;
             ball.pos.y -= 4;
+
+            shot.game2_shrink();
 
             if (scroll_timer[1] < duration)
             {
@@ -253,7 +261,7 @@ void back_update() {
     }
 
     /////// 3回目のスライド処理 ///////
-    if (game_timer == 60000) scroll_timer[2] = 0;
+    if (game_timer == 600) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
@@ -261,7 +269,7 @@ void back_update() {
     }
 
     /////// 4回目のスライド処理 ///////
-    if (game_timer == 80000)scroll_timer[3] = 0;
+    if (game_timer == 800)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -275,7 +283,7 @@ void back_update() {
     }
 
     /////// 5回目のスライド処理 ///////
-    if (game_timer == 100000)scroll_timer[4] = 0;
+    if (game_timer == 1000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;

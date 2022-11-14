@@ -3,6 +3,8 @@
 
 #include "all.h"
 
+extern float game2_center;
+
 enum class BulletTag
 {
     None,//何もない空状態
@@ -61,6 +63,11 @@ struct OBJ2D {
 class SHOT 
 {
 public:
+    /* 1つずつにパラメータを設定するなら
+       OBJ2D parameter を配列にする必要がある 
+       今回は1ずつの弾のパラメータは同じなので
+       OBJ2Dは一つでいい。*/
+
     //OBJ2D parameter[SHOT_MAX];
     OBJ2D parameter;
 
@@ -78,6 +85,7 @@ class SHOOTER
 {
 private:
     SHOT bullet[SHOT_MAX];
+    
     inline static float mag[4] = { 0.2, 0.4, 0.6, 0.8 };
 
 public:
@@ -115,23 +123,46 @@ public:
                 if (!bullet[i].parameter.isLiving)
                 {
                     bullet[i].parameter.pos = ShotPosition(origin, height, num);
-                    bullet[i].parameter.speed = { 30,0 };
+
+                    if (bullet[i].parameter.pos.x < game2_center) 
+                    {
+                        bullet[i].parameter.speed = { 5,0 };
+                        bullet[i].parameter.scale.x *= -1;
+                    }
+                    else 
+                    {
+                        bullet[i].parameter.speed = { -5,0 };
+                        bullet[i].parameter.scale.x *= 1;
+                    }
+                    
                     bullet[i].parameter.isLiving = true;
+
+                    spwaonFlag = 100;//rand() % 300 + 300;
+                    bullet_timer = 0;
+
                     return;
                 }
             }
-
-            bullet_timer = 0;
         }
     }
 
+    /////// 弾がゲーム２の真ん中なら isLiving を falseにする。///////
     void LivingCheck()
     {
         for (int i = 0; i < SHOT_MAX; i++)
         {
-            // 弾が画面外なら isLiving を falseにする。
+            if (bullet[i].parameter.pos.x == game2_center) 
+            {
+                bullet[i].parameter.isLiving = false;
+                // 
+                if (bullet[i].parameter.scale.x < 0) {
+                    bullet[i].parameter.scale.x *= -1;
+                }
+            }
         }
     }
+
+    void game2_shrink();
 
     void shot_render();
 

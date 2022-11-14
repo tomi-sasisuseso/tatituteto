@@ -67,6 +67,13 @@ SHOOTER::SHOOTER()
 {
     bullet_timer = 0;
     spwaonFlag = rand() % 300 + 300;
+    for (int i = 0; i < SHOT_MAX; i++)
+    {
+        bullet[i].parameter.scale = { 1,1 };
+        bullet[i].parameter.texPos = { 0,0 };
+        bullet[i].parameter.texSize = { 100,100 };
+        bullet[i].parameter.pivot = { 100/2,100/2 };
+    }
 }
 
 void SHOOTER::shot_render()
@@ -84,4 +91,13 @@ void SHOOTER::shot_render()
         }
     }
     texture::end(1);
+}
+
+void SHOOTER::game2_shrink()
+{
+    for (int i = 0; i < SHOT_MAX; i++)
+    {
+        bullet[i].parameter.scale *= 0.99;
+        bullet[i].parameter.pos.y -= 4;
+    }
 }
