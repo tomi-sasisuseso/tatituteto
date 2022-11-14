@@ -44,7 +44,7 @@ struct OBJ2D {
 
     //これがtrueなら生存中、生存中なら更新や描画を行う
     bool isLivingBack;
-    bool isLiving;
+    bool isLiving=false;
 
     int anime, animetimer;
     int anime2, animetimer2;
@@ -58,33 +58,82 @@ struct OBJ2D {
     int shotCount;
 };
 
-class SHOT : public OBJ2D
+class SHOT 
 {
 public:
+    //OBJ2D parameter[SHOT_MAX];
+    OBJ2D parameter;
+
+
     GameLib::Sprite* sprite;
     BulletTag tag;
+
+    void Update()
+    {
+        parameter.pos += parameter.speed;
+    }
 };
 
-struct OBJ2DE {
+class SHOOTER
+{
+private:
+    SHOT bullet[SHOT_MAX];
+    inline static float mag[4] = { 0.2, 0.4, 0.6, 0.8 };
 
-    int hp;
-    int ap;
+public:
+    int spwaonFlag;
+    SHOOTER();
+    int bullet_timer;
 
-    std::string wasd;
+    /////// 出現させた弾を動かしてる ///////
+    void Update()
+    {
+        for (int i = 0; i < SHOT_MAX; i++)
+        {
+            if (bullet[i].parameter.isLiving) {
+                bullet[i].Update();
+            }
+        }
+        LivingCheck();
+    }
 
-    //VECTOR2             pos;        // 位置
-    //VECTOR2             scale;      // スケール
-    //VECTOR2             size;       // 幅高さ
-    //VECTOR2             texPos;     // 画像位置
-    //VECTOR2             texSize;    // 画像サイズ
-    //VECTOR2             pivot;      // 基準点
-    //VECTOR4             color;      // 色
+    /////// 弾の位置を決めてる ///////
+    VECTOR2 ShotPosition(VECTOR2 origin, float height, int num)
+    {
+        VECTOR2 shot_pos;
+        shot_pos = { origin.x, origin.y + (height * mag[num]) };
 
-    //VECTOR2             speed;      // 速度
+        return shot_pos;
+    }
 
-    ////円と円の当たり判定
-    //float radius;
-    //VECTOR2 offset;
+    /////// 弾を出現させてる ///////
+    void Shot(VECTOR2 origin, float height, int num)
+    {
+        if (bullet_timer >= spwaonFlag) {
+            for (int i = 0; i < SHOT_MAX; i++)
+            {
+                if (!bullet[i].parameter.isLiving)
+                {
+                    bullet[i].parameter.pos = ShotPosition(origin, height, num);
+                    bullet[i].parameter.speed = { 30,0 };
+                    bullet[i].parameter.isLiving = true;
+                    return;
+                }
+            }
+
+            bullet_timer = 0;
+        }
+    }
+
+    void LivingCheck()
+    {
+        for (int i = 0; i < SHOT_MAX; i++)
+        {
+            // 弾が画面外なら isLiving を falseにする。
+        }
+    }
+
+    void shot_render();
 
 };
 
@@ -105,7 +154,6 @@ public:
     /*privateにOBJ2D a[4]を入れてget関数を作って試してみたけど背景を動かすときに
     posも動かしたかったからpublicに戻した。drowで描画するときも
     getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
-    こういう場合はprivateよりpublicのほうがいいの？
     */
     
     VECTOR2 getPos();
@@ -114,8 +162,9 @@ public:
     VECTOR2 getTexS();
     VECTOR2 getPivot();
 
-    OBJ2D a[4];
+    OBJ2D a;
 private:
 };
+
 
 #endif

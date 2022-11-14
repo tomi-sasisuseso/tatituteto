@@ -1,6 +1,6 @@
 #include "obj2d.h"
 
-static const VECTOR2 square_offsets[4] =
+const VECTOR2 square_offsets[4] =
 {
     {0, 0},
     {0, 100},
@@ -15,43 +15,28 @@ Squares::Squares(float x, float y)
 
 void Squares::pos_Init(float x, float y)
 {
-    a[0].pos = { x, y };
-    a[1].pos = a[0].pos + square_offsets[1];
-    a[2].pos = a[1].pos + square_offsets[2];
-    a[3].pos = a[2].pos + square_offsets[3];
-
+    a.pos = { x, y };
 }
 
 void Squares::scale_Init(float x, float y)
 {
-    a[0].scale = { x,y };
-    a[1].scale = { x,y };
-    a[2].scale = { x,y };
-    a[3].scale = { x,y };
+    a.scale = { x,y };
+
 }
 
 void Squares::texP_Init(float x, float y)
 {
-    a[0].texPos = { x,y };
-    a[1].texPos = { x,y };
-    a[2].texPos = { x,y };
-    a[3].texPos = { x,y };
+    a.texPos = { x,y };
 }
 
 void Squares::texS_Init(float x, float y)
 {
-    a[0].texSize = { x,y };
-    a[1].texSize = { x,y };
-    a[2].texSize = { x,y };
-    a[3].texSize = { x,y };
+    a.texSize = { x,y };
 }
 
 void Squares::pivot_Init(float x, float y)
 {
-    a[0].pivot = { x,y };
-    a[1].pivot = { x,y };
-    a[2].pivot = { x,y };
-    a[3].pivot = { x,y };
+    a.pivot = { x,y };
 }
 
 void Squares::update()
@@ -59,22 +44,44 @@ void Squares::update()
 }
 
 VECTOR2 Squares::getPos(){
-    return a[0].pos; 
+    return a.pos; 
 }
 
 VECTOR2 Squares::getScale(){
-    return a[0].scale; 
+    return a.scale; 
 }
 
 VECTOR2 Squares::getTexP(){
-    return a[0].texPos; 
+    return a.texPos; 
 }
 
 VECTOR2 Squares::getTexS(){
-    return a[0].texSize; 
+    return a.texSize; 
 }
 
 VECTOR2 Squares::getPivot(){
-    return a[0].pivot; 
+    return a.pivot; 
 }
 
+SHOOTER::SHOOTER()
+{
+    bullet_timer = 0;
+    spwaonFlag = rand() % 300 + 300;
+}
+
+void SHOOTER::shot_render()
+{
+    texture::begin(1);
+    for (int i = 0; i < SHOT_MAX; i++)
+    {
+        if (bullet[i].parameter.isLiving) {
+            texture::draw(1,
+                bullet[i].parameter.pos,
+                bullet[i].parameter.scale,
+                bullet[i].parameter.texPos,
+                bullet[i].parameter.texSize,
+                bullet[i].parameter.pivot);
+        }
+    }
+    texture::end(1);
+}

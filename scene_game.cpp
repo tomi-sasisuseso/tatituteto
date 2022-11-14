@@ -11,7 +11,6 @@
 
 //------< 定数 >----------------------------------------------------------------
 
-
 //------< 変数 >----------------------------------------------------------------
 int game_state;
 int game_timer;
@@ -29,7 +28,11 @@ Sprite* Square;
 
 OBJ2D back[MAX_GAMES];
 OBJ2D ball;
-Squares square;
+Squares square[4];
+
+SHOOTER shot;
+
+extern const VECTOR2 square_offsets[4];
 
 #define ball_error  0//ball.texSize.x/(2.0f/ball.scale.x)
 //--------------------------------------
@@ -78,7 +81,8 @@ void game_update()
         Back[5] = sprite_load(L"Data/Images/仮10.png");
 
         Ball = sprite_load(L"./Data/Images/ボール_右.png");
-        texture::load(0,L"Data/images/四角.png",1U);
+        texture::load(0, L"Data/images/ゲーム2_四角.png", 4U);
+        texture::load(1, L"Data/images/ゲーム2_弾.png", SHOT_MAX);
 
         game_state++;
         /*fallthrough*/
@@ -90,7 +94,7 @@ void game_update()
 
         back[0].texSize = { 1280,540 };
         back[0].pivot = { 0,0 };
-        back[0].pos = { 0,0};
+        back[0].pos = { 0,0 };
         back[0].scale = { 2, 2 };
 
 
@@ -101,20 +105,20 @@ void game_update()
         back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
         back[1].scale = { 1,1 };
-        
+
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
 
         back[2].texSize = { 1920, 540 };
-        back[2].pivot = {0,0 };
+        back[2].pivot = { 0,0 };
         back[2].pos = { 0,SCREEN_H };
         back[2].scale = { 1,1 };
-        
+
 
         back[3].texSize = { 960, 540 };
         back[3].pivot = { 0,0 };
-        back[3].pos = { SCREEN_W,SCREEN_H/2 };
+        back[3].pos = { SCREEN_W,SCREEN_H / 2 };
         back[3].scale = { 1,1 };
 
 
@@ -122,25 +126,29 @@ void game_update()
         back[4].pivot = { 0,0 };
         back[4].pos = { SCREEN_W,0 };
         back[4].scale = { 1,1 };
-        
+
 
         back[5].texSize = { 640, 540 };
         back[5].pivot = { 0,0 };
-        back[5].pos = { SCREEN_W,SCREEN_H/2 };
+        back[5].pos = { SCREEN_W,SCREEN_H / 2 };
         back[5].scale = { 1,1 };
 
 
         ball.texPos = { 0,0 };
         ball.texSize = { 150,150 };
         ball.pos = { SCREEN_W / 2 ,SCREEN_H / 2 };
-        ball.pivot = { 150/2,150/2 };
+        ball.pivot = { 150 / 2,150 / 2 };
         ball.scale = { 1,1 };
-        
-        square.pos_Init(SCREEN_W , SCREEN_H / 2);
-        square.scale_Init(1,1);
-        square.texP_Init(0,0);
-        square.texS_Init(100,100);
-        square.pivot_Init(100 / 2, 100 / 2);
+
+        square[0].pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
+        square[1].pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 50);
+        square[2].pos_Init(SCREEN_W + 50, SCREEN_H / 2 + 50);
+        square[3].pos_Init(SCREEN_W + 50, SCREEN_H / 2 + 150);
+
+        square[0].scale_Init(1, 1);
+        square[0].texP_Init(0, 0);
+        square[0].texS_Init(100, 100);
+        square[0].pivot_Init(100 / 2, 100 / 2);
 
 
         game_state++;
@@ -159,18 +167,28 @@ void game_update()
         debug::setString("back[2].pos.y:%f", back[2].pos.y);
         debug::setString("back[3].pos.x:%f", back[3].pos.x);
 
+        debug::setString("bullet_timer:%d", shot.bullet_timer);
+        debug::setString("shot.spwaonFlag:%d", shot.spwaonFlag);
+
         if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_SCORE;
             break;
         }
 
+        VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
+        float height = back[1].texSize.y * back[1].scale.y; // tex_size.y * scale
 
+        shot.Update();
+
+        shot.Shot(shot_pos[rand() % 1], height, rand() % 3);// 出現位置を決めてそのまま発射してる
+        
         back_update();
         break;
     }
 
     game_timer++;
+    shot.bullet_timer++;
 }
 
 void back_update() {
@@ -193,10 +211,20 @@ void back_update() {
         back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 3, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
 
-        if (ball.pos.x > SCREEN_W / 4 ) ball.pos.x -= 16;
-        else ball.pos.x = SCREEN_W / 4 ;
-        if (square.a[0].pos.x > SCREEN_W - SCREEN_W / 4)square.a[0].pos.x -= 16;
-        else square.a[0].pos.x = SCREEN_W - SCREEN_W / 4;
+        if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
+        else ball.pos.x = SCREEN_W / 4;
+        if (square[0].a.pos.x > SCREEN_W - SCREEN_W / 4) {
+            square[0].a.pos.x -= 16;
+            square[1].a.pos.x -= 16;
+            square[2].a.pos.x -= 16;
+            square[3].a.pos.x -= 16;
+        }
+        else {
+            square[0].a.pos.x = SCREEN_W - SCREEN_W / 4;
+            square[1].a.pos.x = SCREEN_W - SCREEN_W / 4;
+            square[2].a.pos.x = SCREEN_W - SCREEN_W / 4;
+            square[3].a.pos.x = SCREEN_W - SCREEN_W / 4;
+        }
     }
 
     /////// 2回目のスライド処理 ///////
@@ -289,6 +317,7 @@ void game_render()
 
     square_render();
 
+    shot.shot_render();
 
     sprite_render(Back[2],
         back[2].pos.x, back[2].pos.y,
@@ -347,11 +376,32 @@ void ball_render() {
 void square_render() {
     texture::begin(0);
     texture::draw(0,
-        square.getPos(),
-        square.getScale(),
-        square.getTexP(),
-        square.getTexS(),
-        square.getPivot()
+        square[0].getPos(),
+        square[0].getScale(),
+        square[0].getTexP(),
+        square[0].getTexS(),
+        square[0].getPivot()
+    ); 
+    texture::draw(0,
+        square[1].getPos(),
+        square[0].getScale(),
+        square[0].getTexP(),
+        square[0].getTexS(),
+        square[0].getPivot()
+    ); 
+    texture::draw(0,
+        square[2].getPos(),
+        square[0].getScale(),
+        square[0].getTexP(),
+        square[0].getTexS(),
+        square[0].getPivot()
+    );
+    texture::draw(0,
+        square[3].getPos(),
+        square[0].getScale(),
+        square[0].getTexP(),
+        square[0].getTexS(),
+        square[0].getPivot()
     );
     texture::end(0);
 }

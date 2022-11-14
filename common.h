@@ -28,6 +28,9 @@
 /////// ゲーム数 ///////
 #define MAX_GAMES       6
 
+/////// ショット数 ///////
+#define SHOT_MAX        100
+
 // 変数
 extern int curScene;
 extern int nextScene;
