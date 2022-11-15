@@ -86,82 +86,20 @@ class SHOOTER
 private:
     SHOT bullet[SHOT_MAX];
     
-    inline static float mag[4] = { 0.2, 0.4, 0.6, 0.8 };
+    inline static float mag[4] = {  0.4, 0.6, 0.8 };
 
 public:
-    int spwaonFlag;
+    int spawnFlag;
     SHOOTER();
     int bullet_timer;
 
-    /////// èoåªÇ≥ÇπÇΩíeÇìÆÇ©ÇµÇƒÇÈ ///////
-    void Update()
-    {
-        for (int i = 0; i < SHOT_MAX; i++)
-        {
-            if (bullet[i].parameter.isLiving) {
-                bullet[i].Update();
-            }
-        }
-        LivingCheck();
-    }
+    void Update(); // èoåªÇ≥ÇπÇΩíeÇìÆÇ©ÇµÇƒÇÈ
 
-    /////// íeÇÃà íuÇåàÇﬂÇƒÇÈ ///////
-    VECTOR2 ShotPosition(VECTOR2 origin, float height, int num)
-    {
-        VECTOR2 shot_pos;
-        shot_pos = { origin.x, origin.y + (height * mag[num]) };
+    VECTOR2 ShotPosition(VECTOR2 origin, float height, float num); // íeÇÃà íuÇåàÇﬂÇƒÇÈ
 
-        return shot_pos;
-    }
+    void Shot(VECTOR2 origin, float height, float num); // íeÇèoåªÇ≥ÇπÇƒÇÈ
 
-    /////// íeÇèoåªÇ≥ÇπÇƒÇÈ ///////
-    void Shot(VECTOR2 origin, float height, int num)
-    {
-        if (bullet_timer >= spwaonFlag) {
-            for (int i = 0; i < SHOT_MAX; i++)
-            {
-                if (!bullet[i].parameter.isLiving)
-                {
-                    bullet[i].parameter.pos = ShotPosition(origin, height, num);
-
-                    if (bullet[i].parameter.pos.x < game2_center) 
-                    {
-                        bullet[i].parameter.speed = { 5,0 };
-                        bullet[i].parameter.scale.x *= -1;
-                    }
-                    else 
-                    {
-                        bullet[i].parameter.speed = { -5,0 };
-                        bullet[i].parameter.scale.x *= 1;
-                    }
-                    
-                    bullet[i].parameter.isLiving = true;
-
-                    spwaonFlag = 100;//rand() % 300 + 300;
-                    bullet_timer = 0;
-
-                    return;
-                }
-            }
-        }
-    }
-
-    /////// íeÇ™ÉQÅ[ÉÄÇQÇÃê^ÇÒíÜÇ»ÇÁ isLiving Ç falseÇ…Ç∑ÇÈÅB///////
-    void LivingCheck()
-    {
-        for (int i = 0; i < SHOT_MAX; i++)
-        {
-            if (bullet[i].parameter.pos.x == game2_center) 
-            {
-                bullet[i].parameter.isLiving = false;
-
-                // íeÇ™îΩì]ÇµÇƒÇ¢ÇΩÇÁ -1 Ç©ÇØÇƒå≥ÇÃå¸Ç´Ç…ñﬂÇ∑ //
-                if (bullet[i].parameter.scale.x < 0) {
-                    bullet[i].parameter.scale.x *= -1;
-                }
-            }
-        }
-    }
+    void LivingCheck(); // íeÇ™ÉQÅ[ÉÄÇQÇÃê^ÇÒíÜÇ»ÇÁ isLiving Ç falseÇ…Ç∑ÇÈÅB
 
     void game2_shrink();
 
@@ -190,8 +128,9 @@ public:
     getÇæÇ∆îzóÒÇÃ1î‘ñ⁄ÇÃÇ‚Ç¬ÇµÇ©ï‘Ç≥Ç»Ç¢ÇÃÇ≈getä÷êîÇîzóÒï™çÏÇÈïKóvÇ™Ç†ÇÈÇÃÅH
     */
     
-    VECTOR2 getPos();
-    VECTOR2 getScale();
+    float frame_getPos();
+    float frame_getScale();
+    
     VECTOR2 getTexP();
     VECTOR2 getTexS();
     VECTOR2 getPivot();

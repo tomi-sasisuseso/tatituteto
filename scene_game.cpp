@@ -37,6 +37,13 @@ SHOOTER shot;
 
 extern const VECTOR2 square_offsets[4];
 
+
+/*
+* 基本scene_game.cppでのクラスの呼び出しはメンバ関数のみ
+* この場合 SHOOTERクラス の shot のような組み方。
+* Squaresクラスの square はあまりきれいな形ではない。(途中でクラスの組み方に変更したため);
+*/
+
 #define ball_error  0//ball.texSize.x/(2.0f/ball.scale.x)
 //--------------------------------------
 //  初期設定
@@ -173,8 +180,11 @@ void game_update()
         debug::setString("back[3].pos.x:%f", back[3].pos.x);
 
         debug::setString("bullet_timer:%d", shot.bullet_timer);
-        debug::setString("shot.spwaonFlag:%d", shot.spwaonFlag);
+        debug::setString("shot.spwaonFlag:%d", shot.spawnFlag);
         debug::setString("game2_center:%f", game2_center);
+        debug::setString("frame_Pos():%f", square.frame_getPos());
+        debug::setString("frame_Scale():%f", square.frame_getScale());
+        debug::setString("square.a.texSize.y :%f", square.a.texSize.y);
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -183,11 +193,11 @@ void game_update()
         }
 
         VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
-        float height = back[1].texSize.y * back[1].scale.y; // tex_size.y * scale
+        float height = square.frame_getPos() * square.frame_getScale(); // tex_size.y * scale
         game2_center = (back[1].pos.x + back[4].pos.x) / 2;
 
         shot.Update();
-        shot.Shot(shot_pos[rand() % 2], height, rand() % 3);// 出現位置を決めてそのまま発射してる
+        shot.Shot(shot_pos[rand() % 2], height, square.a.texSize.y * (/*rand() % 4+*/1));// 出現位置を決めてそのまま発射してる
 
         square.update();
         back_update();
