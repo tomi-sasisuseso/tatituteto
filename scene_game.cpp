@@ -87,8 +87,8 @@ void game_update()
         //////// 初期設定 ////////
         Back[0] = sprite_load(L"./Data/Images/背景2.png");
         Back[1] = sprite_load(L"./Data/Images/仮1.png");
-        Back[2] = sprite_load(L"./Data/Images/仮14.png");
-        Back[3] = sprite_load(L"Data/Images/仮4.png");
+        Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
+        Back[3] = sprite_load(L"Data/Images/ゲーム5_背景.png");
         Back[4] = sprite_load(L"Data/Images/仮8.png");
         Back[5] = sprite_load(L"Data/Images/仮10.png");
 
@@ -156,6 +156,7 @@ void game_update()
         /*Squares square(SCREEN_W + 50, SCREEN_H / 2 - 150);
           ゲームループの中でクラスの実態宣言はできない？
           */
+
         square.pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
         square.scale_Init(1, 1);
         square.texP_Init(0, 0);
@@ -185,6 +186,7 @@ void game_update()
         debug::setString("frame_Pos():%f", square.frame_getPos());
         debug::setString("frame_Scale():%f", square.frame_getScale());
         debug::setString("square.a.texSize.y :%f", square.a.texSize.y);
+        debug::setString("square.a.scale.y :%f", square.a.scale.y);
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -193,11 +195,11 @@ void game_update()
         }
 
         VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
-        float height = square.frame_getPos() * square.frame_getScale(); // tex_size.y * scale
+        float height = square.frame_getPos()-((square.frame_getTexS()/2) * square.frame_getScale()); // tex_size.y * scale
         game2_center = (back[1].pos.x + back[4].pos.x) / 2;
 
         shot.Update();
-        shot.Shot(shot_pos[rand() % 2], height, square.a.texSize.y * (/*rand() % 4+*/1));// 出現位置を決めてそのまま発射してる
+        shot.Shot(shot_pos[rand() % 2], height, (square.a.texSize.y*square.a.scale.y) * (rand() % 4+1));// 出現位置を決めてそのまま発射してる
 
         square.update();
         back_update();
@@ -230,14 +232,14 @@ void back_update() {
 
         if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
         else ball.pos.x = SCREEN_W / 4;
-        square.square_slide();
+        square.square_slide(SCREEN_W-SCREEN_W/4);
 
     }
 
     /////// 2回目のスライド処理 ///////
-    if (game_timer == 40000) scroll_timer[1] = 0;
+    if (game_timer == 400) scroll_timer[1] = 0;
     if (back[0].scale.x >= 1) {
-        if (game_timer > 40000) {
+        if (game_timer > 400) {
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
             back[1].scale.x *= 0.99;
@@ -245,10 +247,11 @@ void back_update() {
 
             ball.scale.x *= 0.99;
             ball.scale.y *= 0.99;
-            ball.pos.y -= 4;
+            if (ball.pos.y > SCREEN_H / 4) ball.pos.y -= 4;
+            else ball.pos.y = SCREEN_H / 4;
 
             shot.game2_shrink();
-            
+            square.square_shrink();
 
             if (scroll_timer[1] < duration)
             {
@@ -263,7 +266,7 @@ void back_update() {
     }
 
     /////// 3回目のスライド処理 ///////
-    if (game_timer == 60000) scroll_timer[2] = 0;
+    if (game_timer == 600) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
@@ -271,7 +274,7 @@ void back_update() {
     }
 
     /////// 4回目のスライド処理 ///////
-    if (game_timer == 80000)scroll_timer[3] = 0;
+    if (game_timer == 800)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -279,13 +282,15 @@ void back_update() {
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
         back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
 
+        square.square_slide(SCREEN_W/2);
+
         if (ball.pos.x > SCREEN_W / 6 ) ball.pos.x -= 8;
         else ball.pos.x = SCREEN_W / 6 ;
 
     }
 
     /////// 5回目のスライド処理 ///////
-    if (game_timer == 100000)scroll_timer[4] = 0;
+    if (game_timer == 1000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
@@ -337,13 +342,6 @@ void game_render()
         back[2].pivot.x, back[2].pivot.y);
     
 
-    sprite_render(Back[3],
-        back[3].pos.x, back[3].pos.y,
-        back[3].scale.x, back[3].scale.y,
-        0, 0,
-        back[3].texSize.x, back[3].texSize.y,
-        back[3].pivot.x, back[3].pivot.y);
-    
     
     sprite_render(Back[4],
         back[4].pos.x, back[4].pos.y,
@@ -351,6 +349,13 @@ void game_render()
         0, 0,
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
+    
+    sprite_render(Back[3],
+        back[3].pos.x, back[3].pos.y,
+        back[3].scale.x, back[3].scale.y,
+        0, 0,
+        back[3].texSize.x, back[3].texSize.y,
+        back[3].pivot.x, back[3].pivot.y);
     
     
     sprite_render(Back[5],

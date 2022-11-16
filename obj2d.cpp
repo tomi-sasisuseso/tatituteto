@@ -55,30 +55,42 @@ void Squares::pivot_Init(float x, float y)
 void Squares::update()
 {
     if (TRG(0) & PAD_UP) {
-        a.pos.y -= a.texSize.y;
+        a.pos.y -= a.texSize.y*a.scale.y;
     }
     if (TRG(0) & PAD_DOWN) {
-        a.pos.y += a.texSize.y;
+        a.pos.y += a.texSize.y*a.scale.y;
     }
     
     a.pos.y = std::clamp(a.pos.y,
-        frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1,
-        frame.pos.y + frame.texSize.y / 2 - (a.texSize.y / 2) - 1);
+        (frame.pos.y - (frame.texSize.y * frame.scale.y) / 2.0f + (a.texSize.y * a.scale.y / 2.0f) + 1.0f),
+        (frame.pos.y + (frame.texSize.y * frame.scale.y) / 2.0f - (a.texSize.y * a.scale.y / 2.0f) - 1.0f));
     
 }
 
 
-void Squares::square_slide()
+void Squares::square_slide(float x)
 {
-    if (a.pos.x > SCREEN_W - SCREEN_W / 4) {
+    if (a.pos.x > x) {
         a.pos.x -= 16;
         frame.pos.x -= 16;
     }
     else {
-        a.pos.x = SCREEN_W - SCREEN_W / 4;
-        frame.pos.x = SCREEN_W - SCREEN_W / 4;
+        a.pos.x = x;
+        frame.pos.x = x;
     }
 }
+
+void Squares::square_shrink()
+{
+    frame.scale *= 0.99;
+    if (frame.pos.y > SCREEN_H / 4) frame.pos.y -= 4;
+    else frame.pos.y = SCREEN_H / 4;
+    
+    a.scale *= 0.99;
+   /* if ((frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1)* a.scale.y) a.pos.y -= 4;
+    else a.pos.y = (frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1) ;*/
+}
+
 
 float Squares::frame_getPos(){
     return frame.pos.y+1;// +1‚Í˜g‚Ì‘¾‚³•ª‚¸‚ç‚µ‚Ä‚¢‚éB 
@@ -92,8 +104,8 @@ VECTOR2 Squares::getTexP(){
     return a.texPos; 
 }
 
-VECTOR2 Squares::getTexS(){
-    return a.texSize; 
+float Squares::frame_getTexS(){
+    return frame.texSize.y; 
 }
 
 VECTOR2 Squares::getPivot(){
@@ -150,7 +162,7 @@ void SHOOTER::Update()
 VECTOR2 SHOOTER::ShotPosition(VECTOR2 origin, float height, float num)
 {
     VECTOR2 shot_pos;
-    shot_pos = { origin.x, origin.y + (height + num) };
+    shot_pos = { origin.x, origin.y + (height-(bullet->parameter.texSize.y/2*bullet->parameter.scale.y) + num) };
 
     return shot_pos;
 }
@@ -226,6 +238,8 @@ void SHOOTER::game2_shrink()
     for (int i = 0; i < SHOT_MAX; i++)
     {
         bullet[i].parameter.scale *= 0.99;
-        bullet[i].parameter.pos.y -= 4;
+        
+        //bullet[i].parameter.pos.y -= 4;
     }
+    
 }

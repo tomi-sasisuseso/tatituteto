@@ -81,7 +81,42 @@ public:
     }
 };
 
-class SHOOTER
+
+
+class Squares {
+public:
+    Squares() {}
+    Squares(float x, float y);
+
+    void pos_Init(float x, float y);
+    void scale_Init(float x, float y);
+    void texP_Init(float x, float y);
+    void texS_Init(float x, float y);
+    void pivot_Init(float x, float y);
+    
+    void square_render();
+    void square_slide(float x);
+    void square_shrink();
+    void update();
+
+    /*privateにOBJ2D a[4]を入れてget関数を作って試してみたけど背景を動かすときに
+    posも動かしたかったからpublicに戻した。drowで描画するときも
+    getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
+    */
+    
+    float frame_getPos();
+    float frame_getScale();
+    float frame_getTexS();
+    
+    VECTOR2 getTexP();
+    VECTOR2 getPivot();
+
+    OBJ2D a;
+protected:
+    OBJ2D frame;
+};
+
+class SHOOTER /*:public Squares*/
 {
 private:
     SHOT bullet[SHOT_MAX];
@@ -101,44 +136,10 @@ public:
 
     void LivingCheck(); // 弾がゲーム２の真ん中なら isLiving を falseにする。
 
-    void game2_shrink();
+    void game2_shrink(); // 縮小してる
 
     void shot_render();
 
 };
-
-
-class Squares {
-public:
-    Squares() {}
-    Squares(float x, float y);
-
-    void pos_Init(float x, float y);
-    void scale_Init(float x, float y);
-    void texP_Init(float x, float y);
-    void texS_Init(float x, float y);
-    void pivot_Init(float x, float y);
-    
-    void square_render();
-    void square_slide();
-    void update();
-
-    /*privateにOBJ2D a[4]を入れてget関数を作って試してみたけど背景を動かすときに
-    posも動かしたかったからpublicに戻した。drowで描画するときも
-    getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
-    */
-    
-    float frame_getPos();
-    float frame_getScale();
-    
-    VECTOR2 getTexP();
-    VECTOR2 getTexS();
-    VECTOR2 getPivot();
-
-    OBJ2D a;
-private:
-    OBJ2D frame;
-};
-
 
 #endif
