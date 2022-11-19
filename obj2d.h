@@ -1,9 +1,10 @@
 #ifndef OBJ2D_H
 #define OBJ2D_H
 
-#include "all.h"
 
 extern float game2_center;
+
+
 
 enum class BulletTag
 {
@@ -119,9 +120,14 @@ protected:
 class SHOOTER /*:public Squares*/
 {
 private:
+    /*
+    * bulletは今回のゲームでは基本的に一画面に１つしか出ないけど
+    * 練習として１００発出せるようなコードの組み方をしてる。
+    * たくさん出したければbulletのようにすればいいよ。
+    */
     SHOT bullet[SHOT_MAX];
     
-    inline static float mag[4] = {  0.4, 0.6, 0.8 };
+    inline static float mag[4] = {  0.4f, 0.6f, 0.8f };
 
 public:
     int spawnFlag;
@@ -142,4 +148,21 @@ public:
 
 };
 
+class Game4_Manager
+{
+private:
+    OBJ2D belt_conveyor;
+    OBJ2D hole;
+public:
+    OBJ2D box;
+    int box_timer = 0;
+    int spwanFlag = rand() % 300 + 600;
+    void Game4_Manager_update();
+    void Game4_Manager_init();
+    void hole_update();
+    void box_update();
+    void LivingCheck(); 
+
+    void Game4_render();
+};
 #endif

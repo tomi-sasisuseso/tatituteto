@@ -1,7 +1,17 @@
-#include "obj2d.h"
+#include "all.h"
 
 extern Sprite* Square;
 extern Sprite* Frame;
+extern Sprite* Game4_beruto;
+extern Sprite* Game4_hole;
+extern Sprite* Game4_box;
+
+
+extern OBJ2D back[MAX_GAMES];
+
+#define box_difference 5
+#define belt_conveyor_while 128
+#define belt_conveyor_width 161
 
 const VECTOR2 square_offsets[4] =
 {
@@ -180,17 +190,17 @@ void SHOOTER::Shot(VECTOR2 origin, float height, float num)
                 if (bullet[i].parameter.pos.x < game2_center)
                 {
                     bullet[i].parameter.speed = { 5,0 };
-                    bullet[i].parameter.scale.x *= -1;
+                    bullet[i].parameter.scale.x *= 1;
                 }
                 else
                 {
                     bullet[i].parameter.speed = { -5,0 };
-                    bullet[i].parameter.scale.x *= 1;
+                    bullet[i].parameter.scale.x *= -1;
                 }
 
                 bullet[i].parameter.isLiving = true;
 
-                spawnFlag = 100;//rand() % 300 + 300;
+                spawnFlag = rand() % 300 + 300;
                 bullet_timer = 0;
 
                 return;
@@ -242,4 +252,121 @@ void SHOOTER::game2_shrink()
         //bullet[i].parameter.pos.y -= 4;
     }
     
+}
+
+void Game4_Manager::Game4_Manager_update()
+{
+    belt_conveyor.pos.x = back[3].pos.x+240;
+    belt_conveyor.pos.y = back[3].pos.y;
+    
+
+    hole.pos.x = belt_conveyor.pos.x;
+    hole.pos.y = belt_conveyor.pos.y+belt_conveyor.texSize.y;
+   
+    //box.pos.x = belt_conveyor.pos.x;
+    //box.pos.y = belt_conveyor.pos.y;
+    hole_update();
+    box_update();
+}
+
+void Game4_Manager::Game4_Manager_init()
+{
+    belt_conveyor.scale = { 1,1 };
+    belt_conveyor.texPos = { 0,0 };
+    belt_conveyor.texSize = { 450,374 };
+    belt_conveyor.pivot = { 0,0 };
+
+    hole.scale = { 1,1 };
+    hole.texPos = { 0,0 };
+    hole.texSize = { 450,160 };
+    hole.pivot = { 0,0 };
+    
+    box.scale = { 1,1 };
+    box.texPos = { 0,0 };
+    box.texSize = { 150,150 };
+    box.pivot = { 0,0 };
+
+}
+
+void Game4_Manager::hole_update()
+{
+    //if (STATE(0) & PAD_RIGHT) {
+    if (hole.texPos.x != 1 * hole.texSize.x) {
+        hole.anime = hole.animetimer / 9 % 2;
+        hole.texPos.x = hole.anime * hole.texSize.x;
+        ++hole.animetimer;
+    }
+
+    else {
+        hole.anime = hole.animetimer / 20 % 1;
+        hole.texPos.x = hole.anime * hole.texSize.x;
+        ++hole.animetimer;
+        if (hole.texPos.x = 3 * hole.texSize.x) {
+            hole.texPos = {};
+            hole.anime = 0;
+            hole.animetimer = 0;
+        }
+    }
+
+}
+
+void Game4_Manager::box_update()
+{
+    box_timer++;
+    if (box_timer >= spwanFlag) {
+        box.isLiving = true;
+        int r = rand() % 2;
+        if (r == 0) {
+            box.pos.x = belt_conveyor.pos.x + box_difference;
+            box.pos.y = belt_conveyor.pos.y;
+        }
+        else if (r == 1) {
+            box.pos.x = belt_conveyor.pos.x + box_difference + belt_conveyor_while+belt_conveyor_width;
+            box.pos.y = belt_conveyor.pos.y;
+        }
+        box.speed = { 0,5 };
+        box_timer = 0;
+        spwanFlag = rand() % 300 + 600;
+    }
+
+    box.pos.y += box.speed.y;
+    LivingCheck();
+
+}
+
+void Game4_Manager::LivingCheck()
+{
+    if (box.pos.y >= SCREEN_H) {
+        /*
+        * 変更必要　judgh関数であなにおとせるようにする。
+        */
+        box.isLiving = false;
+
+    }
+}
+
+void Game4_Manager::Game4_render()
+{
+    sprite_render(Game4_beruto,
+        belt_conveyor.pos.x, belt_conveyor.pos.y,
+        belt_conveyor.scale.x, belt_conveyor.scale.y,
+        belt_conveyor.texPos.x, belt_conveyor.texPos.y,
+        belt_conveyor.texSize.x, belt_conveyor.texSize.y,
+        belt_conveyor.pivot.x, belt_conveyor.pivot.y);
+
+    sprite_render(Game4_hole,
+        hole.pos.x, hole.pos.y,
+        hole.scale.x, hole.scale.y,
+        hole.texPos.x, hole.texPos.y,
+        hole.texSize.x, hole.texSize.y,
+        hole.pivot.x, hole.pivot.y);
+
+    if (box.isLiving) {
+        sprite_render(Game4_box,
+            box.pos.x, box.pos.y,
+            box.scale.x, box.scale.y,
+            box.texPos.x, box.texPos.y,
+            box.texSize.x, box.texSize.y,
+            box.pivot.x, box.pivot.y);
+    }
 }

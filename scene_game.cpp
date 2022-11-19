@@ -25,18 +25,24 @@ float game2_center;
 int bgmNo;
 
 Sprite* Back[MAX_GAMES];
+
 Sprite* Ball;
 Sprite* Square;
 Sprite* Frame;
 
+
+Sprite* Game4_beruto;
+Sprite* Game4_box;
+Sprite* Game4_hole;
+
 OBJ2D back[MAX_GAMES];
 OBJ2D ball;
+
 Squares square(SCREEN_W + 50, SCREEN_H / 2 );
-
 SHOOTER shot;
-
 extern const VECTOR2 square_offsets[4];
 
+Game4_Manager game4_manager;
 
 /*
 * Šî–{scene_game.cpp‚Å‚ÌƒNƒ‰ƒX‚ÌŒÄ‚Ño‚µ‚Íƒƒ“ƒoŠÖ”‚Ì‚İ
@@ -85,7 +91,7 @@ void game_update()
     {
     case 0:
         //////// ‰Šúİ’è ////////
-        Back[0] = sprite_load(L"./Data/Images/”wŒi2.png");
+        /*Back[0] = sprite_load(L"./Data/Images/”wŒi2.png");
         Back[1] = sprite_load(L"./Data/Images/‰¼1.png");
         Back[2] = sprite_load(L"./Data/Images/ƒQ[ƒ€4_”wŒi.png");
         Back[3] = sprite_load(L"Data/Images/ƒQ[ƒ€5_”wŒi.png");
@@ -96,6 +102,27 @@ void game_update()
         Frame = sprite_load(L"./Data/images/ƒQ[ƒ€2_˜g.png");
         Ball = sprite_load(L"./Data/Images/ƒ{[ƒ‹_‰E.png");
         texture::load(1, L"Data/images/ƒQ[ƒ€2_’e.png", SHOT_MAX);
+
+        Game4_box = sprite_load(L"./Data/Images/ƒQ[ƒ€5_lŠp.png");
+        Game4_hole = sprite_load(L"./Data/Images/ƒQ[ƒ€5_ŒŠ.png");
+        Game4_beruto = sprite_load(L"Data/Images/ƒQ[ƒ€5_ƒxƒ‹ƒgƒRƒ“ƒxƒA.png");*/
+
+        Back[0] = sprite_load(L"./Data/Images/ƒQ[ƒ€1_”wŒi.png");
+        Back[1] = sprite_load(L"./Data/Images/ƒQ[ƒ€2_”wŒi.png");
+        Back[2] = sprite_load(L"./Data/Images/ƒQ[ƒ€4_”wŒi.png");
+        Back[3] = sprite_load(L"Data/Images/ƒQ[ƒ€5_”wŒi.png");
+        Back[4] = sprite_load(L"Data/Images/ƒQ[ƒ€3_”wŒi.png");
+        Back[5] = sprite_load(L"Data/Images/ƒQ[ƒ€6_”wŒi.png");
+
+        Ball = sprite_load(L"./Data/Images/ƒQ[ƒ€1_ƒ{[ƒ‹.png");
+
+        Square = sprite_load(L"./Data/images/ƒQ[ƒ€2_lŠp.png");
+        Frame = sprite_load(L"./Data/images/ƒQ[ƒ€2_˜g.png");
+        texture::load(1, L"Data/images/ƒQ[ƒ€2_’e.png", SHOT_MAX);
+
+        Game4_box = sprite_load(L"./Data/Images/ƒQ[ƒ€5_lŠp.png");
+        Game4_hole = sprite_load(L"./Data/Images/ƒQ[ƒ€5_ŒŠ.png");
+        Game4_beruto = sprite_load(L"Data/Images/ƒQ[ƒ€5_ƒxƒ‹ƒgƒRƒ“ƒxƒA.png");
 
         game_state++;
         /*fallthrough*/
@@ -163,6 +190,7 @@ void game_update()
         square.texS_Init(100, 100);
         square.pivot_Init(100 / 2, 100 / 2);
 
+        game4_manager.Game4_Manager_init();
 
         game_state++;
         /*fallthrough*/
@@ -187,6 +215,10 @@ void game_update()
         debug::setString("frame_Scale():%f", square.frame_getScale());
         debug::setString("square.a.texSize.y :%f", square.a.texSize.y);
         debug::setString("square.a.scale.y :%f", square.a.scale.y);
+        debug::setString("game4_manager.box_timer :%d", game4_manager.box_timer);
+        debug::setString("game4_manager.spwanFlag :%d", game4_manager.spwanFlag);
+        debug::setString("game4_manager.box.speed.y :%f", game4_manager.box.speed.y);
+        debug::setString("game4_manager.box.pos.y :%f", game4_manager.box.pos.y);
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -202,6 +234,8 @@ void game_update()
         shot.Shot(shot_pos[rand() % 2], height, (square.a.texSize.y*square.a.scale.y) * (rand() % 4+1));// oŒ»ˆÊ’u‚ğŒˆ‚ß‚Ä‚»‚Ì‚Ü‚Ü”­Ë‚µ‚Ä‚é
 
         square.update();
+        game4_manager.Game4_Manager_update();
+
         back_update();
         break;
     }
@@ -274,7 +308,7 @@ void back_update() {
     }
 
     /////// 4‰ñ–Ú‚ÌƒXƒ‰ƒCƒhˆ— ///////
-    if (game_timer == 800)scroll_timer[3] = 0;
+    if (game_timer == 80000)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -290,12 +324,12 @@ void back_update() {
     }
 
     /////// 5‰ñ–Ú‚ÌƒXƒ‰ƒCƒhˆ— ///////
-    if (game_timer == 1000)scroll_timer[4] = 0;
+    if (game_timer == 100000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
         back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
-        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2 - SCREEN_W / 6, t);
+        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W/3 - 120 / 2, t);
         back[5].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
 
     }
@@ -341,6 +375,14 @@ void game_render()
         back[2].texSize.x, back[2].texSize.y,
         back[2].pivot.x, back[2].pivot.y);
     
+    sprite_render(Back[3],
+        back[3].pos.x, back[3].pos.y,
+        back[3].scale.x, back[3].scale.y,
+        0, 0,
+        back[3].texSize.x, back[3].texSize.y,
+        back[3].pivot.x, back[3].pivot.y);
+
+    game4_manager.Game4_render();
 
     
     sprite_render(Back[4],
@@ -350,14 +392,9 @@ void game_render()
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
     
-    sprite_render(Back[3],
-        back[3].pos.x, back[3].pos.y,
-        back[3].scale.x, back[3].scale.y,
-        0, 0,
-        back[3].texSize.x, back[3].texSize.y,
-        back[3].pivot.x, back[3].pivot.y);
+
     
-    
+
     sprite_render(Back[5],
         back[5].pos.x, back[5].pos.y,
         back[5].scale.x, back[5].scale.y,
