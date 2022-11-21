@@ -148,5 +148,11 @@ void text_render()
             false
         );
     }
+<<<<<<< HEAD
 }
 #endif
+=======
+
+}
+
+>>>>>>> tomy
