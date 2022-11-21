@@ -33,61 +33,73 @@ Squares::Squares(float x, float y)
     frame.texPos = { 0,0 };
     frame.texSize = { 102,402 };
     frame.pivot = { 102/2,402/2 };
+
+}
+
+void Squares::square_init()
+{
+    pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
+    scale_Init(1, 1);
+    texP_Init(0, 0);
+    texS_Init(100, 100);
+    pivot_Init(100 / 2, 100 / 2);
 }
 
 void Squares::pos_Init(float x, float y)
 {
-    a.pos = { x, y };
+    square.pos = { x, y };
+    square.Dradius = 10;
 }
 
 void Squares::scale_Init(float x, float y)
 {
-    a.scale = { x,y };
+    square.scale = { x,y };
 
 }
 
 void Squares::texP_Init(float x, float y)
 {
-    a.texPos = { x,y };
+    square.texPos = { x,y };
 }
 
 void Squares::texS_Init(float x, float y)
 {
-    a.texSize.x = x;
-    a.texSize.y = y;
+    square.texSize.x = x;
+    square.texSize.y = y;
 }
 
 void Squares::pivot_Init(float x, float y)
 {
-    a.pivot = { x,y };
+    square.pivot = { x,y };
 }
 
 void Squares::update()
 {
     if (TRG(0) & PAD_UP) {
-        a.pos.y -= a.texSize.y*a.scale.y;
+        square.pos.y -= square.texSize.y*square.scale.y;
     }
     if (TRG(0) & PAD_DOWN) {
-        a.pos.y += a.texSize.y*a.scale.y;
+        square.pos.y += square.texSize.y*square.scale.y;
     }
     
-    a.pos.y = std::clamp(a.pos.y,
-        (frame.pos.y - (frame.texSize.y * frame.scale.y) / 2.0f + (a.texSize.y * a.scale.y / 2.0f) + 1.0f),
-        (frame.pos.y + (frame.texSize.y * frame.scale.y) / 2.0f - (a.texSize.y * a.scale.y / 2.0f) - 1.0f));
+    square.pos.y = std::clamp(square.pos.y,
+        (frame.pos.y - (frame.texSize.y * frame.scale.y) / 2.0f + (square.texSize.y * square.scale.y / 2.0f) + 1.0f),
+        (frame.pos.y + (frame.texSize.y * frame.scale.y) / 2.0f - (square.texSize.y * square.scale.y / 2.0f) - 1.0f));
     
 }
 
 
 void Squares::square_slide(float x)
 {
-    if (a.pos.x > x) {
-        a.pos.x -= 16;
+    if (square.pos.x > x) {
+        square.pos.x -= 16;
         frame.pos.x -= 16;
     }
     else {
-        a.pos.x = x;
+        square.pos.x = x;
         frame.pos.x = x;
     }
+    
 }
 
 void Squares::square_shrink()
@@ -96,11 +108,20 @@ void Squares::square_shrink()
     if (frame.pos.y > SCREEN_H / 4) frame.pos.y -= 4;
     else frame.pos.y = SCREEN_H / 4;
     
-    a.scale *= 0.99;
+    square.scale *= 0.99;
    /* if ((frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1)* a.scale.y) a.pos.y -= 4;
     else a.pos.y = (frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1) ;*/
 }
 
+
+void Squares::frame_init()
+{
+    frame.pos = { SCREEN_W + 50, SCREEN_H / 2 };
+    frame.scale = { 1,1 };
+    frame.texPos = { 0,0 };
+    frame.texSize = { 102,402 };
+    frame.pivot = { 102 / 2,402 / 2 };
+}
 
 float Squares::frame_getPos(){
     return frame.pos.y+1;// +1は枠の太さ分ずらしている。 
@@ -111,7 +132,7 @@ float Squares::frame_getScale(){
 }
 
 VECTOR2 Squares::getTexP(){
-    return a.texPos; 
+    return square.texPos; 
 }
 
 float Squares::frame_getTexS(){
@@ -119,17 +140,17 @@ float Squares::frame_getTexS(){
 }
 
 VECTOR2 Squares::getPivot(){
-    return a.pivot; 
+    return square.pivot; 
 }
 
 void Squares::square_render()
 {    
     sprite_render(Square,
-        a.pos.x, a.pos.y,
-        a.scale.x, a.scale.y,
-        a.texPos.x, a.texPos.y,
-        a.texSize.x, a.texSize.y,
-        a.pivot.x, a.pivot.y
+        square.pos.x, square.pos.y,
+        square.scale.x, square.scale.y,
+        square.texPos.x, square.texPos.y,
+        square.texSize.x, square.texSize.y,
+        square.pivot.x, square.pivot.y
         );
     
     sprite_render(Frame,
@@ -140,9 +161,19 @@ void Squares::square_render()
         frame.pivot.x, frame.pivot.y
         );
     
+    primitive::circle(square.pos.x, square.pos.y, square.Dradius,
+        1, 1,
+        0,
+        0, 1, 0, 0.5f);
+
 }
 
 SHOOTER::SHOOTER()
+{
+    bullet_init();
+}
+
+void SHOOTER::bullet_init()
 {
     bullet_timer = 0;
     spawnFlag = rand() % 300 + 300;
@@ -151,13 +182,15 @@ SHOOTER::SHOOTER()
         bullet[i].parameter.scale = { 1,1 };
         bullet[i].parameter.texPos = { 0,0 };
         bullet[i].parameter.texSize = { 100,100 };
-        bullet[i].parameter.pivot = { 100/2,100/2 };
+        bullet[i].parameter.pivot = { 100 / 2,100 / 2 };
+        bullet[i].parameter.Dradius = 10;
+        bullet[i].parameter.isLiving = false;
     }
 }
 
 
 /////// 出現させた弾を動かしてる ///////
-void SHOOTER::Update()
+void SHOOTER::Update(OBJ2D &obj)
 {
     for (int i = 0; i < SHOT_MAX; i++)
     {
@@ -166,6 +199,7 @@ void SHOOTER::Update()
         }
     }
     LivingCheck();
+    judge(obj);
 }
 
 /////// 弾の位置を決めてる ///////
@@ -241,6 +275,13 @@ void SHOOTER::shot_render()
         }
     }
     texture::end(1);
+
+    primitive::circle(bullet->parameter.pos.x,
+        bullet->parameter.pos.y,
+        bullet->parameter.Dradius,
+        1, 1,
+        0,
+        1, 0, 0, 0.5f);
 }
 
 void SHOOTER::game2_shrink()
@@ -252,6 +293,16 @@ void SHOOTER::game2_shrink()
         //bullet[i].parameter.pos.y -= 4;
     }
     
+}
+
+void SHOOTER::judge(OBJ2D &obj)
+{
+    if (bullet->parameter.isLiving) {
+        if (circle_collision(bullet->parameter.pos, obj.pos,
+            bullet->parameter.Dradius, obj.Dradius)) {
+            nextScene = SCENE_SCORE;
+        }
+    }
 }
 
 void Game4_Manager::Game4_Manager_update()
@@ -286,7 +337,7 @@ void Game4_Manager::Game4_Manager_init()
     box.texSize = { 150,150 };
     box.pivot = { 150/2,150/2 };
     box.offset = { 150 / 2,-150/2};
-
+    box.isLiving = false;
 }
 
 void Game4_Manager::hole_update()
@@ -297,11 +348,10 @@ void Game4_Manager::hole_update()
     }
 
     else if (TRG(0) & PAD_LEFT ) {
-        animeFlag = true;
         animeFlag_LeftCheck = true;
     }
 
-    if (animeFlag == true && animeFlag_LeftCheck == true) {
+    if ( animeFlag_LeftCheck == true) {
         hole.texPos = {0,hole.texSize.y};
     
         hole.anime2 = (hole.animetimer2 < interval * frameCount) ?
@@ -312,7 +362,6 @@ void Game4_Manager::hole_update()
             ++hole.animetimer2;
 
         if (hole.animetimer2 >= interval * frameCount+holeKeep) {
-            animeFlag = false;
             animeFlag_LeftCheck = false;
             hole.texPos = { 0,0 };
             hole.animetimer2 = 0;
@@ -320,7 +369,7 @@ void Game4_Manager::hole_update()
         }
     }
 
-    else if (animeFlag == true) {
+    if (animeFlag == true) {
         hole.texPos = {};
 
         hole.anime = (hole.animetimer < interval* frameCount) ?
@@ -370,7 +419,7 @@ void Game4_Manager::box_update()
 
 void Game4_Manager::LivingCheck()
 {
-    if (box.pos.y+box.offset.y >= hole.pos.y&&animeFlag==true) {
+    if (box.pos.y+box.offset.y >= hole.pos.y&&(animeFlag==true||animeFlag_LeftCheck==true)) {
         /*
         * 変更必要　judgh関数であなにおとせるようにする。
         */

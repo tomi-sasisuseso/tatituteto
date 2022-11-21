@@ -26,7 +26,7 @@ int bgmNo;
 
 Sprite* Back[MAX_GAMES];
 Sprite* GameOver[5];
-Sprite* between[5];
+Sprite* Between[5];
 
 Sprite* Ball;
 Sprite* Square;
@@ -38,6 +38,8 @@ Sprite* Game4_box;
 Sprite* Game4_hole;
 
 OBJ2D back[MAX_GAMES];
+OBJ2D between[MAX_GAMES];
+
 OBJ2D ball;
 
 Squares square(SCREEN_W + 50, SCREEN_H / 2 );
@@ -67,6 +69,11 @@ void game_init()
     scroll_timer[4] = 50000;
     scroll_timer[5] = 50000;
     game2_center = 0;
+    square.square_init();
+    square.frame_init();
+    shot.bullet_init();
+
+    game4_manager.Game4_Manager_init();
 
     isPaused = false;
 }
@@ -123,7 +130,12 @@ void game_update()
         GameOver[3] = sprite_load(L"./Data/images/4.png");
         GameOver[4] = sprite_load(L"./Data/images/5.png");
 
-        between[0] = sprite_load(L"./Data/images/1.png");
+        Between[0] = sprite_load(L"./Data/images/淵1.png");
+        Between[1] = sprite_load(L"./Data/images/淵2.png");
+        Between[2] = sprite_load(L"./Data/images/淵3.png");
+        Between[3] = sprite_load(L"./Data/images/淵4.png");
+        Between[4] = sprite_load(L"./Data/images/淵5.png");
+        Between[5] = sprite_load(L"./Data/images/淵6.png");
 
         Ball = sprite_load(L"./Data/Images/ゲーム1_ボール.png");
 
@@ -147,16 +159,21 @@ void game_update()
         back[0].pivot = { 0,0 };
         back[0].pos = { 0,0 };
         back[0].scale = { 2, 2 };
+        between[0].pos = { 0,0 };
 
 
         //back[0].pos = { 1920 / 2, 1080 / 2 };
         //back[0].pivot = { 640/2,460/2 };
 
-        back[1].texSize = { 1920, 1080 };
-        back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
         back[1].scale = { 1,1 };
+        back[1].pivot = { 0,0 };
+        back[1].texSize = { 1920, 1080 };
 
+        between[1].pos = { SCREEN_W,0 };
+        between[1].scale = { 1,1 };
+        between[1].pivot = { 0,0 };
+        between[1].texSize = { 1920, 1080 };
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
@@ -200,11 +217,9 @@ void game_update()
           ゲームループの中でクラスの実態宣言はできない？
           */
 
-        square.pos_Init(SCREEN_W + 50, SCREEN_H / 2 - 150);
-        square.scale_Init(1, 1);
-        square.texP_Init(0, 0);
-        square.texS_Init(100, 100);
-        square.pivot_Init(100 / 2, 100 / 2);
+        square.square_init();
+        square.frame_init();
+        shot.bullet_init();
 
         game4_manager.Game4_Manager_init();
 
@@ -229,8 +244,8 @@ void game_update()
         debug::setString("game2_center:%f", game2_center);
         debug::setString("frame_Pos():%f", square.frame_getPos());
         debug::setString("frame_Scale():%f", square.frame_getScale());
-        debug::setString("square.a.texSize.y :%f", square.a.texSize.y);
-        debug::setString("square.a.scale.y :%f", square.a.scale.y);
+        debug::setString("square.a.texSize.y :%f", square.square.texSize.y);
+        debug::setString("square.a.scale.y :%f", square.square.scale.y);
         debug::setString("game4_manager.box_timer :%d", game4_manager.box_timer);
         debug::setString("game4_manager.spwanFlag :%d", game4_manager.spwanFlag);
         debug::setString("game4_manager.box.speed.y :%f", game4_manager.box.speed.y);
@@ -248,8 +263,8 @@ void game_update()
         float height = square.frame_getPos()-((square.frame_getTexS()/2) * square.frame_getScale()); // tex_size.y * scale
         game2_center = (back[1].pos.x + back[4].pos.x) / 2;
 
-        shot.Update();
-        shot.Shot(shot_pos[rand() % 2], height, (square.a.texSize.y*square.a.scale.y) * (rand() % 4+1));// 出現位置を決めてそのまま発射してる
+        shot.Update(square.square);
+        shot.Shot(shot_pos[rand() % 2], height, (square.square.texSize.y*square.square.scale.y) * (rand() % 4+1));// 出現位置を決めてそのまま発射してる
 
         square.update();
         game4_manager.Game4_Manager_update();
@@ -285,7 +300,7 @@ void back_update() {
         if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
         else ball.pos.x = SCREEN_W / 4;
         square.square_slide(SCREEN_W-SCREEN_W/4);
-
+        shot.bullet_init();
     }
 
     /////// 2回目のスライド処理 ///////
@@ -323,6 +338,7 @@ void back_update() {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
         back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
+        game4_manager.Game4_Manager_init();
     }
 
     /////// 4回目のスライド処理 ///////
@@ -370,6 +386,12 @@ void game_render()
         0, 0,
         back[0].texSize.x, back[0].texSize.y,
         back[0].pivot.x, back[0].pivot.y);
+    sprite_render(Between[0],
+        back[0].pos.x, back[0].pos.y,
+        1,1,
+        0, 0,
+        back[0].texSize.x, back[0].texSize.y,
+        back[0].pivot.x, back[0].pivot.y);
 
     ball_render();
 
@@ -377,6 +399,12 @@ void game_render()
     sprite_render(Back[1],
         back[1].pos.x, back[1].pos.y,
         back[1].scale.x, back[1].scale.y,
+        0, 0,
+        back[1].texSize.x, back[1].texSize.y,
+        back[1].pivot.x, back[1].pivot.y);
+    sprite_render(Between[1],
+        back[1].pos.x, back[1].pos.y,
+        1, 1,
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
@@ -391,6 +419,14 @@ void game_render()
         0, 0,
         back[2].texSize.x, back[2].texSize.y,
         back[2].pivot.x, back[2].pivot.y);
+
+    /*sprite_render(Between[2],
+        back[2].pos.x, back[2].pos.y,
+        1, 1,
+        0, 0,
+        back[2].texSize.x, back[2].texSize.y,
+        back[2].pivot.x, back[2].pivot.y);*/
+
     
     sprite_render(Back[3],
         back[3].pos.x, back[3].pos.y,

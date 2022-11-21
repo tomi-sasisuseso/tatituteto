@@ -91,6 +91,7 @@ public:
     Squares() {}
     Squares(float x, float y);
 
+    void square_init();
     void pos_Init(float x, float y);
     void scale_Init(float x, float y);
     void texP_Init(float x, float y);
@@ -107,6 +108,9 @@ public:
     getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
     */
     
+
+    void frame_init();
+
     float frame_getPos();
     float frame_getScale();
     float frame_getTexS();
@@ -114,7 +118,7 @@ public:
     VECTOR2 getTexP();
     VECTOR2 getPivot();
 
-    OBJ2D a;
+    OBJ2D square;
 protected:
     OBJ2D frame;
 };
@@ -135,16 +139,14 @@ public:
     int spawnFlag;
     SHOOTER();
     int bullet_timer;
+    void bullet_init();
 
-    void Update(); // 出現させた弾を動かしてる
-
+    void Update(OBJ2D &obj); // 出現させた弾を動かしてる
     VECTOR2 ShotPosition(VECTOR2 origin, float height, float num); // 弾の位置を決めてる
-
     void Shot(VECTOR2 origin, float height, float num); // 弾を出現させてる
-
     void LivingCheck(); // 弾がゲーム２の真ん中なら isLiving を falseにする。
-
     void game2_shrink(); // 縮小してる
+    void judge(OBJ2D &obj);
 
     void shot_render();
 
@@ -169,7 +171,6 @@ public:
     void Game4_Manager_update();
     void Game4_Manager_init();
     void LivingCheck(); 
-    void judge();
 
     void hole_update();
     void box_update();
