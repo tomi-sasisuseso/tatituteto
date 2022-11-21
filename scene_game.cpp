@@ -60,17 +60,17 @@ void game_update()
     {
     case 0:
         //////// ‰Šúİ’è ////////
-        Back[0] = sprite_load(L"./Data/Images/”wŒi2.png");
-        Back[1] = sprite_load(L"./Data/Images/‰¼1.png");
-        Back[2] = sprite_load(L"./Data/Images/‰¼3.png");
-        //Back[3] = sprite_load(L"Data/Images/”wŒi1.png");
-        Ball = sprite_load(L"./Data/Images/ƒ{[ƒ‹_‰E.png");
+        //Back[0] = sprite_load(L"./Data/Images/”wŒi2.png");
+        //Back[1] = sprite_load(L"./Data/Images/‰¼1.png");
+        //Back[2] = sprite_load(L"./Data/Images/‰¼3.png");
+        ////Back[3] = sprite_load(L"Data/Images/”wŒi1.png");
+        //Ball = sprite_load(L"./Data/Images/ƒ{[ƒ‹_‰E.png");
 
-        Back[0] = sprite_load(L"Data/Images/”wŒi2.png");
-        Back[1] = sprite_load(L"Data/Images/‰¼1.png");
-        Back[2] = sprite_load(L"Data/Images/‰¼3.png");
-        //Back[3] = sprite_load(L"Data/images/”wŒi1.png");
-        Ball = sprite_load(L"Data/images/ƒ{[ƒ‹_‰E.png");
+        //Back[0] = sprite_load(L"Data/Images/”wŒi2.png");
+        //Back[1] = sprite_load(L"Data/Images/‰¼1.png");
+        //Back[2] = sprite_load(L"Data/Images/‰¼3.png");
+        ////Back[3] = sprite_load(L"Data/images/”wŒi1.png");
+        //Ball = sprite_load(L"Data/images/ƒ{[ƒ‹_‰E.png");
 
         game_state++;
         /*fallthrough*/

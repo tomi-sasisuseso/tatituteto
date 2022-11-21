@@ -15,8 +15,4 @@ void title_deinit();
 void title_update();
 void title_render();
 
-void stage_move();
-void ball_init();
-void ball_move();
-
 #endif//SCENE_TITLE_H

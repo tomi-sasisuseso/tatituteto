@@ -3,33 +3,40 @@
 int title_state;
 int title_timer;
 
-int control = 0;
+const int FLASHING_SPEED = 40;
+const float TITLE_EASE_DURATION = 50;
 
-const float STAGE_SPEED = 0.02f;
-const float STAGE_MAX_SPEED = 1.0f;
-const float BALL_SPEED = 0.2f;
-const float BALL_MAX_SPEED = 2.0f;
-const float FRICTION = 0.95f;
-const float GRAVITY = 0.7f;
+VECTOR2 title_str_pos;
+VECTOR2 title_str_pos_start = { -300, 780 };
+VECTOR2 title_str_pos_end = { 680, 780 };
+float title_alpha;
+bool isbegin;
+int title_easeTimer = INT_MAX;
 
-OBJ2D stage;
-Sprite* stage_sprite;
 
-OBJ2D ball1;
-Sprite* ball1_sprite;
+Sprite* title_background_sprite;
+Sprite* title_str_sprite;
+Sprite* title_str_load1;
+Sprite* title_str_load2;
 
 void title_init()
 {
     title_state = 0;
     title_timer = 0;
 
-    stage_sprite = sprite_load(L"./Data/Images/棒.png");
-    ball1_sprite = sprite_load(L"./Data/Images/ボール.png");
+    title_str_pos = title_str_pos_start;
+    title_alpha = 0.0f;
+    isbegin = false;
+
+    title_background_sprite = sprite_load(L"./Data/Images/タイトル.png");
+    title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
+    title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
 }
 
 void title_deinit()
 {
     music::stop(0);
+
 }
 
 void title_update()
@@ -38,7 +45,6 @@ void title_update()
     {
     case 0:
         //////// 初期設定 ////////
-        ball_init();
         title_state++;
 
         /*fallthrough*/
@@ -47,41 +53,34 @@ void title_update()
         GameLib::setBlendMode(Blender::BS_ALPHA);
         music::play(0, FALSE);
 
-        stage.pos = { SCREEN_W / 2, SCREEN_H / 2 + 100 };
-        stage.scale = { 1, 1 };
-        stage.angle = 0;
-        stage.velocity = { 0,0 };
-        stage.texSize = { 450, 30 };
-        stage.pivot = stage.texSize / 2;
-        ball1.pos = { SCREEN_W / 2, SCREEN_H / 2 - 100 };
-        ball1.scale = { 0.5, 0.5 };
-        ball1.texSize = { 150, 150 };
-        ball1.pivot = ball1.texSize / 2;
-        ball1.angle = 0;
-
         title_state++;
-        /*fallthrough*/
-
     case 2:
         //////// 通常時 ////////
         //デバッグ用
         debug::setString("title_state:%d", title_state);
         debug::setString("title_timer:%d", title_timer);
-        debug::setString("stage velocity: %f", stage.velocity.x);
-        debug::setString("ball velocity: %f", ball1.velocity.x);
 
-        if (TRG(0) & PAD_START)
+        //文字のスライド
+        if (title_timer == 30)   title_easeTimer = 0;
+        if (title_easeTimer < TITLE_EASE_DURATION)
         {
-            nextScene = SCENE_GAME;
-            break;
+            title_easeTimer++;
+            float t = (float)title_easeTimer / TITLE_EASE_DURATION;
+            title_str_pos.x = Easing::step(eType::EXPO_OUT, title_str_pos_start.x, title_str_pos_end.y, t);
         }
 
-        stage_move();
-        ball_move();
+        //文字のスプライトの切り替え
+        if (title_timer % FLASHING_SPEED < FLASHING_SPEED / 2)  title_str_sprite = title_str_load1;
+        else    title_str_sprite = title_str_load2;
+        //入力の検知
+        if (TRG(0) & PAD_START)   isbegin = true;
+        //透明度を下げる
+        if (isbegin)    title_alpha += 0.02;
+        //透明度に応じて次のシーンに
+        if (title_alpha > 1.5f) nextScene = SCENE_GAME;
+
         break;
     }
-
-
     title_timer++;
 }
 
@@ -89,69 +88,35 @@ void title_render()
 {
     // 画面を青で塗りつぶす
     GameLib::clear(0.3f, 0.5f, 1.0f);
-
-    //ステージの描画
+    //背景
     sprite_render(
-        stage_sprite,
-        stage.pos.x, stage.pos.y,
-        stage.scale.x, stage.scale.y,
+        title_background_sprite,
         0, 0,
-        stage.texSize.x, stage.texSize.y,
-        stage.pivot.x, stage.pivot.y,
-        stage.angle
+        1, 1,
+        0, 0,
+        SCREEN_W, SCREEN_H,
+        0, 0,
+        0
     );
-    //ボールの描画
+    //文字(点滅)
+
     sprite_render(
-        ball1_sprite,
-        ball1.pos.x, ball1.pos.y,
-        ball1.scale.x, ball1.scale.y,
+        title_str_sprite,
+        title_str_pos.x, title_str_pos.y,
+        1, 1,
         0, 0,
-        ball1.texSize.x, ball1.texSize.y,
-        ball1.pivot.x, ball1.pivot.y,
-        ball1.angle
+        587, 55,
+        587 * 0.5f, 55 * 0.5f,
+        0
+    );
+
+    //塗りつぶし
+    primitive::rect(
+        { 0, 0 },
+        { SCREEN_W, SCREEN_H },
+        { 0, 0 },
+        0,
+        { 0.0f, 0.0f, 0.0f, title_alpha }
     );
 }
 
-void stage_move()
-{
-    //入力
-    if (STATE(0) & PAD_LEFT)     control = -1;
-    else if (STATE(0) & PAD_RIGHT)     control = 1;
-    else    control = 0;
-
-    stage.velocity.x += control * STAGE_SPEED;
-
-    //速度の制限など
-    if(control == 0)    stage.velocity.x *= FRICTION;
-    stage.velocity.x = std::clamp(stage.velocity.x, -STAGE_MAX_SPEED, STAGE_MAX_SPEED);
-
-    stage.angle += ToRadian(stage.velocity.x);
-}
-
-void ball_init()
-{
-    ball1.pos = stage.pos;
-    ball1.pos.y -= ball1.texSize.y / 2;
-}
-
-void ball_move()
-{
-    //ボールのx方向の計算（ステージの角度に応じて速度を設定）
-    ball1.velocity.x += stage.angle * BALL_SPEED;
-    ball1.velocity.x = std::clamp(ball1.velocity.x, -BALL_MAX_SPEED, BALL_MAX_SPEED);
-    ball1.pos.x += ball1.velocity.x;
-    //y方向（重力）
-    ball1.velocity.y += GRAVITY;
-    ball1.pos.y += ball1.velocity.y;
-
-    float y = stage.pos.y - 50;
-
-    y += (1.0f * powf(stage.angle, 2)) * 90.0f;
-
-    if (ball1.pos.y > y)
-    {
-        ball1.pos.y = y;
-    }
-
-    debug::setString("%f", y);
-}

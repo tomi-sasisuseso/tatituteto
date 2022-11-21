@@ -3,24 +3,21 @@
 int score_state;
 int score_timer;
 
-bool showRanking;
-int scorePanel_easeTimer = 100;
+float score_alpha;
+bool isend;
 
-OBJ2D scorePanel;
-
-int text_easeTimer;
-float text_alpha;
+Sprite* score_background_sprite;
+Sprite* score_number_sprite;
 
 void score_init() {
     score_state = 0;
     score_timer = 0;
 
-    showRanking = false;
-    scorePanel_easeTimer = INT_MAX;
-    text_easeTimer = INT_MAX;
-    text_alpha = 0;
+    score_alpha = 0.0f;
+    isend = false;
 
-    texture::load(TEXTURE_SCOREPANEL, L"./Data/Images/score_panel.png");
+    score_background_sprite = sprite_load(L"./Data/Images/GAMEOVER.png");
+    score_number_sprite = sprite_load(L"./Data/Images/number.png");
 }
 
 void score_deinit() {
@@ -32,7 +29,6 @@ void score_update() {
     //デバッグ用
     debug::setString("score_state:%d", score_state);
     debug::setString("score_timer:%d", score_timer);
-    debug::setString("panel.pos.x: %f", scorePanel.pos.x);
 
     switch (score_state)
     {
@@ -47,9 +43,6 @@ void score_update() {
         GameLib::setBlendMode(Blender::BS_ALPHA);
         music::play(0, FALSE);
 
-        scorePanel.pos = { -600, SCREEN_H / 2 };
-        scorePanel.scale = { 1, 1 };
-        scorePanel.texSize = { 600, 720 };
 
         score_state++;
         /*fallthrough*/
@@ -57,29 +50,12 @@ void score_update() {
     case 2:
         //////// 通常時 ////////
 
-        if (TRG(0) & PAD_START)
-        {
-            nextScene = SCENE_TITLE;
-            break;
-        }
-
-        //スコアの背景を移動
-        if (score_timer == 10 || TRG(0) & PAD_TRG1)      scorePanel_easeTimer = 0;
-        const float duration = 40;
-        if (scorePanel_easeTimer < duration)
-        {
-            scorePanel_easeTimer++;
-            float t = (float)scorePanel_easeTimer / duration;
-            scorePanel.pos.x = Easing::step(eType::ELASTIC_INOUT, 1920, SCREEN_W / 2, t);
-            //scorePanel.pos.x = SCREEN_W - SCREEN_W / 2 * Easing::linear(t);
-        }
-
-        //ランキングを表示（仮）
-        if (score_timer == 60)
-        {
-            text_easeTimer = 0;
-            showRanking = !showRanking;
-        }
+        //入力の検知
+        if (TRG(0) & PAD_START)   isend = true;
+        //透明度を下げる
+        if (isend)    score_alpha += 0.02;
+        //透明度に応じて次のシーンに
+        if (score_alpha > 1.5f)     nextScene = SCENE_TITLE;
 
         break;
     }
@@ -88,26 +64,42 @@ void score_update() {
 
 void score_render() 
 {
-    GameLib::clear(0.2f, 0.7f, 0.0f);
-
-    texture::begin(TEXTURE_SCOREPANEL);
-    texture::draw(
-        TEXTURE_SCOREPANEL,
-        scorePanel.pos,
-        scorePanel.scale,
-        { 0, 0 },
-        scorePanel.texSize,
-        scorePanel.texSize / 2,
+    //GameLib::clear(0.2f, 0.7f, 0.0f);
+    //背景
+    sprite_render(
+        score_background_sprite,
+        0, 0,
+        1, 1,
+        0, 0,
+        SCREEN_W, SCREEN_H,
+        0, 0,
         0
     );
-    texture::end(TEXTURE_SCOREPANEL);
-
-    if (showRanking)
+    //文字
+    for (int i = 0; i < 6; i++)
     {
-        text_render();
+        sprite_render(
+            score_number_sprite,
+            SCREEN_W / 2 + (i * 100), 100,
+            1, 1,
+            40, 0,
+            40, 61,
+            0, 0,
+            0
+        );
     }
+
+    primitive::rect(
+        { 0, 0 },
+        { SCREEN_W, SCREEN_H },
+        { 0, 0 },
+        0,
+        { 0.0f, 0.0f, 0.0f, score_alpha }
+    );
 }
 
+//ランキングの表示用（参考）
+#if 0
 //テキストを表示
 void text_render()
 {
@@ -157,4 +149,4 @@ void text_render()
         );
     }
 }
-
+#endif
