@@ -296,24 +296,7 @@ void Game4_Manager::hole_update()
 
     }
 
-    if (animeFlag == true) {
-        hole.texPos = {};
-    
-        hole.anime = (hole.animetimer < interval * frameCount) ?
-            // hole.anime が　trueなら左、falseなら右
-            hole.animetimer / interval % frameCount : frameCount-1; 
-
-            hole.texPos.x = hole.anime * hole.texSize.x;
-            ++hole.animetimer;
-
-        if (hole.animetimer >= interval * frameCount+holeKeep) {
-            animeFlag = false;
-            hole.texPos = { 0,0 };
-            hole.animetimer = 0;
-        }
-    }
-    
-    if (TRG(0) & PAD_LEFT ) {
+    else if (TRG(0) & PAD_LEFT ) {
         animeFlag = true;
         animeFlag_LeftCheck = true;
     }
@@ -330,11 +313,32 @@ void Game4_Manager::hole_update()
 
         if (hole.animetimer2 >= interval * frameCount+holeKeep) {
             animeFlag = false;
+            animeFlag_LeftCheck = false;
             hole.texPos = { 0,0 };
             hole.animetimer2 = 0;
-            animeFlag_LeftCheck = false;
+            if (fallCheck)box.scale = { 0,0 };
         }
     }
+
+    else if (animeFlag == true) {
+        hole.texPos = {};
+
+        hole.anime = (hole.animetimer < interval* frameCount) ?
+            // hole.anime が　trueなら左、falseなら右
+            hole.animetimer / interval % frameCount : frameCount - 1;
+
+        hole.texPos.x = hole.anime * hole.texSize.x;
+        ++hole.animetimer;
+
+        if (hole.animetimer >= interval * frameCount + holeKeep) {
+            animeFlag = false;
+            hole.texPos = { 0,0 };
+            hole.animetimer = 0;
+            if (fallCheck)box.scale = { 0,0 };
+        }
+    }
+    
+
     
 }
 
@@ -355,31 +359,41 @@ void Game4_Manager::box_update()
         }
         box.speed = { 0,3 };
         box_timer = 0;
-        spwanFlag = rand() % 300 + 600;
+        spwanFlag = 300;// rand() % 300 + 600;
     }
 
     box.pos.y += box.speed.y;
+
     LivingCheck();
 
 }
 
 void Game4_Manager::LivingCheck()
 {
-    if (box.pos.y+box.offset.y >= hole.pos.y) {
+    if (box.pos.y+box.offset.y >= hole.pos.y&&animeFlag==true) {
         /*
         * 変更必要　judgh関数であなにおとせるようにする。
         */
 
         /////// 落ちる処理 ///////
+        fallCheck = true;
         box.speed = { 0,0 };
         box.pivot.x = 150 / 2;
         box.pivot.y = 150 / 2;
-        box.scale.x *= 0.95;
-        box.scale.y *= 0.95;
-        if(box.scale.x<=0.01) box.isLiving = false;
-        
+        box.scale.x *= 0.91;
+        box.scale.y *= 0.91;
+    }
+
+    if (box.scale.x <= 0.01) {
+        box.isLiving = false;
+        fallCheck = false;
     }
 }
+
+//void Game4_Manager::judge()
+//{
+//    if(box.pos.y>hole.pos.y&&animeFlag==true)
+//}
 
 void Game4_Manager::Game4_render()
 {

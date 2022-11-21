@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 #include "all.h"
-=======
 #ifndef OBJ2D_H
 #define OBJ2D_H
 
 
 extern float game2_center;
-
-
->>>>>>> tomy
 
 enum class BulletTag
 {
@@ -19,10 +14,6 @@ enum class BulletTag
     D
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> tomy
 struct OBJ2D {
     
     int state;
@@ -72,8 +63,6 @@ struct OBJ2D {
     int shotCount;
 };
 
-<<<<<<< HEAD
-=======
 class SHOT 
 {
 public:
@@ -166,22 +155,25 @@ class Game4_Manager
 private:
     OBJ2D belt_conveyor;
     OBJ2D hole;
+    //OBJ2D box_judge;
     bool animeFlag;
     bool animeFlag_LeftCheck;
     const int interval = 9;
     const int frameCount = 3;
     const int holeKeep = 24;
 public:
+    bool fallCheck;
     OBJ2D box;
     int box_timer = 0;
     int spwanFlag = rand() % 300 + 600;
     void Game4_Manager_update();
     void Game4_Manager_init();
+    void LivingCheck(); 
+    void judge();
+
     void hole_update();
     void box_update();
-    void LivingCheck(); 
 
     void Game4_render();
 };
 #endif
->>>>>>> tomy

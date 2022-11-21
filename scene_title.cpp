@@ -24,7 +24,6 @@ void title_init()
     title_state = 0;
     title_timer = 0;
 
-<<<<<<< HEAD
     title_str_pos = title_str_pos_start;
     title_alpha = 0.0f;
     isbegin = false;
@@ -32,12 +31,6 @@ void title_init()
     title_background_sprite = sprite_load(L"./Data/Images/タイトル.png");
     title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
     title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
-=======
-
-    stage_sprite = sprite_load(L"./Data/Images/棒.png");
-    ball1_sprite = sprite_load(L"./Data/Images/ボール.png");
-
->>>>>>> tomy
 }
 
 void title_deinit()
@@ -66,10 +59,6 @@ void title_update()
         //デバッグ用
         debug::setString("title_state:%d", title_state);
         debug::setString("title_timer:%d", title_timer);
-<<<<<<< HEAD
-=======
-        debug::setString("velocity: %f", stage.velocity.x);
->>>>>>> tomy
 
         //文字のスライド
         if (title_timer == 30)   title_easeTimer = 0;

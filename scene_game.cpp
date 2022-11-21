@@ -93,19 +93,7 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
-<<<<<<< HEAD
-        //Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
-        //Back[1] = sprite_load(L"./Data/Images/âº1.png");
-        //Back[2] = sprite_load(L"./Data/Images/âº3.png");
-        ////Back[3] = sprite_load(L"Data/Images/îwåi1.png");
-        //Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
 
-        //Back[0] = sprite_load(L"Data/Images/îwåi2.png");
-        //Back[1] = sprite_load(L"Data/Images/âº1.png");
-        //Back[2] = sprite_load(L"Data/Images/âº3.png");
-        ////Back[3] = sprite_load(L"Data/images/îwåi1.png");
-        //Ball = sprite_load(L"Data/images/É{Å[Éã_âE.png");
-=======
         /*Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
         Back[1] = sprite_load(L"./Data/Images/âº1.png");
         Back[2] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ4_îwåi.png");
@@ -146,7 +134,6 @@ void game_update()
         Game4_box = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_éläp.png");
         Game4_hole = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_åä.png");
         Game4_beruto = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_ÉxÉãÉgÉRÉìÉxÉA.png");
->>>>>>> tomy
 
         game_state++;
         /*fallthrough*/
@@ -168,24 +155,16 @@ void game_update()
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy
         back[1].scale = { 1,1 };
 
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
-<<<<<<< HEAD
-
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
         back[2].pos = { 1920 / 2, 1080+back[2].pivot.y  };
         
-=======
->>>>>>> tomy
 
         back[2].texSize = { 1920, 540 };
         back[2].pivot = { 0,0 };
@@ -257,6 +236,7 @@ void game_update()
         debug::setString("game4_manager.box.speed.y :%f", game4_manager.box.speed.y);
         debug::setString("game4_manager.box.pos.y :%f", game4_manager.box.pos.y);
         debug::setString("game4_manager.box.isLiving :%d", game4_manager.box.isLiving);
+        debug::setString("game4_manager.fallCheck :%d", game4_manager.fallCheck);
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -379,13 +359,9 @@ void back_update() {
 
 void game_render()
 {
-<<<<<<< HEAD
-=======
 
     GameLib::clear(1,1,1);
 
-
->>>>>>> tomy
     GameLib::clear(0.2f, 0.2f, 0.4f);
 
     sprite_render(Back[0],
@@ -404,18 +380,12 @@ void game_render()
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
-
-<<<<<<< HEAD
-    ball_render();
-
-    /*sprite_render(Back[0],
-=======
     square.square_render();
 
     shot.shot_render();
 
+
     sprite_render(Back[2],
->>>>>>> tomy
         back[2].pos.x, back[2].pos.y,
         back[2].scale.x, back[2].scale.y,
         0, 0,
