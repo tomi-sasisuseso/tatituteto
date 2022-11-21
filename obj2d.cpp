@@ -318,6 +318,7 @@ void Game4_Manager::Game4_Manager_update()
     //box.pos.y = belt_conveyor.pos.y;
     hole_update();
     box_update();
+    Game4_judge();
 }
 
 void Game4_Manager::Game4_Manager_init()
@@ -332,12 +333,18 @@ void Game4_Manager::Game4_Manager_init()
     hole.texSize = { 450,160 };
     hole.pivot = { 0,0 };
     
+    box.pos = { 0,belt_conveyor.pos.y - box.offset.y };
     box.scale = { 1,1 };
     box.texPos = { 0,0 };
     box.texSize = { 150,150 };
     box.pivot = { 150/2,150/2 };
     box.offset = { 150 / 2,-150/2};
     box.isLiving = false;
+}
+
+void Game4_Manager::Game4_judge()
+{
+    if (box.pos.y > SCREEN_H) nextScene = SCENE_SCORE;
 }
 
 void Game4_Manager::hole_update()

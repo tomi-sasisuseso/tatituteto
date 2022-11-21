@@ -27,6 +27,7 @@
 #include "scene_game.h"
 #include "scene_title.h"
 #include "scene_score.h"
+#include "ball_balancing.h"
 
 // namespace
 using namespace GameLib;

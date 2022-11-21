@@ -171,6 +171,7 @@ public:
     void Game4_Manager_update();
     void Game4_Manager_init();
     void LivingCheck(); 
+    void Game4_judge();
 
     void hole_update();
     void box_update();

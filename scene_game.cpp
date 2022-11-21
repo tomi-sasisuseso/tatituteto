@@ -40,12 +40,13 @@ Sprite* Game4_hole;
 OBJ2D back[MAX_GAMES];
 OBJ2D between[MAX_GAMES];
 
-OBJ2D ball;
+//OBJ2D ball;
 
 Squares square(SCREEN_W + 50, SCREEN_H / 2 );
 SHOOTER shot;
 extern const VECTOR2 square_offsets[4];
 
+Game1_Manager game1_manager;
 Game4_Manager game4_manager;
 
 /*
@@ -73,6 +74,7 @@ void game_init()
     square.frame_init();
     shot.bullet_init();
 
+    game1_manager.Game1_init();
     game4_manager.Game4_Manager_init();
 
     isPaused = false;
@@ -83,7 +85,7 @@ void game_init()
 //--------------------------------------
 void game_deinit()
 {
-    
+    game1_manager.Game1_deinit();
 }
 
 //--------------------------------------
@@ -207,11 +209,11 @@ void game_update()
         back[5].scale = { 1,1 };
 
 
-        ball.texPos = { 0,0 };
+        /*ball.texPos = { 0,0 };
         ball.texSize = { 150,150 };
         ball.pos = { SCREEN_W / 2 ,SCREEN_H / 2 };
         ball.pivot = { 150 / 2,150 / 2 };
-        ball.scale = { 1,1 };
+        ball.scale = { 1,1 };*/
 
         /*Squares square(SCREEN_W + 50, SCREEN_H / 2 - 150);
           ゲームループの中でクラスの実態宣言はできない？
@@ -229,11 +231,12 @@ void game_update()
     case 2:
         //////// 通常時 ////////
         //デバッグ用
+#if 1
         debug::setString("game_state:%d", game_state);
         debug::setString("game_timer:%d", game_timer);
         debug::setString("");
         debug::setString("ENTER:PAUSE");
-        debug::setString("ball.scale:%f", ball.scale.x);
+        //debug::setString("ball.scale:%f", ball.scale.x);
         debug::setString("back[0].pos.x:%f", back[0].pos.x);
         debug::setString("back[0].pos.y:%f", back[0].pos.y);
         debug::setString("back[2].pos.y:%f", back[2].pos.y);
@@ -252,6 +255,7 @@ void game_update()
         debug::setString("game4_manager.box.pos.y :%f", game4_manager.box.pos.y);
         debug::setString("game4_manager.box.isLiving :%d", game4_manager.box.isLiving);
         debug::setString("game4_manager.fallCheck :%d", game4_manager.fallCheck);
+#endif
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -259,6 +263,8 @@ void game_update()
             break;
         }
 
+        /////// Game2__Manager_updata ///////
+#if 1
         VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
         float height = square.frame_getPos()-((square.frame_getTexS()/2) * square.frame_getScale()); // tex_size.y * scale
         game2_center = (back[1].pos.x + back[4].pos.x) / 2;
@@ -267,6 +273,8 @@ void game_update()
         shot.Shot(shot_pos[rand() % 2], height, (square.square.texSize.y*square.square.scale.y) * (rand() % 4+1));// 出現位置を決めてそのまま発射してる
 
         square.update();
+#endif
+        game1_manager.Game1_Manager_update();
         game4_manager.Game4_Manager_update();
 
         back_update();
@@ -297,8 +305,8 @@ void back_update() {
         back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 3, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
 
-        if (ball.pos.x > SCREEN_W / 4) ball.pos.x -= 16;
-        else ball.pos.x = SCREEN_W / 4;
+        game1_manager.Game1_Manager_slide(SCREEN_W / 4);
+
         square.square_slide(SCREEN_W-SCREEN_W/4);
         shot.bullet_init();
     }
@@ -312,10 +320,11 @@ void back_update() {
             back[1].scale.x *= 0.99;
             back[1].scale.y *= 0.99;
 
-            ball.scale.x *= 0.99;
+            /*ball.scale.x *= 0.99;
             ball.scale.y *= 0.99;
             if (ball.pos.y > SCREEN_H / 4) ball.pos.y -= 4;
-            else ball.pos.y = SCREEN_H / 4;
+            else ball.pos.y = SCREEN_H / 4;*/
+            game1_manager.Game1_Manager_shrink();
 
             shot.game2_shrink();
             square.square_shrink();
@@ -352,8 +361,8 @@ void back_update() {
 
         square.square_slide(SCREEN_W/2);
 
-        if (ball.pos.x > SCREEN_W / 6 ) ball.pos.x -= 8;
-        else ball.pos.x = SCREEN_W / 6 ;
+        /*if (ball.pos.x > SCREEN_W / 6 ) ball.pos.x -= 8;
+        else ball.pos.x = SCREEN_W / 6 ;*/
 
     }
 
@@ -393,8 +402,7 @@ void game_render()
         back[0].texSize.x, back[0].texSize.y,
         back[0].pivot.x, back[0].pivot.y);
 
-    ball_render();
-
+    game1_manager.Game1_render();
 
     sprite_render(Back[1],
         back[1].pos.x, back[1].pos.y,
@@ -420,12 +428,12 @@ void game_render()
         back[2].texSize.x, back[2].texSize.y,
         back[2].pivot.x, back[2].pivot.y);
 
-    /*sprite_render(Between[2],
+    sprite_render(Between[2],
         back[2].pos.x, back[2].pos.y,
         1, 1,
         0, 0,
         back[2].texSize.x, back[2].texSize.y,
-        back[2].pivot.x, back[2].pivot.y);*/
+        back[2].pivot.x, back[2].pivot.y);
 
     
     sprite_render(Back[3],
@@ -470,12 +478,12 @@ void game_render()
 
 }
 
-void ball_render() {
-    sprite_render(Ball, ball.pos.x, ball.pos.y,
-        ball.scale.x, ball.scale.y,
-        ball.texPos.x, ball.texPos.x,
-        ball.texSize.x, ball.texSize.y,
-        ball.pivot.x, ball.pivot.y);
-}
-
-
+//void ball_render() {
+//    sprite_render(Ball, ball.pos.x, ball.pos.y,
+//        ball.scale.x, ball.scale.y,
+//        ball.texPos.x, ball.texPos.x,
+//        ball.texSize.x, ball.texSize.y,
+//        ball.pivot.x, ball.pivot.y);
+//}
+//
+//
