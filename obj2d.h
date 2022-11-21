@@ -153,6 +153,11 @@ class Game4_Manager
 private:
     OBJ2D belt_conveyor;
     OBJ2D hole;
+    bool animeFlag;
+    bool animeFlag_LeftCheck;
+    const int interval = 9;
+    const int frameCount = 3;
+    const int holeKeep = 24;
 public:
     OBJ2D box;
     int box_timer = 0;

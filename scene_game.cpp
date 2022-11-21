@@ -25,6 +25,8 @@ float game2_center;
 int bgmNo;
 
 Sprite* Back[MAX_GAMES];
+Sprite* GameOver[5];
+Sprite* between[5];
 
 Sprite* Ball;
 Sprite* Square;
@@ -113,6 +115,14 @@ void game_update()
         Back[3] = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_îwåi.png");
         Back[4] = sprite_load(L"Data/Images/ÉQÅ[ÉÄ3_îwåi.png");
         Back[5] = sprite_load(L"Data/Images/ÉQÅ[ÉÄ6_îwåi.png");
+
+        GameOver[0] = sprite_load(L"./Data/images/1.png");
+        GameOver[1] = sprite_load(L"./Data/images/2.png");
+        GameOver[2] = sprite_load(L"./Data/images/3.png");
+        GameOver[3] = sprite_load(L"./Data/images/4.png");
+        GameOver[4] = sprite_load(L"./Data/images/5.png");
+
+        between[0] = sprite_load(L"./Data/images/1.png");
 
         Ball = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ1_É{Å[Éã.png");
 
@@ -219,6 +229,7 @@ void game_update()
         debug::setString("game4_manager.spwanFlag :%d", game4_manager.spwanFlag);
         debug::setString("game4_manager.box.speed.y :%f", game4_manager.box.speed.y);
         debug::setString("game4_manager.box.pos.y :%f", game4_manager.box.pos.y);
+        debug::setString("game4_manager.box.isLiving :%d", game4_manager.box.isLiving);
 
         if (TRG(0) & PAD_SELECT)
         {
