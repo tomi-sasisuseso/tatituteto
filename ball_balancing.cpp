@@ -14,7 +14,7 @@ extern OBJ2D back[MAX_GAMES];
 Sprite* stage_sprite;
 Sprite* ball1_sprite;
 
-void Game1_Manager::Game1_init()
+void Game1_Manager::Game1_Manager_init()
 {
     GameLib::setBlendMode(Blender::BS_ALPHA);
     music::play(0, FALSE);
@@ -34,7 +34,7 @@ void Game1_Manager::Game1_init()
     ball1_sprite = sprite_load(L"./Data/Images/ボール.png");
 }
 
-void Game1_Manager::Game1_deinit()
+void Game1_Manager::Game1_Manager_deinit()
 {
     music::stop(0);
     //スプライトのメモリ開放
@@ -80,8 +80,7 @@ void Game1_Manager::Game1_Manager_update()
 
 void Game1_Manager::Game1_render()
 {
-    // 画面を青で塗りつぶす
-    GameLib::clear(0.3f, 0.5f, 1.0f);
+    
 
     //ステージの描画
     sprite_render(

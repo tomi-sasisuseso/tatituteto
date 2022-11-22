@@ -323,6 +323,10 @@ void Game4_Manager::Game4_Manager_update()
 
 void Game4_Manager::Game4_Manager_init()
 {
+
+    box_timer = 0;
+    spwanFlag = 800;
+
     belt_conveyor.scale = { 1,1 };
     belt_conveyor.texPos = { 0,0 };
     belt_conveyor.texSize = { 450,374 };

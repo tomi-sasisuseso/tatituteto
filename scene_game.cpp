@@ -47,6 +47,7 @@ SHOOTER shot;
 extern const VECTOR2 square_offsets[4];
 
 Game1_Manager game1_manager;
+Game3_Manager game3_manager;
 Game4_Manager game4_manager;
 
 /*
@@ -74,7 +75,8 @@ void game_init()
     square.frame_init();
     shot.bullet_init();
 
-    game1_manager.Game1_init();
+    game1_manager.Game1_Manager_init();
+
     game4_manager.Game4_Manager_init();
 
     isPaused = false;
@@ -85,7 +87,8 @@ void game_init()
 //--------------------------------------
 void game_deinit()
 {
-    game1_manager.Game1_deinit();
+    game1_manager.Game1_Manager_deinit();
+    game3_manager.Game3_Manager_deinit();
 }
 
 //--------------------------------------
@@ -161,7 +164,7 @@ void game_update()
         back[0].pivot = { 0,0 };
         back[0].pos = { 0,0 };
         back[0].scale = { 2, 2 };
-        between[0].pos = { 0,0 };
+        //between[0].pos = { 0,0 };
 
 
         //back[0].pos = { 1920 / 2, 1080 / 2 };
@@ -172,10 +175,10 @@ void game_update()
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
 
-        between[1].pos = { SCREEN_W,0 };
+        /*between[1].pos = { SCREEN_W,0 };
         between[1].scale = { 1,1 };
         between[1].pivot = { 0,0 };
-        between[1].texSize = { 1920, 1080 };
+        between[1].texSize = { 1920, 1080 };*/
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
@@ -223,6 +226,8 @@ void game_update()
         square.frame_init();
         shot.bullet_init();
 
+        game1_manager.Game1_Manager_init();
+        game3_manager.Game3_Manager_init();
         game4_manager.Game4_Manager_init();
 
         game_state++;
@@ -275,6 +280,7 @@ void game_update()
         square.update();
 #endif
         game1_manager.Game1_Manager_update();
+        game3_manager.Game3_Manager_update();
         game4_manager.Game4_Manager_update();
 
         back_update();
@@ -404,6 +410,7 @@ void game_render()
 
     game1_manager.Game1_render();
 
+
     sprite_render(Back[1],
         back[1].pos.x, back[1].pos.y,
         back[1].scale.x, back[1].scale.y,
@@ -416,8 +423,8 @@ void game_render()
         0, 0,
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
-    square.square_render();
 
+    square.square_render();
     shot.shot_render();
 
 
@@ -427,7 +434,6 @@ void game_render()
         0, 0,
         back[2].texSize.x, back[2].texSize.y,
         back[2].pivot.x, back[2].pivot.y);
-
     sprite_render(Between[2],
         back[2].pos.x, back[2].pos.y,
         1, 1,
@@ -435,10 +441,18 @@ void game_render()
         back[2].texSize.x, back[2].texSize.y,
         back[2].pivot.x, back[2].pivot.y);
 
+    game3_manager.Game3_Manager_render();
     
+
     sprite_render(Back[3],
         back[3].pos.x, back[3].pos.y,
         back[3].scale.x, back[3].scale.y,
+        0, 0,
+        back[3].texSize.x, back[3].texSize.y,
+        back[3].pivot.x, back[3].pivot.y);
+    sprite_render(Between[3],
+        back[3].pos.x, back[3].pos.y,
+        1, 1,
         0, 0,
         back[3].texSize.x, back[3].texSize.y,
         back[3].pivot.x, back[3].pivot.y);

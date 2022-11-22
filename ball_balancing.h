@@ -8,8 +8,8 @@ private:
     int control = 0;
 
 public:
-    void Game1_init();
-    void Game1_deinit();
+    void Game1_Manager_init();
+    void Game1_Manager_deinit();
     void Game1_Manager_update();
     void Game1_Manager_slide(float x);
     void Game1_Manager_shrink();

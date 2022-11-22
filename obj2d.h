@@ -167,7 +167,7 @@ public:
     bool fallCheck;
     OBJ2D box;
     int box_timer = 0;
-    int spwanFlag = rand() % 300 + 600;
+    int spwanFlag = 800;
     void Game4_Manager_update();
     void Game4_Manager_init();
     void LivingCheck(); 
