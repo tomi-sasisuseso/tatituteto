@@ -9,7 +9,6 @@ void Game5_Manager::Game5_Manager_init()
 {
     //////// ƒpƒ‰ƒ[ƒ^‚Ìİ’è ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
-    music::play(0, FALSE);
     //”wŒi
     background.pos = {back[4].pos.x, back[4].pos.y};
     background.scale = { 1, 1 };
@@ -131,8 +130,7 @@ void Game5_Manager::ball_move()
             is_on_floor = true;
         }
     }
-
-        
+   
     //‹ó’†
     else
     {

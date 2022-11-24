@@ -3,8 +3,6 @@
 int title_state;
 int title_timer;
 
-
-
 //ƒpƒ‰ƒ[ƒ^
 const float DURATION = 60;
 const float MOVE_SPEED = 5.0f;

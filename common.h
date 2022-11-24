@@ -36,5 +36,7 @@
 // •Ï”
 extern int curScene;
 extern int nextScene;
+extern bool missed_game[MAX_GAMES];
+
 
 #endif//COMMON_H
