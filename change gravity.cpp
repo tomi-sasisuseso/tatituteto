@@ -1,10 +1,5 @@
 #include "all.h"
 
-<<<<<<< HEAD
-=======
-int title_state;
-int title_timer;
-
 //パラメータ
 const float DURATION = 60;
 const float MOVE_SPEED = 5.0f;
@@ -18,7 +13,6 @@ OBJ2D barrier;
 
 int triangle_easetimer = INT_MAX;
 VECTOR2 upperpos = CENTER, downerpos = CENTER;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 
 Sprite* background_sprite;
 Sprite* triangle_sprite;
@@ -30,11 +24,9 @@ extern OBJ2D back[MAX_GAMES];
 void Game6_Manager::Game6_Manager_init()
 {
     Game6_timer = 0;
-    srand(unsigned int(time(NULL)));
 
     //////// パラメータの設定 ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
-    music::play(0, FALSE);
     //四角
     triangle.scale = { 0.5f, 0.5f };
     triangle.texPos = { 0,0 };

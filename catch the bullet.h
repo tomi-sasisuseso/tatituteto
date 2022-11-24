@@ -12,6 +12,7 @@ private:
     int bullet_speed = 5;
     int spawn_interval = 300;
 
+    bool isshow = false;
     float product = 0;
     int spawn_counter = 0;
 

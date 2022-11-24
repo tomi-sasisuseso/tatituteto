@@ -21,6 +21,10 @@ const int scroll_time[MAX_GAMES - 1] = {
     100, 200, 300, 400, 500
 };
 
+int tutrial_easeTimer = INT_MAX;
+const float TUTRIAL_EASEDURATION = 60;
+VECTOR2 tutrial_pos_start;
+
 bool isPaused;
 bool missed_game[6];
 
@@ -35,6 +39,7 @@ int finish_timer = 0;
 Sprite* Back[MAX_GAMES];
 Sprite* GameOver[5];
 Sprite* Between[5];
+Sprite* tutrial_sprite[6];
 
 Sprite* Ball;
 Sprite* Square;
@@ -121,14 +126,11 @@ void game_update()
         isPaused = !isPaused;       // 0コンのスタートボタンが押されたらポーズ状態が反転
     if (isPaused) return;           // この時点でポーズ中ならリターン
 
-
-
     switch (game_state)
     {
     case 0:
         //////// 初期設定 ////////
 
-<<<<<<< HEAD
         /*Back[0] = sprite_load(L"./Data/Images/背景2.png");
         Back[1] = sprite_load(L"./Data/Images/仮1.png");
         Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
@@ -145,8 +147,6 @@ void game_update()
         Game4_hole = sprite_load(L"./Data/Images/ゲーム5_穴.png");
         Game4_beruto = sprite_load(L"Data/Images/ゲーム5_ベルトコンベア.png");*/
 
-=======
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         Back[0] = sprite_load(L"./Data/Images/ゲーム1_背景.png");
         Back[1] = sprite_load(L"./Data/Images/ゲーム2_背景.png");
         Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
@@ -166,6 +166,13 @@ void game_update()
         Between[3] = sprite_load(L"./Data/Images/淵4.png");
         Between[4] = sprite_load(L"./Data/Images/淵5.png");
         Between[5] = sprite_load(L"./Data/Images/淵6.png");
+
+        tutrial_sprite[0] = sprite_load(L"./Data/Images/チュートリアル_1.png");
+        tutrial_sprite[1] = sprite_load(L"./Data/Images/チュートリアル_2.png");
+        tutrial_sprite[2] = sprite_load(L"./Data/Images/チュートリアル_3.png");
+        tutrial_sprite[3] = sprite_load(L"./Data/Images/チュートリアル_4.png");
+        tutrial_sprite[4] = sprite_load(L"./Data/Images/チュートリアル_5.png");
+        tutrial_sprite[5] = sprite_load(L"./Data/Images/チュートリアル_6.png");
 
         Ball = sprite_load(L"./Data/Images/ゲーム1_ボール.png");
 
@@ -192,7 +199,6 @@ void game_update()
         back[0].scale = { 2, 2 };
 
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
@@ -204,12 +210,11 @@ void game_update()
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
-=======
 
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
+
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -307,27 +312,32 @@ void game_update()
 
 #endif
         //ミスの判定
-        for (int i = 0; i < MAX_GAMES; i++)
-        {
-            if (missed_game[i])
-            {
-                //音楽のボリューム
-                game_volume -= 0.04;
-                game_volume = std::clamp(game_volume, 0.0f, 1.0f);
-                music::setVolume(1, game_volume);
-                //少し待つ
-                finish_timer++;
-                if (finish_timer < 60) break;
+        //for (int i = 0; i < MAX_GAMES; i++)
+        //{
+        //    if (missed_game[i])
+        //    {
+        //        //音楽のボリューム
+        //        game_volume -= 0.04;
+        //        game_volume = std::clamp(game_volume, 0.0f, 1.0f);
+        //        music::setVolume(1, game_volume);
+        //        //少し待つ
+        //        finish_timer++;
+        //        if (finish_timer < 90) break;
 
-                nextScene = SCENE_SCORE;
-                score = game_timer;
-                break;
-            }
-        }
-        //ゲームオーバーになったら動作を終了
-        for (int i = 0; i < MAX_GAMES; i++)
+        //        nextScene = SCENE_SCORE;
+        //        score = game_timer;
+        //        break;
+        //    }
+        //}
+        ////ゲームオーバーになったら動作を終了
+        //for (int i = 0; i < MAX_GAMES; i++)
+        //{
+        //    if (missed_game[i])  return;
+        //}
+
+        if (TRG(0) & PAD_START)
         {
-            if (missed_game[i])  return;
+            
         }
 
         if (TRG(0) & PAD_SELECT)
@@ -426,15 +436,12 @@ void back_update() {
     }
 
     /////// 3回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 600) scroll_timer[2] = 0;
-=======
     if (game_timer == scroll_time[2])
     {
         scroll_timer[2] = 0;
         number_of_games = 4;
     }
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
+
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
@@ -446,19 +453,15 @@ void back_update() {
     }
 
     /////// 4回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 800)scroll_timer[3] = 0;
-=======
     if (game_timer == scroll_time[3])
     {
         scroll_timer[3] = 0;
         number_of_games = 5;
     }
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
-        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
+        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 2, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
         back[1].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_H / 4, -SCREEN_H/12 , t);
         back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
@@ -475,16 +478,11 @@ void back_update() {
     }
 
     /////// 5回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 1000) {
-        scroll_timer[4] = 0;
-        game6_manager.barrier_init();
-=======
     if (game_timer == scroll_time[4])
     {
+        game6_manager.barrier_init();
         scroll_timer[4] = 0;
         number_of_games = 6;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     }
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
@@ -513,7 +511,7 @@ void game_render()
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
     
-    game5_manager.Game5_Manager_render();
+
     
 
     /////// スクロールするために下に描画 ///////
@@ -524,12 +522,9 @@ void game_render()
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
 
-<<<<<<< HEAD
     game6_manager.Game6_Manager_render();
+    game5_manager.Game5_Manager_render();
     
-=======
-    GameLib::clear(1,1,1);
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -560,10 +555,7 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-<<<<<<< HEAD
-=======
 
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     square.square_render();
     shot.shot_render();
 
@@ -600,14 +592,15 @@ void game_render()
 
     game4_manager.Game4_render();
 
-<<<<<<< HEAD
-=======
+
     sprite_render(Between[0],
         back[4].pos.x, back[4].pos.y,
         back[4].scale.x, back[4].scale.y,
         0, 0,
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
+
+    
 
     sprite_render(Back[5],
         back[5].pos.x, back[5].pos.y,
@@ -621,7 +614,6 @@ void game_render()
         0, 0,
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 
     gameover_render();
 
@@ -770,7 +762,7 @@ void gameover_render()
         }
         sprite_render(
             s,
-            0, SCREEN_H / 2,
+            pos.x, pos.y,
             1, 1,
             0, 0,
             texsize.x, texsize.y,
@@ -804,4 +796,23 @@ void gameover_render()
             0
         );
     }
+}
+
+void tutrial_init()
+{
+    tutrial_easeTimer = 0;
+}
+
+void tutrial_render()
+{
+    VECTOR2 pos = { SCREEN_W / 2, 0 };
+
+    sprite_render(
+        tutrial_sprite[0],
+        pos.x, pos.y,
+        0, 0,
+        1000, 450,
+        500, 225,
+        0
+    );
 }

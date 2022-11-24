@@ -331,11 +331,7 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
-<<<<<<< HEAD
-            nextScene = SCENE_SCORE;
-=======
             missed_game[1] = true;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         }
     }
 }
@@ -388,13 +384,12 @@ void Game4_Manager::Game4_judge()
 
 void Game4_Manager::hole_update()
 {
-    if (TRG(0) & PAD_TRG4 && !animeFlag_LeftCheck) //âE
+    if (GetAsyncKeyState('L') && !animeFlag_LeftCheck) //âE
     {
         animeFlag = true;
-
     }
 
-    else if (TRG(0) & PAD_TRG3 && !animeFlag ) //ç∂
+    else if (GetAsyncKeyState('J') && !animeFlag) //ç∂
     {
         animeFlag_LeftCheck = true;
     }

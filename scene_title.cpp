@@ -33,10 +33,6 @@ void Game6_Manager_init()
     title_background_sprite = sprite_load(L"./Data/Images/タイトル.png");
     title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
     title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
-<<<<<<< HEAD
-=======
-
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 }
 
 void Game6_Manager_deinit()
@@ -56,7 +52,6 @@ void Game6_Manager_update()
     case 1:
         //////// パラメータの設定 ////////
         GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, false);
 
         title_state++;
     case 2:

@@ -110,7 +110,7 @@ void Game5_Manager::ball_move()
     //回転
     ball3.angle += ToRadian(ROTATE_SPEED);
     //ジャンプ
-    if (TRG(0) & PAD_L1 && is_on_floor)
+    if (GetAsyncKeyState(VK_SPACE) && is_on_floor)
     {
         ball3.velocity.y = -JUMP_POWER;
     }
@@ -119,32 +119,24 @@ void Game5_Manager::ball_move()
     ball3.pos += ball3.velocity;
 
     //穴の左右の位置
-    float left = hole.pos.x - hole.texSize.x/2;
-    float right = hole.pos.x + hole.texSize.x / 2;
+    float left = hole.pos.x - hole.pivot.x;
+    float right = hole.pos.x + hole.pivot.x;
     //地面にいる場合
     if (ball3.pos.y > floor_height && !(left < ball3.pos.x && ball3.pos.x < right)) {
             debug::setString("onground");
             ball3.velocity.y = 0;
             ball3.pos.y = floor_height;
             is_on_floor = true;
-<<<<<<< HEAD
+    }
 
-    }
-        
-=======
-        }
-    }
-   
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     //空中
     else
     {
         is_on_floor = false;
     }
-    debug::setString("left :%f", left);
-    debug::setString("right :%f", right);
+    debug::setString("left: %f", left);
     //落下の判定
-    if (ball3.pos.y > BORDER_TO_FALL)   Game6_Manager_init();
+    if (ball3.pos.y > BORDER_TO_FALL)   missed_game[5] = true;
 }
 
 void Game5_Manager::hole_init()
@@ -154,14 +146,14 @@ void Game5_Manager::hole_init()
     hole.scale = { 1, 1 };
     hole.texPos = { 0,0 };
     hole.texSize = { 150, 150 };
-    hole.pivot = { 0, 0 };
+    hole.pivot = hole.texSize * 0.5f;
     hole.angle = 0;
     hole.Dradius = 32.0f;
 
 
     //位置
     hole.pos = CENTER;
-    hole.pos.y = 0+back[4].texSize.y-hole.texSize.y/2;
+    hole.pos.y = 0 + back[4].texSize.y-hole . texSize.y * 0.5f;
     hole.pos.x = SPAWN_POS_X;
     //次に出現するまでの時間をランダムに生成
     wait_time = MIN_WAIT_TIME + rand() % MAX_WAIT_TIME;
