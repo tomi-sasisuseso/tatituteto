@@ -9,7 +9,7 @@ private:
     const float CIRCLE_MAXSPEED = 3.0f;
     const float CIRCLE_DECELERATION = 0.8f;
     const float SAFE_ANGLE = 0.82f;
-    int bullet_speed = 5;
+    int bullet_speed = 2;
     int spawn_interval = 300;
 
     float product = 0;

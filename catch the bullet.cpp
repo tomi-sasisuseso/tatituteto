@@ -46,7 +46,6 @@ void Game3_Manager::Game3_Manager_slide(float x)
         bullet.pos.x -= 16;
     }
     else circle.pos.x = x;
-
 }
 
 void Game3_Manager::Game3_Manager_shrink()
@@ -78,7 +77,7 @@ void Game3_Manager::Game3_Manager_render()
         1.0f, 1.0f, 1.0f, 1.0f
     );
 
-    if (bullet.pos.y >= SCREEN_H / 2) {
+    if (bullet.pos.x<back[3].pos.x &&bullet.pos.y >= SCREEN_H / 2) {
         sprite_render(
             bullet_sprite,
             bullet.pos.x, bullet.pos.y,
@@ -91,7 +90,7 @@ void Game3_Manager::Game3_Manager_render()
         );
     }
 
-#if 0
+#if 1
     //ìñÇΩÇËîªíË
     //â~
     primitive::circle(
@@ -191,12 +190,9 @@ void Game3_Manager::is_safe()
     //É~ÉXÇÇµÇΩèÍçá
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
-<<<<<<< HEAD
         //nextScene = SCENE_SCORE;
         bullet_init();
-=======
         bullet_init();
         missed_game[2] = true;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     }
 }

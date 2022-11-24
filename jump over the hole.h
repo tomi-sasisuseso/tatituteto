@@ -12,7 +12,7 @@ private:
     const float BORDER_TO_FALL = 780.0f;
     //Å‘å‚©‚çÅ­‚Ü‚Å‚ÌŠÔ‚©‚çƒ‰ƒ“ƒ_ƒ€‚É‘Ò‹@ŠÔ‚ğİ’è
     const int MAX_WAIT_TIME = 1000;
-    const int MIN_WAIT_TIME = 100;
+    const int MIN_WAIT_TIME = 500;
 
     int game5_timer;
 

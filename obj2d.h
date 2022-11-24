@@ -174,6 +174,7 @@ public:
     void Game4_Manager_init();
     void LivingCheck(); 
     void Game4_judge();
+    void Game4_slideX(float t);
 
     void hole_update();
     void box_update();

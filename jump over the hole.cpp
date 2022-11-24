@@ -127,15 +127,9 @@ void Game5_Manager::ball_move()
             ball3.velocity.y = 0;
             ball3.pos.y = floor_height;
             is_on_floor = true;
-<<<<<<< HEAD
 
     }
-        
-=======
-        }
-    }
-   
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
+
     //‹ó’†
     else
     {
@@ -144,7 +138,7 @@ void Game5_Manager::ball_move()
     debug::setString("left :%f", left);
     debug::setString("right :%f", right);
     //—Ž‰º‚Ì”»’è
-    if (ball3.pos.y > BORDER_TO_FALL)   Game6_Manager_init();
+    if (ball3.pos.y > BORDER_TO_FALL)   missed_game[5] = true;
 }
 
 void Game5_Manager::hole_init()

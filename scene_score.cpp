@@ -226,8 +226,3 @@ void score_render()
         { 0.0f, 0.0f, 0.0f, score_alpha_overall }
     );
 }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e

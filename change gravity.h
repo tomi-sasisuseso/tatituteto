@@ -11,7 +11,7 @@ private:
     //ÉpÉâÉÅÅ[É^
     const float DURATION = 60;
     const float SPAWN_POS_X = SCREEN_W + 200.0f;
-    const float DESPAWN_POS_X = -100.0f;
+    const float DESPAWN_POS_X = -300.0f;
     const float COYOTE_TIME = 20.0f;
     float MOVE_SPEED = 0.0f;
 

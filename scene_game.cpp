@@ -22,13 +22,19 @@ const int scroll_time[MAX_GAMES - 1] = {
 };
 
 bool isPaused;
+bool tutorial;
 bool missed_game[6];
+
+bool scroll_Frag[6];
 
 const float duration = 60;
 int scroll_timer[MAX_GAMES];
+int timer[MAX_GAMES];
 int number_of_games;
 float game2_center;
 float game_volume;
+
+float back_slide;
 
 int finish_timer = 0;
 
@@ -77,6 +83,7 @@ void game_init()
     number_of_games = 1;
     finish_timer = 0;
     game_volume = 1.0f;
+    back_slide = 0;
     scroll_timer[0] = 50000;
     scroll_timer[1] = 50000;
     scroll_timer[2] = 50000;
@@ -117,9 +124,12 @@ void game_deinit()
 void game_update()
 {
     //ゲームをポーズ
-    if (TRG(0) & PAD_START)
+    if (TRG(0) & PAD_START&& !tutorial)
         isPaused = !isPaused;       // 0コンのスタートボタンが押されたらポーズ状態が反転
-    if (isPaused) return;           // この時点でポーズ中ならリターン
+    if (tutorial && TRG(0) & PAD_START)
+        tutorial = false;
+    if (isPaused||tutorial) 
+        return;           // この時点でポーズ中ならリターン
 
 
 
@@ -128,7 +138,6 @@ void game_update()
     case 0:
         //////// 初期設定 ////////
 
-<<<<<<< HEAD
         /*Back[0] = sprite_load(L"./Data/Images/背景2.png");
         Back[1] = sprite_load(L"./Data/Images/仮1.png");
         Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
@@ -145,8 +154,6 @@ void game_update()
         Game4_hole = sprite_load(L"./Data/Images/ゲーム5_穴.png");
         Game4_beruto = sprite_load(L"Data/Images/ゲーム5_ベルトコンベア.png");*/
 
-=======
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         Back[0] = sprite_load(L"./Data/Images/ゲーム1_背景.png");
         Back[1] = sprite_load(L"./Data/Images/ゲーム2_背景.png");
         Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
@@ -192,7 +199,6 @@ void game_update()
         back[0].scale = { 2, 2 };
 
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
@@ -204,12 +210,10 @@ void game_update()
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
-=======
 
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -239,6 +243,8 @@ void game_update()
         back[5].pos = { SCREEN_W,SCREEN_H / 2 };
         back[5].scale = { 1,1 };
 
+        
+
 
         /*Squares square(SCREEN_W + 50, SCREEN_H / 2 - 150);
           ゲームループの中でクラスの実態宣言はできない？
@@ -258,6 +264,7 @@ void game_update()
         for (int i = 0; i < MAX_GAMES; i++)
         {
             missed_game[i] = false;
+            scroll_Frag[i] = false;
         }
 
         game_state++;
@@ -304,31 +311,38 @@ void game_update()
 
 
         debug::setString("back[5].pos.x:%f", back[5].pos.x);
+        debug::setString("back[3].texSize.x:%f", back[3].texSize.x);
+        debug::setString("back[3].texPos.x:%f", back[3].texPos.x);
 
+        debug::setString("timer[0] %d", timer[0]);
 #endif
-        //ミスの判定
-        for (int i = 0; i < MAX_GAMES; i++)
-        {
-            if (missed_game[i])
-            {
-                //音楽のボリューム
-                game_volume -= 0.04;
-                game_volume = std::clamp(game_volume, 0.0f, 1.0f);
-                music::setVolume(1, game_volume);
-                //少し待つ
-                finish_timer++;
-                if (finish_timer < 60) break;
 
-                nextScene = SCENE_SCORE;
-                score = game_timer;
-                break;
-            }
-        }
-        //ゲームオーバーになったら動作を終了
-        for (int i = 0; i < MAX_GAMES; i++)
-        {
-            if (missed_game[i])  return;
-        }
+        back_update();
+        
+        
+        //ミスの判定
+        //for (int i = 0; i < MAX_GAMES; i++)
+        //{
+        //    if (missed_game[i])
+        //    {
+        //        //音楽のボリューム
+        //        game_volume -= 0.04;
+        //        game_volume = std::clamp(game_volume, 0.0f, 1.0f);
+        //        music::setVolume(1, game_volume);
+        //        //少し待つ
+        //        finish_timer++;
+        //        if (finish_timer < 60) break;
+
+        //        nextScene = SCENE_SCORE;
+        //        score = game_timer;
+        //        break;
+        //    }
+        //}
+        ////ゲームオーバーになったら動作を終了
+        //for (int i = 0; i < MAX_GAMES; i++)
+        //{
+        //    if (missed_game[i])  return;
+        //}
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -355,7 +369,7 @@ void game_update()
         game5_manager.Game5_Manager_update();
         game6_manager.Game6_Manager_update();
 
-        back_update();
+        game_tutorial();
 
         break;
     }
@@ -365,6 +379,8 @@ void game_update()
 }
 
 void back_update() {
+
+
     /////// 1回目のスライド処理 ///////
     if (game_timer == scroll_time[0])
     {
@@ -373,6 +389,7 @@ void back_update() {
     }
     if (scroll_timer[0] < duration)
     {
+        scroll_Frag[1] = true;
         scroll_timer[0]++;
         float t = (float)scroll_timer[0] / duration;
         back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 3, t);
@@ -380,9 +397,10 @@ void back_update() {
 
         game1_manager.Game1_Manager_slideX(SCREEN_W / 4);
 
-        square.square_slideX(SCREEN_W-SCREEN_W/4);
+        square.square_slideX(SCREEN_W - SCREEN_W / 4);
         shot.bullet_init();
     }
+    else scroll_Frag[1] = false;
 
     /////// 2回目のスライド処理 ///////
     if (game_timer == scroll_time[1])
@@ -392,6 +410,8 @@ void back_update() {
     }
     if (back[0].scale.x >= 1) {
         if (game_timer > scroll_time[1]) {
+            scroll_Frag[2] = true;
+
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
             //back[1].scale.x *= 0.99;
@@ -423,19 +443,19 @@ void back_update() {
             
             //back[2].pos = { 0,back[0].texSize.y * back[0].scale.y };
         }
+        else scroll_Frag[2] = false;
+
     }
 
     /////// 3回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 600) scroll_timer[2] = 0;
-=======
     if (game_timer == scroll_time[2])
     {
         scroll_timer[2] = 0;
         number_of_games = 4;
     }
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     if (scroll_timer[2] < duration) {
+        scroll_Frag[3] = true;
+
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
         back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W/2, t);
@@ -444,21 +464,21 @@ void back_update() {
         game3_manager.Game3_Manager_shrink();
         game4_manager.Game4_Manager_init();
     }
+    else scroll_Frag[3] = false;
+
 
     /////// 4回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 800)scroll_timer[3] = 0;
-=======
     if (game_timer == scroll_time[3])
     {
         scroll_timer[3] = 0;
         number_of_games = 5;
     }
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     if (scroll_timer[3] < duration) {
+        scroll_Frag[4] = true;
+
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
-        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
+        back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 2, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
         back[1].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_H / 4, -SCREEN_H/12 , t);
         back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
@@ -473,27 +493,32 @@ void back_update() {
         else ball.pos.x = SCREEN_W / 6 ;*/
 
     }
+    else scroll_Frag[4] = false;
+
 
     /////// 5回目のスライド処理 ///////
-<<<<<<< HEAD
-    if (game_timer == 1000) {
-        scroll_timer[4] = 0;
-        game6_manager.barrier_init();
-=======
     if (game_timer == scroll_time[4])
     {
+        game6_manager.barrier_init();
         scroll_timer[4] = 0;
         number_of_games = 6;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     }
     if (scroll_timer[4] < duration) {
+        scroll_Frag[5] = true;
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
-        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_W/2, -SCREEN_W / 4, t);
+
+        back[3].texSize.x -= 5.333333f;
+        back[3].texPos.x += 2.666667f;
+        back_slide += 2.666667f;
+
+        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_W/2, SCREEN_W/3-SCREEN_W  , t);
         back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W / 2, SCREEN_W / 2 - back[3].texSize.x / 2, t);
         back[5].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
         game3_manager.Game3_Manager_slide(SCREEN_W / 6);
     }
+    else scroll_Frag[5] = false;
+
 }
 
 //--------------------------------------
@@ -524,12 +549,8 @@ void game_render()
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
 
-<<<<<<< HEAD
     game6_manager.Game6_Manager_render();
     
-=======
-    GameLib::clear(1,1,1);
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -560,10 +581,6 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     square.square_render();
     shot.shot_render();
 
@@ -588,7 +605,7 @@ void game_render()
     sprite_render(Back[3],
         back[3].pos.x, back[3].pos.y,
         back[3].scale.x, back[3].scale.y,
-        0, 0,
+        back[3].texPos.x,back[3].texPos.y,
         back[3].texSize.x, back[3].texSize.y,
         back[3].pivot.x, back[3].pivot.y);
     sprite_render(Between[0],
@@ -600,8 +617,6 @@ void game_render()
 
     game4_manager.Game4_render();
 
-<<<<<<< HEAD
-=======
     sprite_render(Between[0],
         back[4].pos.x, back[4].pos.y,
         back[4].scale.x, back[4].scale.y,
@@ -609,19 +624,7 @@ void game_render()
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
 
-    sprite_render(Back[5],
-        back[5].pos.x, back[5].pos.y,
-        back[5].scale.x, back[5].scale.y,
-        0, 0,
-        back[5].texSize.x, back[5].texSize.y,
-        back[5].pivot.x, back[5].pivot.y);
-    sprite_render(Between[0],
-        back[5].pos.x, back[5].pos.y,
-        back[5].scale.x, back[5].scale.y,
-        0, 0,
-        back[5].texSize.x, back[5].texSize.y,
-        back[5].pivot.x, back[5].pivot.y);
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
+  
 
     gameover_render();
 
@@ -804,4 +807,36 @@ void gameover_render()
             0
         );
     }
+}
+
+void game_tutorial() {
+    for (int i = 0; i < MAX_GAMES; i++) {
+        timer[i] = scroll_time[i]+duration;
+    }
+
+    if (game_timer == timer[0]) tutorial = true;
+    else if(game_timer==timer[1]) tutorial = true;
+    else if(game_timer==timer[2]) tutorial = true;
+    else if(game_timer==timer[3]) tutorial = true;
+    else if(game_timer==timer[4]) tutorial = true;
+
+
+    /*switch (game_timer)
+    {
+    case timer[0]:
+        isPaused = true;
+        break;
+    case timer[1]:
+        isPaused = true;
+        break;
+    case timer[2]:
+        isPaused = true;
+        break;
+    case timer[3]:
+        isPaused = true;
+        break;
+    case timer[4]:
+        isPaused = true;
+        break;
+    }*/
 }

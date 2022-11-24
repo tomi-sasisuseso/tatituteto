@@ -8,7 +8,7 @@ extern Sprite* Game4_box;
 
 extern OBJ2D back[MAX_GAMES];
 
-
+extern float back_slide;
 
 #define box_difference 5
 #define belt_conveyor_while 128
@@ -254,12 +254,12 @@ void SHOOTER::Shot(VECTOR2 origin, float height, float num)
 
                 if (bullet[i].parameter.pos.x < game2_center)
                 {
-                    bullet[i].parameter.speed = { 5,0 };
+                    bullet[i].parameter.speed = { 2,0 };
                     bullet[i].parameter.scale.x *= 1;
                 }
                 else
                 {
-                    bullet[i].parameter.speed = { -5,0 };
+                    bullet[i].parameter.speed = { -2,0 };
                     bullet[i].parameter.scale.x *= -1;
                 }
 
@@ -331,18 +331,15 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
-<<<<<<< HEAD
             nextScene = SCENE_SCORE;
-=======
             missed_game[1] = true;
->>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         }
     }
 }
 
 void Game4_Manager::Game4_Manager_update()
 {
-    belt_conveyor.pos.x = back[3].pos.x+255;
+    belt_conveyor.pos.x = back[3].pos.x+255-back_slide;
     belt_conveyor.pos.y = back[3].pos.y;
     
 
@@ -384,6 +381,11 @@ void Game4_Manager::Game4_Manager_init()
 void Game4_Manager::Game4_judge()
 {
     if (box.pos.y > SCREEN_H)   missed_game[3] = true;
+}
+
+void Game4_Manager::Game4_slideX(float t)
+{
+    belt_conveyor.pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, belt_conveyor.pos.x, (SCREEN_W / 2 - back[3].texSize.x / 2)-160, t);
 }
 
 void Game4_Manager::hole_update()

@@ -17,4 +17,5 @@ void game_render();
 
 void back_update();
 void gameover_render();
+void game_tutorial();
 #endif//SCENE_GAME_H
