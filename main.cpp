@@ -60,7 +60,6 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
                 break;
             
             }
-
             curScene = nextScene;
         }
 

@@ -40,6 +40,16 @@ float p_to_p_angle(VECTOR2 pos1, VECTOR2 pos2);
 /// <returns>-1から1の範囲の値</returns>
 float inner_product(VECTOR2 vec1, VECTOR2 vec2);
 
+/// <summary>
+/// 数値の中の指定した桁の値を取得
+/// </summary>
+/// <param name="value"></param>
+/// <param name="m"></param>
+/// <param name="n"></param>
+/// <returns></returns>
+int getDigits(int value, int m, int n);
+
+int countDigits(int n);
 
 //参考サイト (https://gist.github.com/snorpey/8134c248296649433de2)
 //バランス取りゲーム用の関数なのでほかで使わないように

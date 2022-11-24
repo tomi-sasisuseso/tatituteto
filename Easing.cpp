@@ -42,6 +42,7 @@ namespace Easing
 	{
 		//開始と終了が同じ
 		if (start == end)	return start;
+<<<<<<< HEAD
 
 
 
@@ -49,6 +50,11 @@ namespace Easing
 		if (start == end)	return start;
 
 
+=======
+		//開始と終了が同じ
+		if (start == end)	return start;
+
+>>>>>>> origin/yao2
 		float a = start;
 		float b = end;
 
@@ -61,46 +67,49 @@ namespace Easing
 		float d = b - a;
 		float t = v;
 		//処理を実行
+		float amount = 0;
 		switch (type)
 		{
-		case eType::LINEAR:					return a + (d * Easing::linear(v));
-		case eType::QUAD_IN:				return a + (d * Easing::quad_in(v));
-		case eType::QUAD_OUT:				return a + (d * Easing::quad_out(v));
-		case eType::QUAD_INOUT:				return a + (d * Easing::quad_in_out(v));
-		case eType::CUBE_IN:				return a + (d * Easing::cube_in(v));
-		case eType::CUBE_OUT:				return a + (d * Easing::cube_out(v));
-		case eType::CUBE_INOUT:				return a + (d * Easing::cube_in_out(v));
-		case eType::QUART_IN:				return a + (d * Easing::quart_in(v));
-		case eType::QUART_OUT:				return a + (d * Easing::quart_out(v));
-		case eType::QUART_INOUT:			return a + (d * Easing::quart_in_out(v));
-		case eType::QUINT_IN:				return a + (d * Easing::quint_in(v));
-		case eType::QUINT_OUT:				return a + (d * Easing::quint_out(v));
-		case eType::QUINT_INOUT:			return a + (d * Easing::quint_in_out(v));
-		case eType::SMOOTH_STEP_IN:			return a + (d * Easing::smooth_step_in(v));
-		case eType::SMOOTH_STEP_OUT:		return a + (d * Easing::smooth_step_out(v));
-		case eType::SMOOTH_STEP_INOUT:		return a + (d * Easing::smooth_step_in_out(v));
-		case eType::SMOOTHER_STEP_IN:		return a + (d * Easing::smoother_step_in(v));
-		case eType::SMOOTHER_STEP_OUT:		return a + (d * Easing::smoother_step_out(v));
-		case eType::SMOOTHER_STEP_INOUT:	return a + (d * Easing::smoother_step_in_out(v));
-		case eType::SIN_IN:					return a + (d * Easing::sine_in(v));
-		case eType::SIN_OUT:				return a + (d * Easing::sine_out(v));
-		case eType::SIN_INOUT:				return a + (d * Easing::sine_in_out(v));
-		case eType::CIRC_IN:				return a + (d * Easing::circ_in(v));
-		case eType::CIRC_OUT:				return a + (d * Easing::circ_out(v));
-		case eType::CIRC_INOUT:				return a + (d * Easing::circ_in_out(v));
-		case eType::BOUNCE_IN:				return a + (d * Easing::bounce_in(v));
-		case eType::BOUNCE_OUT:				return a + (d * Easing::bounce_out(v));
-		case eType::BOUNCE_INOUT:			return a + (d * Easing::bounce_in_out(v));
-		case eType::BACK_IN:				return a + (d * Easing::back_in(v));
-		case eType::BACK_OUT:				return a + (d * Easing::back_out(v));
-		case eType::BACK_INOUT:				return a + (d * Easing::back_in_out(v));
-		case eType::EXPO_IN:				return a + (d * Easing::expo_in(v));
-		case eType::EXPO_OUT:				return a + (d * Easing::expo_out(v));
-		case eType::EXPO_INOUT:				return a + (d * Easing::expo_in_out(v));
-		case eType::ELASTIC_IN:				return a + (d * Easing::elastic_in(v));
-		case eType::ELASTIC_OUT:			return a + (d * Easing::elastic_out(v));
-		case eType::ELASTIC_INOUT:			return a + (d * Easing::elastic_in_out(v));
+		case eType::LINEAR:					amount = Easing::linear(v); break;
+		case eType::QUAD_IN:				amount = Easing::quad_in(v); break;
+		case eType::QUAD_OUT:				amount = Easing::quad_out(v); break;
+		case eType::QUAD_INOUT:				amount = Easing::quad_in_out(v); break;
+		case eType::CUBE_IN:				amount = Easing::cube_in(v); break;
+		case eType::CUBE_OUT:				amount = Easing::cube_out(v); break;
+		case eType::CUBE_INOUT:				amount = Easing::cube_in_out(v); break;
+		case eType::QUART_IN:				amount = Easing::quart_in(v); break;
+		case eType::QUART_OUT:				amount = Easing::quart_out(v); break;
+		case eType::QUART_INOUT:			amount = Easing::quart_in_out(v); break;
+		case eType::QUINT_IN:				amount = Easing::quint_in(v); break;
+		case eType::QUINT_OUT:				amount = Easing::quint_out(v); break;
+		case eType::QUINT_INOUT:			amount = Easing::quint_in_out(v); break;
+		case eType::SMOOTH_STEP_IN:			amount = Easing::smooth_step_in(v); break;
+		case eType::SMOOTH_STEP_OUT:		amount = Easing::smooth_step_out(v); break;
+		case eType::SMOOTH_STEP_INOUT:		amount = Easing::smooth_step_in_out(v); break;
+		case eType::SMOOTHER_STEP_IN:		amount = Easing::smoother_step_in(v); break;
+		case eType::SMOOTHER_STEP_OUT:		amount = Easing::smoother_step_out(v); break;
+		case eType::SMOOTHER_STEP_INOUT:	amount = Easing::smoother_step_in_out(v); break;
+		case eType::SIN_IN:					amount = Easing::sine_in(v); break;
+		case eType::SIN_OUT:				amount = Easing::sine_out(v); break;
+		case eType::SIN_INOUT:				amount = Easing::sine_in_out(v); break;
+		case eType::CIRC_IN:				amount = Easing::circ_in(v); break;
+		case eType::CIRC_OUT:				amount = Easing::circ_out(v); break;
+		case eType::CIRC_INOUT:				amount = Easing::circ_in_out(v); break;
+		case eType::BOUNCE_IN:				amount = Easing::bounce_in(v); break;
+		case eType::BOUNCE_OUT:				amount = Easing::bounce_out(v); break;
+		case eType::BOUNCE_INOUT:			amount = Easing::bounce_in_out(v); break;
+		case eType::BACK_IN:				amount = Easing::back_in(v); break;
+		case eType::BACK_OUT:				amount = Easing::back_out(v); break;
+		case eType::BACK_INOUT:				amount = Easing::back_in_out(v); break;
+		case eType::EXPO_IN:				amount = Easing::expo_in(v); break;
+		case eType::EXPO_OUT:				amount = Easing::expo_out(v); break;
+		case eType::EXPO_INOUT:				amount = Easing::expo_in_out(v); break;
+		case eType::ELASTIC_IN:				amount = Easing::elastic_in(v); break;
+		case eType::ELASTIC_OUT:			amount = Easing::elastic_out(v); break;
+		case eType::ELASTIC_INOUT:			amount = Easing::elastic_in_out(v); break;
 		}
+
+		return a + (d * amount);
 	}
 
 #pragma region Normal

@@ -15,4 +15,8 @@ void title_deinit();
 void title_update();
 void title_render();
 
+void ball_move();
+void hole_init();
+void hole_move();
+
 #endif//SCENE_TITLE_H

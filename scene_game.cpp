@@ -15,6 +15,7 @@
 //------< ïœêî >----------------------------------------------------------------
 int game_state;
 int game_timer;
+int score;
 
 bool isPaused;
 
@@ -109,6 +110,7 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
+<<<<<<< HEAD
 
         /*Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
         Back[1] = sprite_load(L"./Data/Images/âº1.png");
@@ -126,6 +128,8 @@ void game_update()
         Game4_hole = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_åä.png");
         Game4_beruto = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_ÉxÉãÉgÉRÉìÉxÉA.png");*/
 
+=======
+>>>>>>> origin/yao2
         Back[0] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ1_îwåi.png");
         Back[1] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ2_îwåi.png");
         Back[2] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ4_îwåi.png");
@@ -175,6 +179,10 @@ void game_update()
         //back[0].pivot = { 640/2,460/2 };
 
         back[1].pos = { SCREEN_W,0 };
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/yao2
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
@@ -186,6 +194,11 @@ void game_update()
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> origin/yao2
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -275,6 +288,7 @@ void game_update()
         if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_SCORE;
+            score = game_timer;
             break;
         }
 
@@ -303,16 +317,6 @@ void game_update()
 }
 
 void back_update() {
-    //back[0].pos.x -= 2;
-    //if (back[1].pos.x >= SCREEN_W / 2) {
-    //    if (game_timer > 200) {
-    //        //back[0].pos.x -= 5;
-    //        back[1].pos.x -= 5;
-    //    }
-
-    //}
-
-
     /////// 1âÒñ⁄ÇÃÉXÉâÉCÉhèàóù ///////
     if (game_timer == 200) scroll_timer[0] = 0;
     if (scroll_timer[0] < duration)
@@ -414,6 +418,7 @@ void back_update() {
 
 void game_render()
 {
+<<<<<<< HEAD
 
     GameLib::clear(1,1,1);
 
@@ -428,6 +433,10 @@ void game_render()
     game5_manager.Game5_Manager_render();
 
 
+=======
+    GameLib::clear(1,1,1);
+
+>>>>>>> origin/yao2
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
         back[0].scale.x,back[0].scale.y,
@@ -457,6 +466,12 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
+<<<<<<< HEAD
+=======
+
+    ball_render();
+
+>>>>>>> origin/yao2
     square.square_render();
     shot.shot_render();
 
@@ -502,8 +517,6 @@ void game_render()
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
 
-
-    //ball_render();
 
     //É|Å[ÉYíÜ
     if (isPaused)    font::textOut(

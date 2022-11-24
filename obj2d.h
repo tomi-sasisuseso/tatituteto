@@ -1,7 +1,10 @@
 #include "all.h"
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/yao2
 #ifndef OBJ2D_H
 #define OBJ2D_H
-
 
 extern float game2_center;
 
