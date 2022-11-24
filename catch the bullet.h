@@ -10,7 +10,7 @@ private:
     const float CIRCLE_DECELERATION = 0.8f;
     const float SAFE_ANGLE = 0.82f;
     int bullet_speed = 5;
-    int spawn_interval = 30;
+    int spawn_interval = 300;
 
     float product = 0;
     int spawn_counter = 0;
@@ -21,6 +21,9 @@ public:
     void Game3_Manager_init();
     void Game3_Manager_deinit();
     void Game3_Manager_update();
+    void Game3_Manager_slide(float x);
+    void Game3_Manager_shrink();
+
     void circle_move();
     void bullet_init();
     void bullet_move();

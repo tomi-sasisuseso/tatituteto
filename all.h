@@ -29,6 +29,7 @@
 #include "scene_score.h"
 #include "ball_balancing.h"
 #include "catch the bullet.h"
+#include "jump over the hole.h"
 
 // namespace
 using namespace GameLib;

@@ -99,7 +99,8 @@ public:
     void pivot_Init(float x, float y);
     
     void square_render();
-    void square_slide(float x);
+    void square_slideX(float x);
+    void square_slideY(float y);
     void square_shrink();
     void update();
 

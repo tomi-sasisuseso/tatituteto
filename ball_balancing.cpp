@@ -175,7 +175,7 @@ void Game1_Manager::ball_move()
     ball.pos += ball.velocity;
 }
 
-void Game1_Manager::Game1_Manager_slide(float x)
+void Game1_Manager::Game1_Manager_slideX(float x)
 {
     if (stage.pos.x > x) {
         stage.pos.x -= 16;
@@ -187,6 +187,15 @@ void Game1_Manager::Game1_Manager_slide(float x)
     //else stage.pos.x = x;
     //if (ball.pos.x > x) ball.pos.x -= 16;
     //else ball.pos.x = x;
+}
+
+void Game1_Manager::Game1_Manager_slideY(float y)
+{
+    if (stage.pos.y > y) {
+        stage.pos.y -= 16;
+        ball.pos.y -= 16;
+    }
+    else stage.pos.y = y;
 }
 
 void Game1_Manager::Game1_Manager_shrink()

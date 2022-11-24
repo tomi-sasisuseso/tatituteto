@@ -10,7 +10,8 @@ void Game3_Manager::Game3_Manager_init()
     GameLib::setBlendMode(Blender::BS_ALPHA);
     music::play(0, FALSE);
     //中心の円
-    circle.pos = { back[2].pos.x + back[2].texSize.x/2,back[2].pos.y + back[2].texSize.y/2 };
+    circle.pos = { back[2].pos.x + back[2].texSize.x / 2,
+                   back[2].pos.y + back[2].texSize.y / 2 };   
     circle.scale = { 1, 1 };
     circle.texPos = { 0,0 };
     circle.texSize = { 300,300 };
@@ -19,6 +20,7 @@ void Game3_Manager::Game3_Manager_init()
     circle.angle = 0;
 
     bullet_init();
+    bullet.scale = { 1, 1 };
 
     circle_sprite = sprite_load(L"./Data/Images/ゲーム4_円.png");
     bullet_sprite = sprite_load(L"./Data/Images/ゲーム4_弾.png");
@@ -36,6 +38,30 @@ void Game3_Manager::Game3_Manager_update()
     circle_move();
     bullet_move();
     is_safe();
+}
+
+void Game3_Manager::Game3_Manager_slide(float x)
+{
+    if (circle.pos.x > x) {
+        circle.pos.x -= 16;
+        bullet.pos.x -= 16;
+    }
+    else circle.pos.x = x;
+
+}
+
+void Game3_Manager::Game3_Manager_shrink()
+{
+    if (circle.scale.x >= 0.5) {
+        circle.scale *= 0.98;
+        bullet.scale *= 0.98;
+        circle.Dradius *= 0.98;
+        bullet.Dradius *= 0.98;
+    }
+    /*if (stage.pos.y > SCREEN_H / 4) stage.pos.y -= 4;
+    else stage.pos.y = SCREEN_H / 4;
+    if (ball.pos.y > SCREEN_H / 4) ball.pos.y -= 4;
+    else ball.pos.y = SCREEN_H / 4;*/
 }
 
 void Game3_Manager::Game3_Manager_render()
@@ -100,8 +126,6 @@ void Game3_Manager::Game3_Manager_render()
 void Game3_Manager::circle_move()
 {
     //ベクトル、内積
-    circle.pos = { back[2].pos.x + back[2].texSize.x/2,
-                   back[2].pos.y + back[2].texSize.y/2 };
 
     circle.vector_normal = { cosf(circle.angle), sinf(circle.angle) };
     product = inner_product(circle.vector_normal, bullet.vector_normal);
@@ -129,7 +153,6 @@ void Game3_Manager::bullet_init()
 {
     //弾
     bullet.pos = { -100, -600 };
-    bullet.scale = { 1, 1 };
     bullet.texPos = { 0,0 };
     bullet.texSize = { 70, 70 };
     bullet.pivot = bullet.texSize / 2;
@@ -154,7 +177,7 @@ void Game3_Manager::bullet_move()
     if (spawn_counter < spawn_interval)  return;
     debug::setString("Bullet Activated!");
     //中心に移動
-    bullet.angle = p_to_p_angle(CENTER, bullet.pos);
+    bullet.angle = p_to_p_angle(circle.pos, bullet.pos);
     bullet.vector_normal = { cosf(bullet.angle), sinf(bullet.angle) };
     bullet.velocity = bullet.vector_normal * bullet_speed;
     //速度を位置に代入
@@ -165,13 +188,14 @@ void Game3_Manager::bullet_move()
 void Game3_Manager::is_safe()
 {
     //くぐり抜けた場合
-    if (circle_collision(CENTER, bullet.pos, 1, 1))
+    if (circle_collision(circle.pos, bullet.pos, 1, 1))
     {
         bullet_init();
     }
     //ミスをした場合
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
+        //nextScene = SCENE_SCORE;
         bullet_init();
     }
 }

@@ -89,7 +89,7 @@ void Squares::update()
 }
 
 
-void Squares::square_slide(float x)
+void Squares::square_slideX(float x)
 {
     if (square.pos.x > x) {
         square.pos.x -= 16;
@@ -102,14 +102,39 @@ void Squares::square_slide(float x)
     
 }
 
+void Squares::square_slideY(float y)
+{
+    if (square.pos.y > y) {
+        square.pos.y -= 16;
+        frame.pos.y -= 16;
+    }
+    else {
+        square.pos.y = y;
+        frame.pos.y = y;
+    }
+
+}
+
 void Squares::square_shrink()
 {
     frame.scale *= 0.99;
     if (frame.pos.y > SCREEN_H / 4) frame.pos.y -= 4;
     else frame.pos.y = SCREEN_H / 4;
-    
     square.scale *= 0.99;
-   /* if ((frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1)* a.scale.y) a.pos.y -= 4;
+
+    back[1].pivot = { back[1].texSize.x / 2,back[1].texSize.y / 2 };
+    back[1].scale.x *= 0.99;
+    back[1].scale.y *= 0.99;
+
+    /*if (back[1].scale.x >= 0.666666) {
+        back[1].scale.x *= 0.99;
+        back[1].scale.y *= 0.99;
+    }
+    else {
+        back[1].scale.x = 0.666666;
+        back[1].scale.y = 0.666666;
+    }*/
+    /* if ((frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1)* a.scale.y) a.pos.y -= 4;
     else a.pos.y = (frame.pos.y - frame.texSize.y / 2 + (a.texSize.y / 2) + 1) ;*/
 }
 
@@ -300,7 +325,7 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
-            nextScene = SCENE_SCORE;
+            //nextScene = SCENE_SCORE;
         }
     }
 }
@@ -348,7 +373,7 @@ void Game4_Manager::Game4_Manager_init()
 
 void Game4_Manager::Game4_judge()
 {
-    if (box.pos.y > SCREEN_H) nextScene = SCENE_SCORE;
+    //if (box.pos.y > SCREEN_H) nextScene = SCENE_SCORE;
 }
 
 void Game4_Manager::hole_update()

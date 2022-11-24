@@ -1,117 +1,68 @@
-#include "all.h"
-
-int title_state;
-int title_timer;
-
-//パラメータ
-const float GRAVITY = 0.5f;
-const float MOVE_SPEED = 5.0f;
-const float ROTATE_SPEED = MOVE_SPEED * 0.6f;
-const float JUMP_POWER = 20.0f;
-const float SPAWN_POS_X = SCREEN_W + 100;
-const float DESPAWN_POS_X = -100;
-const float BORDER_TO_FALL = 780.0f;
-//最大から最少までの間からランダムに待機時間を設定
-const int MAX_WAIT_TIME = 1000;
-const int MIN_WAIT_TIME = 100;
-
-OBJ2D background;
-OBJ2D ball3;
-OBJ2D hole;
+#include "jump over the hole.h"
 
 Sprite* ball_sprite;
 Sprite* hole_sprite;
 
-float wait_time = 0;
-float floor_height = 0;
-bool is_on_floor = false;
+extern OBJ2D back[MAX_GAMES];
 
-void title_init()
+void Game5_Manager::Game5_Manager_init()
 {
-    title_state = 0;
-    title_timer = 0;
+
+    //////// パラメータの設定 ////////
+    GameLib::setBlendMode(Blender::BS_ALPHA);
+    music::play(0, FALSE);
+    //背景
+    background.pos = {back[4].pos.x, back[4].pos.y};
+    background.scale = { 1, 1 };
+    background.texPos = { 0,0 };
+    background.texSize = { 1280, 540 };
+    background.pivot = { 0,0 };
+    background.angle = 0;
+    //四角
+    ball3.pos = { background.pos.x + background.texSize.x / 2,
+                  background.pos.y + background.texSize.y };
+    ball3.scale = { 0.5f, 0.5f };
+    ball3.texPos = { 0,0 };
+    ball3.texSize = { 150, 150 };
+    ball3.pivot = ball3.texSize / 2;
+    ball3.angle = 0;
+    ball3.Dradius = 32.0f;
+
+    //ボールの初期位置
+    ball3.pos.x += -400.0f;
+    ball3.pos.y += background.texSize.y * 0.5f - ball3.pivot.y * 1.5f;
+    floor_height = ball3.pos.y;
+
+    hole_init();
 
     texture::load(TEXNO::GAME3_BG, L"./Data/Images/ゲーム3_背景.png", 5000);
     ball_sprite = sprite_load(L"./Data/Images/ゲーム3_ボール.png");
     hole_sprite = sprite_load(L"./Data/Images/ゲーム3_穴.png");
 }
 
-void title_deinit()
+void Game5_Manager::Game5_Manager_deinit()
 {
     music::stop(0);
     safe_delete(ball_sprite);
     safe_delete(hole_sprite);
 }
 
-void title_update()
+void Game5_Manager::Game5_Manager_update()
 {
-    switch (title_state)
-    {
-    case 0:
-        //////// 初期設定 ////////
-        title_state++;
-
-        /*fallthrough*/
-    case 1:
-        //////// パラメータの設定 ////////
-        GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, FALSE);
-        //背景
-        background.pos = CENTER;
-        background.scale = { 1, 1 };
-        background.texPos = { 0,0 };
-        background.texSize = { 1280, 540 };
-        background.pivot = background.texSize / 2;
-        background.angle = 0;
-        //四角
-        ball3.pos = CENTER;
-        ball3.scale = { 0.5f, 0.5f };
-        ball3.texPos = { 0,0 };
-        ball3.texSize = { 150, 150 };
-        ball3.pivot = ball3.texSize / 2;
-        ball3.angle = 0;
-        ball3.Dradius = 32.0f;
-        //穴
-        hole.scale = { 1, 1 };
-        hole.texPos = { 0,0 };
-        hole.texSize = { 150, 150 };
-        hole.pivot = hole.texSize / 2;
-        hole.angle = 0;
-        hole.Dradius = 32.0f;
-        //ボールの初期位置
-        ball3.pos.x += -400.0f;
-        ball3.pos.y += background.texSize.y * 0.5f - ball3.pivot.y * 1.5f;
-        floor_height = ball3.pos.y;
-
-        hole_init();
-        title_state++;
-    case 2:
-        //////// 通常時 ////////
-        //デバッグ用
-        debug::setString("title_state:%d", title_state);
-        debug::setString("title_timer:%d", title_timer);
-        debug::setString("Ball Position: %f %f", ball3.pos.x, ball3.pos.y);
-        debug::setString("Hole Position: %f %f", hole.pos.x, hole.pos.y);
-        debug::setString("Hole Waittime: %f", wait_time);
-
-        ball_move();
-        hole_move();
-        break;
-    }
-    title_timer++;
+    ball_move();
+    hole_move();
+    game5_timer++;
 }
 
-void title_render()
+void Game5_Manager::Game5_Manager_render()
 {
-    // 画面を青で塗りつぶす
-    GameLib::clear(0.3f, 0.5f, 1.0f);
     //背景
     texture::begin(TEXNO::GAME3_BG);
     for (int i = 0; i < 3000; i++)
     {
         texture::draw(
             TEXNO::GAME3_BG,
-            { background.pos.x * i - (title_timer * MOVE_SPEED), background.pos.y },
+            { background.pos.x + i* background.texSize.x - (game5_timer * MOVE_SPEED), background.pos.y },
             background.scale,
             background.texPos,
             background.texSize,
@@ -146,14 +97,14 @@ void title_render()
 #endif
 }
 
-void ball_move()
+void Game5_Manager::ball_move()
 {
     //重力
     ball3.velocity.y += GRAVITY;
     //回転
     ball3.angle += ToRadian(ROTATE_SPEED);
     //ジャンプ
-    if (TRG(0) & PAD_TRG1 && is_on_floor)
+    if (TRG(0) & PAD_L1 && is_on_floor)
     {
         ball3.velocity.y = -JUMP_POWER;
     }
@@ -179,8 +130,18 @@ void ball_move()
     if (ball3.pos.y > BORDER_TO_FALL)   title_init();
 }
 
-void hole_init()
+void Game5_Manager::hole_init()
 {
+
+    //穴の初期設定
+    hole.scale = { 1, 1 };
+    hole.texPos = { 0,0 };
+    hole.texSize = { 150, 150 };
+    hole.pivot = { 0, 0 };
+    hole.angle = 0;
+    hole.Dradius = 32.0f;
+
+
     //位置
     hole.pos = CENTER;
     hole.pos.y += background.pivot.y - 5;
@@ -189,7 +150,7 @@ void hole_init()
     wait_time = MIN_WAIT_TIME + rand() % MAX_WAIT_TIME;
 }
 
-void hole_move()
+void Game5_Manager::hole_move()
 {
     //左方向に移動
     hole.velocity.x = -MOVE_SPEED;

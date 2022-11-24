@@ -49,6 +49,7 @@ extern const VECTOR2 square_offsets[4];
 Game1_Manager game1_manager;
 Game3_Manager game3_manager;
 Game4_Manager game4_manager;
+Game5_Manager game5_manager;
 
 /*
 * 基本scene_game.cppでのクラスの呼び出しはメンバ関数のみ
@@ -79,6 +80,8 @@ void game_init()
 
     game4_manager.Game4_Manager_init();
 
+    game5_manager.Game5_Manager_init();
+
     isPaused = false;
 }
 
@@ -89,6 +92,7 @@ void game_deinit()
 {
     game1_manager.Game1_Manager_deinit();
     game3_manager.Game3_Manager_deinit();
+    game5_manager.Game5_Manager_deinit();
 }
 
 //--------------------------------------
@@ -229,6 +233,8 @@ void game_update()
         game1_manager.Game1_Manager_init();
         game3_manager.Game3_Manager_init();
         game4_manager.Game4_Manager_init();
+        game5_manager.Game5_Manager_init();
+
 
         game_state++;
         /*fallthrough*/
@@ -260,6 +266,10 @@ void game_update()
         debug::setString("game4_manager.box.pos.y :%f", game4_manager.box.pos.y);
         debug::setString("game4_manager.box.isLiving :%d", game4_manager.box.isLiving);
         debug::setString("game4_manager.fallCheck :%d", game4_manager.fallCheck);
+        debug::setString("game5_manager.background.scale.x :%f", game5_manager.background.scale.x);
+
+        debug::setString("back[4].pos.x:%f", back[4].pos.x);
+
 #endif
 
         if (TRG(0) & PAD_SELECT)
@@ -282,6 +292,7 @@ void game_update()
         game1_manager.Game1_Manager_update();
         game3_manager.Game3_Manager_update();
         game4_manager.Game4_Manager_update();
+        game5_manager.Game5_Manager_update();
 
         back_update();
         break;
@@ -311,9 +322,9 @@ void back_update() {
         back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 3, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
 
-        game1_manager.Game1_Manager_slide(SCREEN_W / 4);
+        game1_manager.Game1_Manager_slideX(SCREEN_W / 4);
 
-        square.square_slide(SCREEN_W-SCREEN_W/4);
+        square.square_slideX(SCREEN_W-SCREEN_W/4);
         shot.bullet_init();
     }
 
@@ -323,24 +334,31 @@ void back_update() {
         if (game_timer > 400) {
             back[0].scale.x *= 0.99;
             back[0].scale.y *= 0.99;
-            back[1].scale.x *= 0.99;
-            back[1].scale.y *= 0.99;
+            //back[1].scale.x *= 0.99;
+            //back[1].scale.y *= 0.99;
 
             /*ball.scale.x *= 0.99;
             ball.scale.y *= 0.99;
             if (ball.pos.y > SCREEN_H / 4) ball.pos.y -= 4;
             else ball.pos.y = SCREEN_H / 4;*/
-            game1_manager.Game1_Manager_shrink();
 
-            shot.game2_shrink();
-            square.square_shrink();
+
+            //game1_manager.Game1_Manager_shrink();
+            game1_manager.Game1_Manager_slideY(SCREEN_H / 3 );
+
+            square.square_slideY(SCREEN_H / 4);
+            //shot.game2_shrink();
+            //square.square_shrink();
 
             if (scroll_timer[1] < duration)
             {
                 scroll_timer[1]++;
                 float t = (float)scroll_timer[1] / duration;
                 back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_W/3, 0, t);
+                back[1].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_H/4, t);
                 back[2].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_H, SCREEN_H/2, t);
+                game3_manager.Game3_Manager_init();
+
             }
 
             //back[2].pos = { 0,back[0].texSize.y * back[0].scale.y };
@@ -353,11 +371,13 @@ void back_update() {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
         back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
+        game3_manager.Game3_Manager_slide(SCREEN_W / 4);
+        game3_manager.Game3_Manager_shrink();
         game4_manager.Game4_Manager_init();
     }
 
     /////// 4回目のスライド処理 ///////
-    if (game_timer == 80000)scroll_timer[3] = 0;
+    if (game_timer == 800)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -365,7 +385,11 @@ void back_update() {
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
         back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
 
-        square.square_slide(SCREEN_W/2);
+        game1_manager.Game1_Manager_slideX(SCREEN_W / 6);
+        square.square_slideX(SCREEN_W/2);
+        
+        shot.game2_shrink();
+        square.square_shrink();
 
         /*if (ball.pos.x > SCREEN_W / 6 ) ball.pos.x -= 8;
         else ball.pos.x = SCREEN_W / 6 ;*/
@@ -373,14 +397,14 @@ void back_update() {
     }
 
     /////// 5回目のスライド処理 ///////
-    if (game_timer == 100000)scroll_timer[4] = 0;
+    if (game_timer == 1000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
         back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
-        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W/3 - 120 / 2, t);
+        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W / 2, SCREEN_W / 3 - 120 / 2, t);
         back[5].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
-
+        game3_manager.Game3_Manager_slide(SCREEN_W / 6);
     }
 }
 
@@ -393,7 +417,16 @@ void game_render()
 
     GameLib::clear(1,1,1);
 
-    GameLib::clear(0.2f, 0.2f, 0.4f);
+    /////// スクロールするために一番下に描画 ///////
+    sprite_render(Back[4],
+        back[4].pos.x, back[4].pos.y,
+        back[4].scale.x, back[4].scale.y,
+        0, 0,
+        back[4].texSize.x, back[4].texSize.y,
+        back[4].pivot.x, back[4].pivot.y);
+    
+    game5_manager.Game5_Manager_render();
+
 
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -460,14 +493,6 @@ void game_render()
     game4_manager.Game4_render();
 
     
-    sprite_render(Back[4],
-        back[4].pos.x, back[4].pos.y,
-        back[4].scale.x, back[4].scale.y,
-        0, 0,
-        back[4].texSize.x, back[4].texSize.y,
-        back[4].pivot.x, back[4].pivot.y);
-    
-
     
 
     sprite_render(Back[5],
