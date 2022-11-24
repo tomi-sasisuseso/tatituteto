@@ -155,7 +155,7 @@ void Game5_Manager::hole_init()
 
     //ˆÊ’u
     hole.pos = CENTER;
-    hole.pos.y = 0 + back[4].texSize.y-hole . texSize.y * 0.5f;
+    hole.pos.y = back[4].pos.y + back[4].texSize.y;
     hole.pos.x = SPAWN_POS_X;
     //Ÿ‚ÉoŒ»‚·‚é‚Ü‚Å‚ÌŠÔ‚ğƒ‰ƒ“ƒ_ƒ€‚É¶¬
     wait_time = MIN_WAIT_TIME + rand() % MAX_WAIT_TIME;

@@ -79,7 +79,7 @@ void Game3_Manager::Game3_Manager_render()
         1.0f, 1.0f, 1.0f, 1.0f
     );
 
-    if (isshow) {
+    if (bullet.pos.x < back[3].pos.x && bullet.pos.y >= SCREEN_H / 2) {
         sprite_render(
             bullet_sprite,
             bullet.pos.x, bullet.pos.y,

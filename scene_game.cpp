@@ -629,12 +629,12 @@ void game_render()
         back[3].texPos.x,back[3].texPos.y,
         back[3].texSize.x, back[3].texSize.y,
         back[3].pivot.x, back[3].pivot.y);
-    sprite_render(Between[0],
+    /*sprite_render(Between[0],
         back[3].pos.x, back[3].pos.y,
         back[3].scale.x, back[3].scale.y,
         0, 0,
         back[3].texSize.x, back[3].texSize.y,
-        back[3].pivot.x, back[3].pivot.y);
+        back[3].pivot.x, back[3].pivot.y);*/
 
     game4_manager.Game4_render();
 
@@ -646,12 +646,13 @@ void game_render()
         back[4].pivot.x, back[4].pivot.y);
 
 
-    sprite_render(Back[5],
+    /*sprite_render(Back[5],
         back[5].pos.x, back[5].pos.y,
         back[5].scale.x, back[5].scale.y,
         0, 0,
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
+        */
     sprite_render(Between[0],
         back[5].pos.x, back[5].pos.y,
         back[5].scale.x, back[5].scale.y,
