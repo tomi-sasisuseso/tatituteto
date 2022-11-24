@@ -15,6 +15,7 @@
 //------< ïœêî >----------------------------------------------------------------
 int game_state;
 int game_timer;
+int score;
 
 bool isPaused;
 
@@ -93,35 +94,6 @@ void game_update()
     {
     case 0:
         //////// èâä˙ê›íË ////////
-<<<<<<< HEAD
-        //Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
-        //Back[1] = sprite_load(L"./Data/Images/âº1.png");
-        //Back[2] = sprite_load(L"./Data/Images/âº3.png");
-        ////Back[3] = sprite_load(L"Data/Images/îwåi1.png");
-        //Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
-
-        //Back[0] = sprite_load(L"Data/Images/îwåi2.png");
-        //Back[1] = sprite_load(L"Data/Images/âº1.png");
-        //Back[2] = sprite_load(L"Data/Images/âº3.png");
-        ////Back[3] = sprite_load(L"Data/images/îwåi1.png");
-        //Ball = sprite_load(L"Data/images/É{Å[Éã_âE.png");
-=======
-        /*Back[0] = sprite_load(L"./Data/Images/îwåi2.png");
-        Back[1] = sprite_load(L"./Data/Images/âº1.png");
-        Back[2] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ4_îwåi.png");
-        Back[3] = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_îwåi.png");
-        Back[4] = sprite_load(L"Data/Images/âº8.png");
-        Back[5] = sprite_load(L"Data/Images/âº10.png");
-
-        Square = sprite_load(L"./Data/images/ÉQÅ[ÉÄ2_éläp.png");
-        Frame = sprite_load(L"./Data/images/ÉQÅ[ÉÄ2_òg.png");
-        Ball = sprite_load(L"./Data/Images/É{Å[Éã_âE.png");
-        texture::load(1, L"Data/images/ÉQÅ[ÉÄ2_íe.png", SHOT_MAX);
-
-        Game4_box = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_éläp.png");
-        Game4_hole = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_åä.png");
-        Game4_beruto = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_ÉxÉãÉgÉRÉìÉxÉA.png");*/
-
         Back[0] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ1_îwåi.png");
         Back[1] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ2_îwåi.png");
         Back[2] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ4_îwåi.png");
@@ -146,7 +118,6 @@ void game_update()
         Game4_box = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_éläp.png");
         Game4_hole = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_åä.png");
         Game4_beruto = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_ÉxÉãÉgÉRÉìÉxÉA.png");
->>>>>>> tomy
 
         game_state++;
         /*fallthrough*/
@@ -168,24 +139,19 @@ void game_update()
         back[1].texSize = { 1920, 1080 };
         back[1].pivot = { 0,0 };
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
 
-=======
->>>>>>> tomy
         back[1].scale = { 1,1 };
 
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
-<<<<<<< HEAD
+
 
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
         back[2].pos = { 1920 / 2, 1080+back[2].pivot.y  };
         
-=======
->>>>>>> tomy
 
         back[2].texSize = { 1920, 540 };
         back[2].pivot = { 0,0 };
@@ -261,6 +227,7 @@ void game_update()
         if (TRG(0) & PAD_SELECT)
         {
             nextScene = SCENE_SCORE;
+            score = game_timer;
             break;
         }
 
@@ -283,16 +250,6 @@ void game_update()
 }
 
 void back_update() {
-    //back[0].pos.x -= 2;
-    //if (back[1].pos.x >= SCREEN_W / 2) {
-    //    if (game_timer > 200) {
-    //        //back[0].pos.x -= 5;
-    //        back[1].pos.x -= 5;
-    //    }
-
-    //}
-
-
     /////// 1âÒñ⁄ÇÃÉXÉâÉCÉhèàóù ///////
     if (game_timer == 200) scroll_timer[0] = 0;
     if (scroll_timer[0] < duration)
@@ -379,14 +336,7 @@ void back_update() {
 
 void game_render()
 {
-<<<<<<< HEAD
-=======
-
     GameLib::clear(1,1,1);
-
-
->>>>>>> tomy
-    GameLib::clear(0.2f, 0.2f, 0.4f);
 
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
@@ -405,17 +355,14 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-<<<<<<< HEAD
+
     ball_render();
 
-    /*sprite_render(Back[0],
-=======
     square.square_render();
 
     shot.shot_render();
 
     sprite_render(Back[2],
->>>>>>> tomy
         back[2].pos.x, back[2].pos.y,
         back[2].scale.x, back[2].scale.y,
         0, 0,
@@ -449,8 +396,6 @@ void game_render()
         back[5].texSize.x, back[5].texSize.y,
         back[5].pivot.x, back[5].pivot.y);
 
-
-    //ball_render();
 
     //É|Å[ÉYíÜ
     if (isPaused)    font::textOut(

@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 #include "all.h"
-=======
+
 #ifndef OBJ2D_H
 #define OBJ2D_H
 
-
 extern float game2_center;
-
-
->>>>>>> tomy
 
 enum class BulletTag
 {
@@ -19,10 +14,6 @@ enum class BulletTag
     D
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> tomy
 struct OBJ2D {
     
     int state;
@@ -72,8 +63,6 @@ struct OBJ2D {
     int shotCount;
 };
 
-<<<<<<< HEAD
-=======
 class SHOT 
 {
 public:
@@ -184,4 +173,3 @@ public:
     void Game4_render();
 };
 #endif
->>>>>>> tomy

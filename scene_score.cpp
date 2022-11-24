@@ -3,26 +3,66 @@
 int score_state;
 int score_timer;
 
-float score_alpha;
-bool isend;
+const float EASE_DURATION = 8;
+
+extern int score;
+int number_of_digits;
+int digits[] = {0, 0, 0, 0, 0, 0};
+
+float score_numalpha = 0.0f;
+float score_alpha_overall;
+bool isend = false;
+int score_select = true;
+VECTOR2 continue_pos_def;
+VECTOR2 continue_pos;
+VECTOR2 giveup_pos_def;
+VECTOR2 giveup_pos;
+VECTOR2 continue_scale;
+VECTOR2 giveup_scale;
+int easeTimer = INT_MAX;
 
 Sprite* score_background_sprite;
+Sprite* score_str_sprite;
 Sprite* score_number_sprite;
+Sprite* score_continue_1;
+Sprite* score_continue_2;
+Sprite* score_giveup_1;
+Sprite* score_giveup_2;
 
 void score_init() {
     score_state = 0;
     score_timer = 0;
-
-    score_alpha = 0.0f;
+    //画面のフェードアウトをリセット
+    score_alpha_overall = 0.0f;
     isend = false;
-
+    //桁数を計算
+    number_of_digits = countDigits(score);
+    //桁数のそれぞれの数字を取得
+    for (int i = 0; i < number_of_digits; i++)
+    {
+        digits[i] = getDigits(score, number_of_digits - (i + 1), number_of_digits - (i + 1));
+    }
+    //スプライトをロード
     score_background_sprite = sprite_load(L"./Data/Images/GAMEOVER.png");
+    score_str_sprite = sprite_load(L"./Data/Images/SCORE.png");
     score_number_sprite = sprite_load(L"./Data/Images/number.png");
+    score_continue_1 = sprite_load(L"./Data/Images/CONTINUE_1.png");
+    score_continue_2 = sprite_load(L"./Data/Images/CONTINUE_2.png");
+    score_giveup_1 = sprite_load(L"./Data/Images/GIVEUP_1.png");
+    score_giveup_2 = sprite_load(L"./Data/Images/GIVEUP_2.png");
 }
 
 void score_deinit() {
     score_state = 0;
     score_timer = 0;
+    //スプライトのメモリ開放
+    safe_delete(score_background_sprite);
+    safe_delete(score_str_sprite);
+    safe_delete(score_number_sprite);
+    safe_delete(score_continue_1);
+    safe_delete(score_continue_2);
+    safe_delete(score_giveup_1);
+    safe_delete(score_giveup_2);
 }
 
 void score_update() {
@@ -41,8 +81,10 @@ void score_update() {
     case 1:
         //////// パラメータの設定 ////////
         GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, FALSE);
-
+        continue_pos_def = continue_pos = { 600, 800 };
+        giveup_pos_def = giveup_pos = { 1350, 800 };
+        continue_scale = { 1, 1 };
+        giveup_scale = { 1, 1 };
 
         score_state++;
         /*fallthrough*/
@@ -53,9 +95,43 @@ void score_update() {
         //入力の検知
         if (TRG(0) & PAD_START)   isend = true;
         //透明度を下げる
-        if (isend)    score_alpha += 0.02;
-        //透明度に応じて次のシーンに
-        if (score_alpha > 1.5f)     nextScene = SCENE_TITLE;
+        if (isend)    score_alpha_overall += 0.02;
+        //数字の透明度
+        score_numalpha = abs(cosf(score_timer * 0.1f));
+        //選択の切り替え
+        if (TRG(0) & PAD_LEFT)
+        {
+            score_select = true;
+            easeTimer = 0;
+        }
+        if (TRG(0) & PAD_RIGHT)
+        {
+            score_select = false;
+            easeTimer = 0;
+        }
+        //コンティニュー
+        if (score_select && score_alpha_overall > 1.5f)     nextScene = SCENE_GAME;
+        //ギブアップ
+        if (!score_select && score_alpha_overall > 1.5f)    nextScene = SCENE_TITLE;
+
+        //文字をバウンドさせる
+        if (easeTimer < EASE_DURATION)
+        {
+            easeTimer++;
+            float t = (float)easeTimer / EASE_DURATION;
+            if (score_select)
+            {
+                continue_pos.y = Easing::step(eType::SMOOTHER_STEP_INOUT, continue_pos_def.y - 20, continue_pos_def.y, t);
+                continue_scale.x = Easing::step(eType::SMOOTHER_STEP_INOUT, 1.3f, 1.0f, t);
+                continue_scale.y = Easing::step(eType::SMOOTHER_STEP_INOUT, 1.1f, 1.0f, t);
+            }
+            else
+            {
+                giveup_pos.y = Easing::step(eType::SMOOTHER_STEP_INOUT, giveup_pos_def.y - 20, giveup_pos_def.y, t);
+                giveup_scale.x = Easing::step(eType::SMOOTHER_STEP_INOUT, 1.3f, 1.0f, t);
+                giveup_scale.y = Easing::step(eType::SMOOTHER_STEP_INOUT, 1.1f, 1.0f, t);
+            }
+        }
 
         break;
     }
@@ -68,33 +144,87 @@ void score_render()
     //背景
     sprite_render(
         score_background_sprite,
-        0, 0,
+        SCREEN_W / 2, SCREEN_H / 2,
         1, 1,
         0, 0,
-        SCREEN_W, SCREEN_H,
-        0, 0,
+        1500, 900,
+        750, 450,
         0
     );
-    //文字
-    for (int i = 0; i < 6; i++)
+    //スコア
+    sprite_render(
+        score_str_sprite,
+        800, 650,
+        1, 1,
+        0, 0,
+        244, 63,
+        122, 31.5f,
+        0
+    );
+    //数字
+    for (int i = 0; i < number_of_digits; i++)
     {
         sprite_render(
             score_number_sprite,
-            SCREEN_W / 2 + (i * 100), 100,
+            1100 + (i * 50), 620,
             1, 1,
-            40, 0,
+            digits[i] * 40, 0,
             40, 61,
             0, 0,
+            0,
+            1, 1, 1, score_numalpha
+        );
+    }
+    //リトライ、ギブアップの背景
+    sprite_render(
+        score_continue_2,
+        continue_pos.x, continue_pos.y,
+        continue_scale.x, continue_scale.y,
+        0, 0,
+        309, 49,
+        309 * 0.5f, 49 * 0.5f,
+        0
+    );
+    sprite_render(
+        score_giveup_2,
+        giveup_pos.x, giveup_pos.y,
+        giveup_scale.x, giveup_scale.y,
+        0, 0,
+        309, 49,
+        309 * 0.5f, 49 * 0.5f,
+        0
+    );
+    if (score_select)
+    {
+        sprite_render(
+            score_continue_1,
+            continue_pos.x - 5, continue_pos.y - 5,
+            continue_scale.x, continue_scale.y,
+            0, 0,
+            309, 49,
+            309 * 0.5f, 49 * 0.5f,
             0
         );
     }
-
+    else
+    {
+        sprite_render(
+            score_giveup_1,
+            giveup_pos.x - 5, giveup_pos.y - 5,
+            giveup_scale.x, giveup_scale.y,
+            0, 0,
+            309, 49,
+            309 * 0.5f, 49 * 0.5f,
+            0
+        );
+    }
+    //画面を暗転
     primitive::rect(
         { 0, 0 },
         { SCREEN_W, SCREEN_H },
         { 0, 0 },
         0,
-        { 0.0f, 0.0f, 0.0f, score_alpha }
+        { 0.0f, 0.0f, 0.0f, score_alpha_overall }
     );
 }
 
@@ -151,8 +281,4 @@ void text_render()
 <<<<<<< HEAD
 }
 #endif
-=======
 
-}
-
->>>>>>> tomy

@@ -28,6 +28,27 @@ float inner_product(VECTOR2 vec1, VECTOR2 vec2)
 	return vec1.x * vec2.x + vec1.y * vec2.y;
 }
 
+int getDigits(int value, int m, int n) 
+{
+	int mod_value;
+	int result;
+
+	/* nŒ…–ÚˆÈ‰º‚ÌŒ…‚ğæ“¾ */
+	mod_value = value % (int)pow(10, n + 1);
+
+	/* mŒ…–ÚˆÈã‚ÌŒ…‚ğæ“¾ */
+	result = mod_value / pow(10, m);
+
+	return result;
+}
+
+
+int countDigits(int n)
+{
+	return log10(n) + 1;
+}
+
+
 bool CircleWithRotatedRectanglecollide(VECTOR2 rect_pos, VECTOR2 rect_pivot, float rect_angle, VECTOR2 rect_tSize,
 										VECTOR2 circle_pos, float circle_radius)
 {
