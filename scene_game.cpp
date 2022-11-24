@@ -24,6 +24,7 @@ const int scroll_time[MAX_GAMES - 1] = {
 int tutrial_easeTimer = INT_MAX;
 const float TUTRIAL_EASEDURATION = 60;
 VECTOR2 tutrial_pos_start;
+VECTOR2 tutrial_pos_end;
 
 bool isPaused;
 bool missed_game[6];
@@ -259,6 +260,9 @@ void game_update()
         game5_manager.Game5_Manager_init();
         game6_manager.Game6_Manager_init();
 
+        tutrial_pos_start = { SCREEN_W / 2, -400 };
+        tutrial_pos_end = CENTER;
+
         //ミス判定のリセット
         for (int i = 0; i < MAX_GAMES; i++)
         {
@@ -335,9 +339,9 @@ void game_update()
         //    if (missed_game[i])  return;
         //}
 
-        if (TRG(0) & PAD_START)
+        if (GetAsyncKeyState(VK_SHIFT))
         {
-            
+            tutrial_init();
         }
 
         if (TRG(0) & PAD_SELECT)
@@ -616,6 +620,7 @@ void game_render()
         back[5].pivot.x, back[5].pivot.y);
 
     gameover_render();
+    tutrial_render();
 
     //ポーズ中
     if (isPaused)    font::textOut(
@@ -805,11 +810,19 @@ void tutrial_init()
 
 void tutrial_render()
 {
-    VECTOR2 pos = { SCREEN_W / 2, 0 };
+    VECTOR2 pos = tutrial_pos_start;
+    if (tutrial_easeTimer < TUTRIAL_EASEDURATION)
+    {
+        tutrial_easeTimer++;
+        float t = (float)tutrial_easeTimer / TUTRIAL_EASEDURATION;
+        pos.y = Easing::step(eType::EXPO_OUT, tutrial_pos_start.y, tutrial_pos_end.y, t);
+    }
+
 
     sprite_render(
         tutrial_sprite[0],
         pos.x, pos.y,
+        1, 1,
         0, 0,
         1000, 450,
         500, 225,

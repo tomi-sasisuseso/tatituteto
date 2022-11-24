@@ -17,4 +17,6 @@ void game_render();
 
 void back_update();
 void gameover_render();
+void tutrial_init();
+void tutrial_render();
 #endif//SCENE_GAME_H
