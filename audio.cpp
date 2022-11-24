@@ -19,9 +19,9 @@ void audio_init()
     //sound::load(2, L"./Data/Sounds/Win/oto.xwb");
 
     //sound::setVolume(1, 3, 4.0f);
-    music::load(0, L"./Data/Musics/test.wav");
+   /* music::load(0, L"./Data/Musics/test.wav");
 
-    sound::load(XWB_MAIN, L"./Data/Sounds/SE.xwb");
+    sound::load(XWB_MAIN, L"./Data/Sounds/SE.xwb");*/
 }
 
 

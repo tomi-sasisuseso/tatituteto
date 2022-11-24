@@ -280,7 +280,3 @@ void text_render()
     }
 }
 #endif
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/yao2

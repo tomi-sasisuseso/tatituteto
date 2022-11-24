@@ -31,10 +31,6 @@ void title_init()
     title_background_sprite = sprite_load(L"./Data/Images/タイトル.png");
     title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
     title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/yao2
 }
 
 void title_deinit()
@@ -80,7 +76,7 @@ void title_update()
         if (TRG(0) & PAD_START && !isbegin)
         {
             isbegin = true;
-            sound::play(XWB_MAIN, XWB_MAIN_ENTER);
+            //sound::play(XWB_MAIN, XWB_MAIN_ENTER);
         }
         //透明度を下げる
         if (isbegin)    title_alpha += 0.02;

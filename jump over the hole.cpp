@@ -7,7 +7,6 @@ extern OBJ2D back[MAX_GAMES];
 
 void Game5_Manager::Game5_Manager_init()
 {
-
     //////// パラメータの設定 ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
     music::play(0, FALSE);
@@ -18,9 +17,10 @@ void Game5_Manager::Game5_Manager_init()
     background.texSize = { 1280, 540 };
     background.pivot = { 0,0 };
     background.angle = 0;
+
     //四角
-    ball3.pos = { background.pos.x + background.texSize.x / 2,
-                  background.pos.y + background.texSize.y };
+    ball3.pos = { background.pos.x + background.texSize.x / 4,
+                  SCREEN_H / 2 };
     ball3.scale = { 0.5f, 0.5f };
     ball3.texPos = { 0,0 };
     ball3.texSize = { 150, 150 };
@@ -30,8 +30,10 @@ void Game5_Manager::Game5_Manager_init()
 
     //ボールの初期位置
     ball3.pos.x += -400.0f;
-    ball3.pos.y += background.texSize.y * 0.5f - ball3.pivot.y * 1.5f;
+    ball3.pos.y -= /*background.texSize.y * 0.5f - */ball3.pivot.y * 1.5f;
+    
     floor_height = ball3.pos.y;
+
 
     hole_init();
 
@@ -49,6 +51,8 @@ void Game5_Manager::Game5_Manager_deinit()
 
 void Game5_Manager::Game5_Manager_update()
 {
+    background.pos = { back[4].pos.x, back[4].pos.y };
+
     ball_move();
     hole_move();
     game5_timer++;
@@ -99,6 +103,9 @@ void Game5_Manager::Game5_Manager_render()
 
 void Game5_Manager::ball_move()
 {
+
+    ball3.pos.x = background.pos.x + background.texSize.x / 4;
+
     //重力
     ball3.velocity.y += GRAVITY;
     //回転
@@ -108,19 +115,24 @@ void Game5_Manager::ball_move()
     {
         ball3.velocity.y = -JUMP_POWER;
     }
+
     //速度を位置に代入
     ball3.pos += ball3.velocity;
+
     //穴の左右の位置
     float left = hole.pos.x - hole.pivot.x;
     float right = hole.pos.x + hole.pivot.x;
     //地面にいる場合
-    if (ball3.pos.y > floor_height && !(left < ball3.pos.x && ball3.pos.x < right))
-    {
-        debug::setString("onground");
-        ball3.velocity.y = 0;
-        ball3.pos.y = floor_height;
-        is_on_floor = true;
+    if (ball3.pos.y > floor_height) {
+        if (!left < ball3.pos.x && ball3.pos.x < right) {
+            debug::setString("onground");
+            ball3.velocity.y = 0;
+            ball3.pos.y = floor_height;
+            is_on_floor = true;
+        }
     }
+
+        
     //空中
     else
     {
@@ -144,7 +156,7 @@ void Game5_Manager::hole_init()
 
     //位置
     hole.pos = CENTER;
-    hole.pos.y += background.pivot.y - 5;
+    hole.pos.y = 0+back[4].texSize.y-hole.texSize.y/2;
     hole.pos.x = SPAWN_POS_X;
     //次に出現するまでの時間をランダムに生成
     wait_time = MIN_WAIT_TIME + rand() % MAX_WAIT_TIME;

@@ -16,13 +16,13 @@ private:
 
     int game5_timer;
 
-    OBJ2D ball3;
-    OBJ2D hole;
 
     float wait_time = 0;
     float floor_height = 0;
     bool is_on_floor = false;
 public:
+    OBJ2D hole;
+    OBJ2D ball3;
     OBJ2D background;
     void Game5_Manager_init();
     void Game5_Manager_deinit();

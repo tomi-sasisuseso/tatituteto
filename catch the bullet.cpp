@@ -161,8 +161,8 @@ void Game3_Manager::bullet_init()
 
     //位置を設定
     float angle = rand() % 360;
-    float x = (circle.pos.x) + cosf(angle) * SCREEN_W;
-    float y = (circle.pos.y) + sinf(angle) * SCREEN_H;
+    float x = (circle.pos.x) + cosf(angle) * back[3].pos.x;
+    float y = (circle.pos.y) + sinf(angle) * back[2].texSize.y;
     bullet.pos = { x, y };
 
     //カウンターをリセット
