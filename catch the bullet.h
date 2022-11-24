@@ -16,8 +16,8 @@ private:
     int spawn_counter = 0;
 
     OBJ2D circle;
-    OBJ2D bullet;
 public:
+    OBJ2D bullet;
     void Game3_Manager_init();
     void Game3_Manager_deinit();
     void Game3_Manager_update();

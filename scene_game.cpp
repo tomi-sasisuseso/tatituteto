@@ -128,7 +128,10 @@ void game_update()
         Game4_hole = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ5_åä.png");
         Game4_beruto = sprite_load(L"Data/Images/ÉQÅ[ÉÄ5_ÉxÉãÉgÉRÉìÉxÉA.png");*/
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> tomy2
         Back[0] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ1_îwåi.png");
         Back[1] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ2_îwåi.png");
         Back[2] = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ4_îwåi.png");
@@ -178,7 +181,10 @@ void game_update()
         //back[0].pivot = { 640/2,460/2 };
 
         back[1].pos = { SCREEN_W,0 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> tomy2
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
@@ -190,7 +196,10 @@ void game_update()
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> tomy2
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -272,6 +281,15 @@ void game_update()
         debug::setString("game4_manager.box.isLiving :%d", game4_manager.box.isLiving);
         debug::setString("game4_manager.fallCheck :%d", game4_manager.fallCheck);
         debug::setString("game5_manager.background.scale.x :%f", game5_manager.background.scale.x);
+        debug::setString("game5_manager.ball3.pos.x :%f", game5_manager.ball3.pos.x);
+        debug::setString("game5_manager.ball3.pos.y :%f", game5_manager.ball3.pos.y);
+        debug::setString("back[1].pos.x :%f", back[1].pos.x);
+        debug::setString("back[1].scale.x :%f", back[1].scale.x);
+        debug::setString("game5_manager.background.texSize.y:%f", game5_manager.background.texSize.y);
+        debug::setString("game5_manager.hole.pos.x:%f", game5_manager.hole.pos.x);
+        debug::setString("game3_manager.bullet.pos.x:%f", game3_manager.bullet.pos.x);
+        debug::setString("game3_manager.bullet.pos.y:%f", game3_manager.bullet.pos.y);
+
 
         debug::setString("back[4].pos.x:%f", back[4].pos.x);
 
@@ -362,7 +380,7 @@ void back_update() {
     }
 
     /////// 3âÒñ⁄ÇÃÉXÉâÉCÉhèàóù ///////
-    if (game_timer == 600) scroll_timer[2] = 0;
+    if (game_timer == 60000) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
@@ -373,12 +391,13 @@ void back_update() {
     }
 
     /////// 4âÒñ⁄ÇÃÉXÉâÉCÉhèàóù ///////
-    if (game_timer == 800)scroll_timer[3] = 0;
+    if (game_timer == 80000)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
         back[0].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
         back[1].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W/2, SCREEN_W / 2-SCREEN_W/6, t);
+        back[1].pos.y = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_H / 4, -SCREEN_H/12 , t);
         back[4].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
 
         game1_manager.Game1_Manager_slideX(SCREEN_W / 6);
@@ -393,7 +412,7 @@ void back_update() {
     }
 
     /////// 5âÒñ⁄ÇÃÉXÉâÉCÉhèàóù ///////
-    if (game_timer == 1000)scroll_timer[4] = 0;
+    if (game_timer == 100000)scroll_timer[4] = 0;
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
@@ -411,8 +430,9 @@ void back_update() {
 void game_render()
 {
     GameLib::clear(1,1,1);
-
-    /////// ÉXÉNÉçÅ[ÉãÇ∑ÇÈÇΩÇﬂÇ…àÍî‘â∫Ç…ï`âÊ ///////
+    
+    
+    /////// ÉXÉNÉçÅ[ÉãÇ∑ÇÈÇΩÇﬂÇ…â∫Ç…ï`âÊ ///////
     sprite_render(Back[4],
         back[4].pos.x, back[4].pos.y,
         back[4].scale.x, back[4].scale.y,
@@ -423,8 +443,11 @@ void game_render()
     game5_manager.Game5_Manager_render();
 
 
+<<<<<<< HEAD
     GameLib::clear(1,1,1);
 
+=======
+>>>>>>> tomy2
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
         back[0].scale.x,back[0].scale.y,
@@ -454,11 +477,15 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> tomy2
     square.square_render();
     shot.shot_render();
 
 
+    /////// íeÇ™ï ÇÃÉQÅ[ÉÄÇÃè„Ç…ï`âÊÇ≥ÇÍÇÈÇ©ÇÁ ///////
     sprite_render(Back[2],
         back[2].pos.x, back[2].pos.y,
         back[2].scale.x, back[2].scale.y,
@@ -490,6 +517,10 @@ void game_render()
 
     game4_manager.Game4_render();
 
+<<<<<<< HEAD
+=======
+        
+>>>>>>> tomy2
     sprite_render(Back[5],
         back[5].pos.x, back[5].pos.y,
         back[5].scale.x, back[5].scale.y,
