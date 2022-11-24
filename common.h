@@ -33,7 +33,6 @@
 #define SHOT_MAX        100
 
 
-
 // •Ï”
 extern int curScene;
 extern int nextScene;

@@ -1,5 +1,8 @@
 #include "all.h"
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/yao2
 #ifndef OBJ2D_H
 #define OBJ2D_H
 
@@ -91,6 +94,7 @@ public:
     Squares() {}
     Squares(float x, float y);
 
+    void square_init();
     void pos_Init(float x, float y);
     void scale_Init(float x, float y);
     void texP_Init(float x, float y);
@@ -98,7 +102,8 @@ public:
     void pivot_Init(float x, float y);
     
     void square_render();
-    void square_slide(float x);
+    void square_slideX(float x);
+    void square_slideY(float y);
     void square_shrink();
     void update();
 
@@ -107,6 +112,9 @@ public:
     getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？
     */
     
+
+    void frame_init();
+
     float frame_getPos();
     float frame_getScale();
     float frame_getTexS();
@@ -114,7 +122,7 @@ public:
     VECTOR2 getTexP();
     VECTOR2 getPivot();
 
-    OBJ2D a;
+    OBJ2D square;
 protected:
     OBJ2D frame;
 };
@@ -135,16 +143,14 @@ public:
     int spawnFlag;
     SHOOTER();
     int bullet_timer;
+    void bullet_init();
 
-    void Update(); // 出現させた弾を動かしてる
-
+    void Update(OBJ2D &obj); // 出現させた弾を動かしてる
     VECTOR2 ShotPosition(VECTOR2 origin, float height, float num); // 弾の位置を決めてる
-
     void Shot(VECTOR2 origin, float height, float num); // 弾を出現させてる
-
     void LivingCheck(); // 弾がゲーム２の真ん中なら isLiving を falseにする。
-
     void game2_shrink(); // 縮小してる
+    void judge(OBJ2D &obj);
 
     void shot_render();
 
@@ -155,20 +161,24 @@ class Game4_Manager
 private:
     OBJ2D belt_conveyor;
     OBJ2D hole;
+    //OBJ2D box_judge;
     bool animeFlag;
     bool animeFlag_LeftCheck;
     const int interval = 9;
     const int frameCount = 3;
     const int holeKeep = 24;
 public:
+    bool fallCheck;
     OBJ2D box;
     int box_timer = 0;
-    int spwanFlag = rand() % 300 + 600;
+    int spwanFlag = 800;
     void Game4_Manager_update();
     void Game4_Manager_init();
+    void LivingCheck(); 
+    void Game4_judge();
+
     void hole_update();
     void box_update();
-    void LivingCheck(); 
 
     void Game4_render();
 };

@@ -278,7 +278,9 @@ void text_render()
             false
         );
     }
-<<<<<<< HEAD
 }
 #endif
+<<<<<<< HEAD
+=======
 
+>>>>>>> origin/yao2
