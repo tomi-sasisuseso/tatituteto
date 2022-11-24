@@ -10,11 +10,9 @@ extern OBJ2D back[MAX_GAMES];
 void Game6_Manager::Game6_Manager_init()
 {
     Game6_timer = 0;
-    srand(unsigned int(time(NULL)));
 
     //////// パラメータの設定 ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
-    music::play(0, FALSE);
     //四角
     triangle.scale = { 0.5f, 0.5f };
     triangle.texPos = { 0,0 };

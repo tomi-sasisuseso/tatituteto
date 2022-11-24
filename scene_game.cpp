@@ -21,6 +21,11 @@ const int scroll_time[MAX_GAMES - 1] = {
     100, 200, 300, 400, 500
 };
 
+int tutrial_easeTimer = INT_MAX;
+const float TUTRIAL_EASEDURATION = 60;
+VECTOR2 tutrial_pos_start;
+VECTOR2 tutrial_pos_end;
+
 bool isPaused;
 bool tutorial;
 bool missed_game[6];
@@ -41,6 +46,7 @@ int finish_timer = 0;
 Sprite* Back[MAX_GAMES];
 Sprite* GameOver[5];
 Sprite* Between[5];
+Sprite* tutrial_sprite[6];
 
 Sprite* Ball;
 Sprite* Square;
@@ -131,8 +137,6 @@ void game_update()
     if (isPaused||tutorial) 
         return;           // この時点でポーズ中ならリターン
 
-
-
     switch (game_state)
     {
     case 0:
@@ -173,6 +177,13 @@ void game_update()
         Between[3] = sprite_load(L"./Data/Images/淵4.png");
         Between[4] = sprite_load(L"./Data/Images/淵5.png");
         Between[5] = sprite_load(L"./Data/Images/淵6.png");
+
+        tutrial_sprite[0] = sprite_load(L"./Data/Images/チュートリアル_1.png");
+        tutrial_sprite[1] = sprite_load(L"./Data/Images/チュートリアル_2.png");
+        tutrial_sprite[2] = sprite_load(L"./Data/Images/チュートリアル_3.png");
+        tutrial_sprite[3] = sprite_load(L"./Data/Images/チュートリアル_4.png");
+        tutrial_sprite[4] = sprite_load(L"./Data/Images/チュートリアル_5.png");
+        tutrial_sprite[5] = sprite_load(L"./Data/Images/チュートリアル_6.png");
 
         Ball = sprite_load(L"./Data/Images/ゲーム1_ボール.png");
 
@@ -260,6 +271,9 @@ void game_update()
         game5_manager.Game5_Manager_init();
         game6_manager.Game6_Manager_init();
 
+        tutrial_pos_start = { SCREEN_W / 2, -400 };
+        tutrial_pos_end = CENTER;
+
         //ミス判定のリセット
         for (int i = 0; i < MAX_GAMES; i++)
         {
@@ -320,6 +334,7 @@ void game_update()
         back_update();
         
         
+
         //ミスの判定
         //for (int i = 0; i < MAX_GAMES; i++)
         //{
@@ -331,7 +346,7 @@ void game_update()
         //        music::setVolume(1, game_volume);
         //        //少し待つ
         //        finish_timer++;
-        //        if (finish_timer < 60) break;
+        //        if (finish_timer < 90) break;
 
         //        nextScene = SCENE_SCORE;
         //        score = game_timer;
@@ -343,6 +358,11 @@ void game_update()
         //{
         //    if (missed_game[i])  return;
         //}
+
+        if (GetAsyncKeyState(VK_SHIFT))
+        {
+            tutrial_init();
+        }
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -538,7 +558,7 @@ void game_render()
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
     
-    game5_manager.Game5_Manager_render();
+
     
 
     /////// スクロールするために下に描画 ///////
@@ -550,6 +570,7 @@ void game_render()
         back[5].pivot.x, back[5].pivot.y);
 
     game6_manager.Game6_Manager_render();
+    game5_manager.Game5_Manager_render();
     
 
     sprite_render(Back[0],
@@ -624,9 +645,22 @@ void game_render()
         back[4].texSize.x, back[4].texSize.y,
         back[4].pivot.x, back[4].pivot.y);
 
-  
+
+    sprite_render(Back[5],
+        back[5].pos.x, back[5].pos.y,
+        back[5].scale.x, back[5].scale.y,
+        0, 0,
+        back[5].texSize.x, back[5].texSize.y,
+        back[5].pivot.x, back[5].pivot.y);
+    sprite_render(Between[0],
+        back[5].pos.x, back[5].pos.y,
+        back[5].scale.x, back[5].scale.y,
+        0, 0,
+        back[5].texSize.x, back[5].texSize.y,
+        back[5].pivot.x, back[5].pivot.y);
 
     gameover_render();
+    tutrial_render();
 
     //ポーズ中
     if (isPaused)    font::textOut(
@@ -773,7 +807,7 @@ void gameover_render()
         }
         sprite_render(
             s,
-            0, SCREEN_H / 2,
+            pos.x, pos.y,
             1, 1,
             0, 0,
             texsize.x, texsize.y,
@@ -811,15 +845,15 @@ void gameover_render()
 
 void game_tutorial() {
     for (int i = 0; i < MAX_GAMES; i++) {
-        timer[i] = scroll_time[i]+duration;
+        timer[i] = scroll_time[i] + duration;
     }
 
     if (game_timer == timer[0]) tutorial = true;
-    else if(game_timer==timer[1]) tutorial = true;
-    else if(game_timer==timer[2]) tutorial = true;
-    else if(game_timer==timer[3]) tutorial = true;
-    else if(game_timer==timer[4]) tutorial = true;
-
+    else if (game_timer == timer[1]) tutorial = true;
+    else if (game_timer == timer[2]) tutorial = true;
+    else if (game_timer == timer[3]) tutorial = true;
+    else if (game_timer == timer[4]) tutorial = true;
+}
 
     /*switch (game_timer)
     {
@@ -839,4 +873,29 @@ void game_tutorial() {
         isPaused = true;
         break;
     }*/
+void tutrial_init()
+{
+    tutrial_easeTimer = 0;
+}
+
+void tutrial_render()
+{
+    VECTOR2 pos = tutrial_pos_start;
+    if (tutrial_easeTimer < TUTRIAL_EASEDURATION)
+    {
+        tutrial_easeTimer++;
+        float t = (float)tutrial_easeTimer / TUTRIAL_EASEDURATION;
+        pos.y = Easing::step(eType::EXPO_OUT, tutrial_pos_start.y, tutrial_pos_end.y, t);
+    }
+
+
+    sprite_render(
+        tutrial_sprite[0],
+        pos.x, pos.y,
+        1, 1,
+        0, 0,
+        1000, 450,
+        500, 225,
+        0
+    );
 }

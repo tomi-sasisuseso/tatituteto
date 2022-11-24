@@ -331,7 +331,6 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
-            nextScene = SCENE_SCORE;
             missed_game[1] = true;
         }
     }
@@ -390,13 +389,12 @@ void Game4_Manager::Game4_slideX(float t)
 
 void Game4_Manager::hole_update()
 {
-    if (TRG(0) & PAD_TRG4 && !animeFlag_LeftCheck) //âE
+    if (GetAsyncKeyState('L') && !animeFlag_LeftCheck) //âE
     {
         animeFlag = true;
-
     }
 
-    else if (TRG(0) & PAD_TRG3 && !animeFlag ) //ç∂
+    else if (GetAsyncKeyState('J') && !animeFlag) //ç∂
     {
         animeFlag_LeftCheck = true;
     }

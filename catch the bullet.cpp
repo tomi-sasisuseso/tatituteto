@@ -20,6 +20,8 @@ void Game3_Manager::Game3_Manager_init()
 
     bullet.scale = { 1, 1 };
 
+    bullet_init();
+
     circle_sprite = sprite_load(L"./Data/Images/ゲーム4_円.png");
     bullet_sprite = sprite_load(L"./Data/Images/ゲーム4_弾.png");
 }
@@ -77,7 +79,7 @@ void Game3_Manager::Game3_Manager_render()
         1.0f, 1.0f, 1.0f, 1.0f
     );
 
-    if (bullet.pos.x<back[3].pos.x &&bullet.pos.y >= SCREEN_H / 2) {
+    if (isshow) {
         sprite_render(
             bullet_sprite,
             bullet.pos.x, bullet.pos.y,
@@ -131,6 +133,7 @@ void Game3_Manager::circle_move()
 
     circle.vector_normal = { cosf(circle.angle), sinf(circle.angle) };
     product = inner_product(circle.vector_normal, bullet.vector_normal);
+    debug::setString("Inner Product: %f", product);
     //入力
 
     if (GetAsyncKeyState('I'))          circle.velocity.x += -CIRCLE_MOVESPEED;
@@ -151,7 +154,7 @@ void Game3_Manager::bullet_init()
     bullet.texPos = { 0,0 };
     bullet.texSize = { 70, 70 };
     bullet.pivot = bullet.texSize / 2;
-    bullet.Dradius = 24;
+    bullet.Dradius = 12;
     bullet.angle = 0;
 
     //位置を設定
@@ -167,6 +170,9 @@ void Game3_Manager::bullet_init()
 //弾の処理
 void Game3_Manager::bullet_move()
 {
+    if (bullet.pos.y > SCREEN_H)    isshow = false;
+    else                            isshow = true;
+
     //キャッチ後のインターバル
     spawn_counter++;
     if (spawn_counter < spawn_interval)  return;
@@ -183,15 +189,14 @@ void Game3_Manager::bullet_move()
 void Game3_Manager::is_safe()
 {
     //くぐり抜けた場合
-    if (circle_collision(circle.pos, bullet.pos, 1, 1))
+    if (circle_collision(circle.pos, bullet.pos, 10, 10))
     {
         bullet_init();
     }
     //ミスをした場合
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
-        //nextScene = SCENE_SCORE;
-        bullet_init();
+
         bullet_init();
         missed_game[2] = true;
     }

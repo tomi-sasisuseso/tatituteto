@@ -52,7 +52,6 @@ void Game6_Manager_update()
     case 1:
         //////// ƒpƒ‰ƒ[ƒ^‚Ìİ’è ////////
         GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, false);
 
         title_state++;
     case 2:
