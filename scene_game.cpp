@@ -22,9 +22,11 @@ const int scroll_time[MAX_GAMES - 1] = {
 };
 
 int tutrial_easeTimer = INT_MAX;
-const float TUTRIAL_EASEDURATION = 60;
+const float TUTRIAL_EASEDURATION = 20;
 VECTOR2 tutrial_pos_start;
 VECTOR2 tutrial_pos_end;
+VECTOR2 tutrial_pos;
+int tutrial_counter;
 
 bool isPaused;
 bool tutorial;
@@ -133,7 +135,10 @@ void game_update()
     if (TRG(0) & PAD_START&& !tutorial)
         isPaused = !isPaused;       // 0コンのスタートボタンが押されたらポーズ状態が反転
     if (tutorial && TRG(0) & PAD_START)
+    {
         tutorial = false;
+        tutrial_pos = tutrial_pos_start;
+    }
     if (isPaused||tutorial) 
         return;           // この時点でポーズ中ならリターン
 
@@ -273,7 +278,8 @@ void game_update()
 
         tutrial_pos_start = { SCREEN_W / 2, -400 };
         tutrial_pos_end = CENTER;
-
+        tutrial_pos = tutrial_pos_start;
+        tutrial_counter = -1;
         //ミス判定のリセット
         for (int i = 0; i < MAX_GAMES; i++)
         {
@@ -332,8 +338,7 @@ void game_update()
 #endif
 
         back_update();
-        
-        
+
 
         //ミスの判定
         //for (int i = 0; i < MAX_GAMES; i++)
@@ -359,10 +364,6 @@ void game_update()
         //    if (missed_game[i])  return;
         //}
 
-        if (GetAsyncKeyState(VK_SHIFT))
-        {
-            tutrial_init();
-        }
 
         if (TRG(0) & PAD_SELECT)
         {
@@ -646,13 +647,6 @@ void game_render()
         back[4].pivot.x, back[4].pivot.y);
 
 
-    /*sprite_render(Back[5],
-        back[5].pos.x, back[5].pos.y,
-        back[5].scale.x, back[5].scale.y,
-        0, 0,
-        back[5].texSize.x, back[5].texSize.y,
-        back[5].pivot.x, back[5].pivot.y);
-        */
     sprite_render(Between[0],
         back[5].pos.x, back[5].pos.y,
         back[5].scale.x, back[5].scale.y,
@@ -849,50 +843,60 @@ void game_tutorial() {
         timer[i] = scroll_time[i] + duration;
     }
 
-    if (game_timer == timer[0]) tutorial = true;
-    else if (game_timer == timer[1]) tutorial = true;
-    else if (game_timer == timer[2]) tutorial = true;
-    else if (game_timer == timer[3]) tutorial = true;
-    else if (game_timer == timer[4]) tutorial = true;
+    if (game_timer == 0)
+    {
+        tutorial = true;
+        tutrial_init();
+    }
+
+    if (game_timer == timer[0])
+    {
+        tutorial = true;
+        tutrial_init();
+    }
+    else if (game_timer == timer[1])
+    {
+        tutorial = true;
+        tutrial_init();
+    }
+    else if (game_timer == timer[2])
+    {
+        tutorial = true;
+        tutrial_init();
+    }
+    else if (game_timer == timer[3])
+    {
+        tutorial = true;
+        tutrial_init();
+    }
+    else if (game_timer == timer[4])
+    {
+        tutorial = true;
+        tutrial_init();
+    }
 }
 
-    /*switch (game_timer)
-    {
-    case timer[0]:
-        isPaused = true;
-        break;
-    case timer[1]:
-        isPaused = true;
-        break;
-    case timer[2]:
-        isPaused = true;
-        break;
-    case timer[3]:
-        isPaused = true;
-        break;
-    case timer[4]:
-        isPaused = true;
-        break;
-    }*/
 void tutrial_init()
 {
     tutrial_easeTimer = 0;
+    tutrial_pos = tutrial_pos_start;
+    tutrial_counter++;
 }
 
 void tutrial_render()
 {
-    VECTOR2 pos = tutrial_pos_start;
     if (tutrial_easeTimer < TUTRIAL_EASEDURATION)
     {
         tutrial_easeTimer++;
         float t = (float)tutrial_easeTimer / TUTRIAL_EASEDURATION;
-        pos.y = Easing::step(eType::EXPO_OUT, tutrial_pos_start.y, tutrial_pos_end.y, t);
+        tutrial_pos.y = Easing::step(eType::EXPO_OUT, tutrial_pos_start.y, tutrial_pos_end.y, t);
     }
-
+    Sprite* s = nullptr;
+    s = tutrial_sprite[tutrial_counter % 6];
 
     sprite_render(
-        tutrial_sprite[0],
-        pos.x, pos.y,
+        s,
+        tutrial_pos.x, tutrial_pos.y,
         1, 1,
         0, 0,
         1000, 450,
