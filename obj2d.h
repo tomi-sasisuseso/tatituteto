@@ -1,8 +1,5 @@
 #include "all.h"
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/yao2
 #ifndef OBJ2D_H
 #define OBJ2D_H
 
@@ -107,6 +104,7 @@ public:
     void square_shrink();
     void update();
 
+    int select = 1;
     /*privateにOBJ2D a[4]を入れてget関数を作って試してみたけど背景を動かすときに
     posも動かしたかったからpublicに戻した。drowで描画するときも
     getだと配列の1番目のやつしか返さないのでget関数を配列分作る必要があるの？

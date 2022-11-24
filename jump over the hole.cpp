@@ -7,7 +7,6 @@ extern OBJ2D back[MAX_GAMES];
 
 void Game5_Manager::Game5_Manager_init()
 {
-
     //////// ÉpÉâÉÅÅ[É^ÇÃê›íË ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
     music::play(0, FALSE);
@@ -62,7 +61,7 @@ void Game5_Manager::Game5_Manager_render()
     {
         texture::draw(
             TEXNO::GAME3_BG,
-            { background.pos.x + i* background.texSize.x - (game5_timer * MOVE_SPEED), background.pos.y },
+            { background.pos.x + i * background.texSize.x - (game5_timer * MOVE_SPEED), background.pos.y },
             background.scale,
             background.texPos,
             background.texSize,

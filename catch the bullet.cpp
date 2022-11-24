@@ -130,18 +130,11 @@ void Game3_Manager::circle_move()
     circle.vector_normal = { cosf(circle.angle), sinf(circle.angle) };
     product = inner_product(circle.vector_normal, bullet.vector_normal);
     //入力
-    switch (STATE(0) & (PAD_TRG3 | PAD_TRG4))
-    {
-    case PAD_TRG3:
-        circle.velocity.x += -CIRCLE_MOVESPEED;
-        break;
-    case PAD_TRG4:
-        circle.velocity.x += CIRCLE_MOVESPEED;
-        break;
-    default:
-        circle.velocity.x *= CIRCLE_DECELERATION;
-        break;
-    }
+
+    if (GetAsyncKeyState('I'))          circle.velocity.x += -CIRCLE_MOVESPEED;
+    else if (GetAsyncKeyState('K'))     circle.velocity.x += CIRCLE_MOVESPEED;
+    else    circle.velocity.x *= CIRCLE_DECELERATION;
+
     //速度の制限
     circle.velocity.x = std::clamp(circle.velocity.x, -CIRCLE_MAXSPEED, CIRCLE_MAXSPEED);
     //速度を位置に代入
@@ -195,7 +188,7 @@ void Game3_Manager::is_safe()
     //ミスをした場合
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
-        //nextScene = SCENE_SCORE;
-        bullet_init();
+        nextScene = SCENE_SCORE;
+        //bullet_init();
     }
 }

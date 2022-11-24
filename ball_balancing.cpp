@@ -30,8 +30,8 @@ void Game1_Manager::Game1_Manager_init()
     ball_init();
 
     //スプライトを読み込み
-    stage_sprite = sprite_load(L"./Data/Images/棒.png");
-    ball1_sprite = sprite_load(L"./Data/Images/ボール.png");
+    stage_sprite = sprite_load(L"./Data/Images/ゲーム1_棒.png");
+    ball1_sprite = sprite_load(L"./Data/Images/ゲーム1_ボール.png");
 }
 
 void Game1_Manager::Game1_Manager_deinit()
@@ -75,13 +75,11 @@ void Game1_Manager::Game1_Manager_update()
     stage_move();
     ball_move();
     Game1_judge();
-    
+
 }
 
 void Game1_Manager::Game1_render()
 {
-    
-
     //ステージの描画
     sprite_render(
         stage_sprite,
@@ -102,7 +100,7 @@ void Game1_Manager::Game1_render()
         ball.pivot.x, ball.pivot.y,
         ball.angle
     );
-#if 1
+#if 0
     //当たり判定
     primitive::rect(
         stage.pos,
@@ -124,8 +122,8 @@ void Game1_Manager::Game1_render()
 void Game1_Manager::stage_move()
 {
     //入力
-    if (STATE(0) & PAD_TRG1)     control = -1;
-    else if (STATE(0) & PAD_TRG2)     control = 1;
+    if (GetAsyncKeyState('A'))     control = -1;
+    else if (GetAsyncKeyState('D'))     control = 1;
     else    control = 0;
     //回転
     stage.velocity.x += control * STAGE_SPEED;
@@ -146,7 +144,8 @@ void Game1_Manager::ball_init()
     ball.texSize = { 150, 150 };
     ball.pivot = ball.texSize / 2;
     ball.angle = 0;
-    ball.Dradius = 50.0f;
+    ball.Dradius = 40.0f;
+    ball.velocity = { 0, 0 };
 
     ball.pos = stage.pos;
     ball.pos.y -= ball.texSize.y / 2;

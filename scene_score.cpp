@@ -132,7 +132,6 @@ void score_update() {
                 giveup_scale.y = Easing::step(eType::SMOOTHER_STEP_INOUT, 1.1f, 1.0f, t);
             }
         }
-
         break;
     }
     score_timer++;
@@ -228,59 +227,4 @@ void score_render()
     );
 }
 
-//ランキングの表示用（参考）
-#if 0
-//テキストを表示
-void text_render()
-{
-    const VECTOR2 base_pos = { SCREEN_W / 2 - 230, SCREEN_H / 2 - 150 };
-    const float betweenLines = 95;
-    const float show_duration = 30;
 
-    if (text_easeTimer < show_duration)
-    {
-        text_easeTimer++;
-        float t = (float)text_easeTimer / show_duration;
-        text_alpha = Easing::step(eType::LINEAR, 0, 1, t);
-    }
-
-    for (int i = 0; i < 5; i++)
-    {
-        std::string r;
-        //後ろのアルファベットを設定
-        switch (i)
-        {
-        case 0:
-            r = "st";
-            break;
-        case 1:
-            r = "nd";
-            break;
-        case 2:
-            r = "rd";
-            break;
-        case 3:
-            r = "th";
-            break;
-        case 4:
-            r = "th";
-            break;
-        }
-
-        //ランキングを表示
-        font::textOut(
-            3,
-            std::to_string(i + 1) + r,
-            { base_pos.x, base_pos.y + (i * betweenLines) },
-            { 3, 3 },
-            { 1, 1, 1, text_alpha },
-            TEXT_ALIGN::UPPER_LEFT,
-            false
-        );
-    }
-}
-#endif
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/yao2

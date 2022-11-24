@@ -6,8 +6,9 @@ extern Sprite* Game4_beruto;
 extern Sprite* Game4_hole;
 extern Sprite* Game4_box;
 
-
 extern OBJ2D back[MAX_GAMES];
+
+
 
 #define box_difference 5
 #define belt_conveyor_while 128

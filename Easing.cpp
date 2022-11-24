@@ -42,19 +42,13 @@ namespace Easing
 	{
 		//開始と終了が同じ
 		if (start == end)	return start;
-<<<<<<< HEAD
-
-
 
 		//開始と終了が同じ
 		if (start == end)	return start;
 
-
-=======
 		//開始と終了が同じ
 		if (start == end)	return start;
 
->>>>>>> origin/yao2
 		float a = start;
 		float b = end;
 
