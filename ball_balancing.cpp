@@ -164,7 +164,6 @@ void Game1_Manager::ball_move()
     {
         ball.velocity.y = 0;
 
-        debug::setString("Hit");
         while (CircleWithRotatedRectanglecollide(stage.pos, stage.pivot, -stage.angle, stage.texSize, ball.pos, ball.Dradius))
         {
             ball.pos.y -= BALL_ADJUST;
