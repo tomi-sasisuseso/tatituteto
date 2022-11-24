@@ -17,13 +17,12 @@ Sprite* ball1_sprite;
 void Game1_Manager::Game1_Manager_init()
 {
     GameLib::setBlendMode(Blender::BS_ALPHA);
-    music::play(0, FALSE);
 
     //ステージ
     stage.pos = { SCREEN_W / 2, SCREEN_H / 2 + 100 };
     stage.scale = { 1, 1 };
     stage.angle = 0;
-    stage.velocity = { 0,0 };
+    stage.velocity = { 0.2f ,0 };
     stage.texSize = { 450, 30 };
     stage.pivot = stage.texSize / 2;
 
@@ -44,38 +43,9 @@ void Game1_Manager::Game1_Manager_deinit()
 
 void Game1_Manager::Game1_Manager_update()
 {
-    //switch (title_state)
-    //{
-    //case 0:
-    //    //////// 初期設定 ////////
-    //    ball_init();
-    //    title_state++;
-
-    //    /*fallthrough*/
-    //case 1:
-    //    //////// パラメータの設定 ////////
-    //    GameLib::setBlendMode(Blender::BS_ALPHA);
-    //    music::play(0, FALSE);
-
-    //    //ステージ
-    //    stage.pos = { SCREEN_W / 2, SCREEN_H / 2 + 100 };
-    //    stage.scale = { 1, 1 };
-    //    stage.angle = 0;
-    //    stage.velocity = { 0,0 };
-    //    stage.texSize = { 450, 30 };
-    //    stage.pivot = stage.texSize / 2;
-    //    //ボール
-    //    ball1.pos = { SCREEN_W / 2, SCREEN_H / 2 - 100 };
-    //    ball1.scale = { 0.5, 0.5 };
-    //    ball1.texSize = { 150, 150 };
-    //    ball1.pivot = ball1.texSize / 2;
-    //    ball1.angle = 0;
-    //    ball1.Dradius = 50.0f;
-
     stage_move();
     ball_move();
     Game1_judge();
-
 }
 
 void Game1_Manager::Game1_render()
@@ -100,6 +70,7 @@ void Game1_Manager::Game1_render()
         ball.pivot.x, ball.pivot.y,
         ball.angle
     );
+
 #if 0
     //当たり判定
     primitive::rect(
@@ -210,7 +181,6 @@ void Game1_Manager::Game1_Manager_shrink()
 
 void Game1_Manager::Game1_judge()
 {
-    if (ball.pos.y > SCREEN_H) nextScene = SCENE_SCORE;
+    if (ball.pos.y > SCREEN_H)  missed_game[0] = true;
 }
-
 

@@ -207,7 +207,7 @@ SHOOTER::SHOOTER()
 void SHOOTER::bullet_init()
 {
     bullet_timer = 0;
-    spawnFlag = rand() % 300 + 300;
+    spawnFlag = 150;
     for (int i = 0; i < SHOT_MAX; i++)
     {
         bullet[i].parameter.scale = { 1,1 };
@@ -331,7 +331,11 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
+<<<<<<< HEAD
             nextScene = SCENE_SCORE;
+=======
+            missed_game[1] = true;
+>>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
         }
     }
 }
@@ -379,7 +383,7 @@ void Game4_Manager::Game4_Manager_init()
 
 void Game4_Manager::Game4_judge()
 {
-    //if (box.pos.y > SCREEN_H) nextScene = SCENE_SCORE;
+    if (box.pos.y > SCREEN_H)   missed_game[3] = true;
 }
 
 void Game4_Manager::hole_update()
@@ -512,7 +516,7 @@ void Game4_Manager::LivingCheck()
 void Game4_Manager::Game4_render()
 {
     sprite_render(Game4_beruto,
-        belt_conveyor.pos.x, belt_conveyor.pos.y,
+        belt_conveyor.pos.x, belt_conveyor.pos.y + 10,
         belt_conveyor.scale.x, belt_conveyor.scale.y,
         belt_conveyor.texPos.x, belt_conveyor.texPos.y,
         belt_conveyor.texSize.x, belt_conveyor.texSize.y,

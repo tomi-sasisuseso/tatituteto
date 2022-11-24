@@ -8,7 +8,6 @@ void Game3_Manager::Game3_Manager_init()
 {
     //////// パラメータの設定 ////////
     GameLib::setBlendMode(Blender::BS_ALPHA);
-    music::play(0, FALSE);
     //中心の円
     circle.pos = { back[2].pos.x + back[2].texSize.x / 2,
                    back[2].pos.y + back[2].texSize.y / 2 };   
@@ -192,7 +191,12 @@ void Game3_Manager::is_safe()
     //ミスをした場合
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
+<<<<<<< HEAD
         //nextScene = SCENE_SCORE;
         bullet_init();
+=======
+        bullet_init();
+        missed_game[2] = true;
+>>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
     }
 }

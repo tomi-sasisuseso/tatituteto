@@ -16,5 +16,5 @@ void game_update();
 void game_render();
 
 void back_update();
-extern bool godmode;
+void gameover_render();
 #endif//SCENE_GAME_H

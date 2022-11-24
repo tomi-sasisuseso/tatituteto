@@ -12,6 +12,7 @@ VECTOR2 title_str_pos_end = { 680, 780 };
 float title_alpha;
 bool isbegin;
 int title_easeTimer = INT_MAX;
+float title_volume;
 
 
 Sprite* title_background_sprite;
@@ -26,17 +27,21 @@ void Game6_Manager_init()
 
     title_str_pos = title_str_pos_start;
     title_alpha = 0.0f;
+    title_volume = 1.0f;
     isbegin = false;
 
     title_background_sprite = sprite_load(L"./Data/Images/タイトル.png");
     title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
     title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
+<<<<<<< HEAD
+=======
+
+>>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 }
 
 void Game6_Manager_deinit()
 {
     music::stop(0);
-
 }
 
 void Game6_Manager_update()
@@ -51,7 +56,7 @@ void Game6_Manager_update()
     case 1:
         //////// パラメータの設定 ////////
         GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, FALSE);
+        music::play(0, false);
 
         title_state++;
     case 2:
@@ -66,7 +71,7 @@ void Game6_Manager_update()
         {
             title_easeTimer++;
             float t = (float)title_easeTimer / TITLE_EASE_DURATION;
-            title_str_pos.x = Easing::step(eType::QUART_OUT, title_str_pos_start.x, title_str_pos_end.y, t);
+            title_str_pos.x = Easing::step(eType::BACK_OUT, title_str_pos_start.x, title_str_pos_end.y, t);
         }
 
         //文字のスプライトの切り替え
@@ -79,7 +84,13 @@ void Game6_Manager_update()
             //sound::play(XWB_MAIN, XWB_MAIN_ENTER);
         }
         //透明度を下げる
-        if (isbegin)    title_alpha += 0.02;
+        if (isbegin)
+        {
+            title_alpha += 0.02;
+            title_volume -= 0.05;
+            title_volume = std::clamp(title_volume, 0.0f, 1.0f);
+            music::setVolume(0, title_volume);
+        }
         //透明度に応じて次のシーンに
         if (title_alpha > 1.5f) nextScene = SCENE_GAME;
 

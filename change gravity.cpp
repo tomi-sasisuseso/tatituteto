@@ -1,5 +1,24 @@
 #include "all.h"
 
+<<<<<<< HEAD
+=======
+int title_state;
+int title_timer;
+
+//ƒpƒ‰ƒ[ƒ^
+const float DURATION = 60;
+const float MOVE_SPEED = 5.0f;
+const float SPAWN_POS_X = SCREEN_W + 200.0f;
+const float DESPAWN_POS_X = -100.0f;
+const float COYOTE_TIME = 20.0f;
+
+OBJ2D triangle;
+OBJ2D background;
+OBJ2D barrier;
+
+int triangle_easetimer = INT_MAX;
+VECTOR2 upperpos = CENTER, downerpos = CENTER;
+>>>>>>> a80d139273ed9634b81663bc71a553d8585a488e
 
 Sprite* background_sprite;
 Sprite* triangle_sprite;
