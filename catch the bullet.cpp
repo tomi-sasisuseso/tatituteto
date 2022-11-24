@@ -16,7 +16,7 @@ void Game3_Manager::Game3_Manager_init()
     circle.texPos = { 0,0 };
     circle.texSize = { 300,300 };
     circle.pivot = circle.texSize / 2;
-    circle.Dradius = 150;
+    circle.Dradius = 150.0f;
     circle.angle = 0;
 
     bullet_init();
