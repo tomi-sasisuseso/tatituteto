@@ -30,6 +30,7 @@
 #include "ball_balancing.h"
 #include "catch the bullet.h"
 #include "jump over the hole.h"
+#include "change gravity.h"
 
 // namespace
 using namespace GameLib;

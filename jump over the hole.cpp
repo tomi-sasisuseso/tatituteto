@@ -19,7 +19,7 @@ void Game5_Manager::Game5_Manager_init()
     background.angle = 0;
 
     //四角
-    ball3.pos = { background.pos.x + background.texSize.x / 4,
+    ball3.pos = { background.pos.x + background.texSize.x / 6,
                   SCREEN_H / 2 };
     ball3.scale = { 0.5f, 0.5f };
     ball3.texPos = { 0,0 };
@@ -104,7 +104,7 @@ void Game5_Manager::Game5_Manager_render()
 void Game5_Manager::ball_move()
 {
 
-    ball3.pos.x = background.pos.x + background.texSize.x / 4;
+    ball3.pos.x = background.pos.x + background.texSize.x / 6;
 
     //重力
     ball3.velocity.y += GRAVITY;
@@ -120,26 +120,26 @@ void Game5_Manager::ball_move()
     ball3.pos += ball3.velocity;
 
     //穴の左右の位置
-    float left = hole.pos.x - hole.pivot.x;
-    float right = hole.pos.x + hole.pivot.x;
+    float left = hole.pos.x - hole.texSize.x/2;
+    float right = hole.pos.x + hole.texSize.x / 2;
     //地面にいる場合
-    if (ball3.pos.y > floor_height) {
-        if (!left < ball3.pos.x && ball3.pos.x < right) {
+    if (ball3.pos.y > floor_height && !(left < ball3.pos.x && ball3.pos.x < right)) {
             debug::setString("onground");
             ball3.velocity.y = 0;
             ball3.pos.y = floor_height;
             is_on_floor = true;
-        }
-    }
 
+    }
         
     //空中
     else
     {
         is_on_floor = false;
     }
+    debug::setString("left :%f", left);
+    debug::setString("right :%f", right);
     //落下の判定
-    if (ball3.pos.y > BORDER_TO_FALL)   title_init();
+    if (ball3.pos.y > BORDER_TO_FALL)   Game6_Manager_init();
 }
 
 void Game5_Manager::hole_init()

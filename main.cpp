@@ -32,7 +32,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             switch (curScene)
             {
             case SCENE_TITLE:
-                title_deinit();
+                Game6_Manager_deinit();
                 break;
 
             case SCENE_GAME:
@@ -48,7 +48,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
             switch (nextScene)
             {
             case SCENE_TITLE:
-                title_init();
+                Game6_Manager_init();
                 break;
 
             case SCENE_GAME:
@@ -70,8 +70,8 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
         switch (curScene)
         {
         case SCENE_TITLE:
-            title_update();
-            title_render();
+            Game6_Manager_update();
+            Game6_Manager_render();
             break;
 
         case SCENE_GAME:
@@ -97,7 +97,7 @@ int APIENTRY wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
     switch (curScene)
     {
     case SCENE_TITLE:
-        title_deinit();
+        Game6_Manager_deinit();
         break;
 
     case SCENE_GAME:

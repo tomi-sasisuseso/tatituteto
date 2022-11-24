@@ -10,10 +10,10 @@
 //******************************************************************************
 
 // 関数のプロトタイプ宣言
-void title_init();
-void title_deinit();
-void title_update();
-void title_render();
+void Game6_Manager_init();
+void Game6_Manager_deinit();
+void Game6_Manager_update();
+void Game6_Manager_render();
 
 void ball_move();
 void hole_init();

@@ -1,129 +1,86 @@
 #include "all.h"
 
-int title_state;
-int title_timer;
-
-
-
-//ÉpÉâÉÅÅ[É^
-const float DURATION = 60;
-const float MOVE_SPEED = 5.0f;
-const float SPAWN_POS_X = SCREEN_W + 200.0f;
-const float DESPAWN_POS_X = -100.0f;
-const float COYOTE_TIME = 20.0f;
-
-OBJ2D triangle;
-OBJ2D background;
-OBJ2D barrier;
-
-int triangle_easetimer = INT_MAX;
-VECTOR2 upperpos = CENTER, downerpos = CENTER;
 
 Sprite* background_sprite;
 Sprite* triangle_sprite;
 Sprite* barrier_sprite;
 
-bool reverse = true;
-float interval = 150.0f;
+extern OBJ2D back[MAX_GAMES];
 
-void title_init()
+
+void Game6_Manager::Game6_Manager_init()
 {
-    title_state = 0;
-    title_timer = 0;
+    Game6_timer = 0;
     srand(unsigned int(time(NULL)));
+
+    //////// ÉpÉâÉÅÅ[É^ÇÃê›íË ////////
+    GameLib::setBlendMode(Blender::BS_ALPHA);
+    music::play(0, FALSE);
+    //éläp
+    triangle.scale = { 0.5f, 0.5f };
+    triangle.texPos = { 0,0 };
+    triangle.texSize = { 200, 160 };
+    triangle.pivot = triangle.texSize / 2;
+    triangle.angle = 0;
+    triangle.Dradius = 32.0f;
+
+    //îwåi
+    background.pos = back[5].pos;
+    background.scale = { 1, 1 };
+    background.texPos = { 0,0 };
+    background.texSize = { 1280, 540 };
+    background.pivot = { 0,0 };
+    background.angle = 0;
+
+    //è·äQï®
+    barrier.pos = {50000,50000};
+    barrier.scale = { 1, 1 };
+    barrier.texPos = { 0,0 };
+    barrier.texSize = { 60, 160 };
+    barrier.pivot = barrier.texSize / 2;
+    barrier.angle = 0;
+    barrier.Dradius = 32;
+
+    //èâä˙à íu
+    upperpos = { 0, (SCREEN_H / 2 + triangle.pivot.y / 2) + Stage_error };
+    downerpos = { 0, (SCREEN_H - triangle.pivot.y / 2) - Stage_error };
+    triangle.pos = downerpos;
+    triangle.pos.x = background.pos.x + background.texSize.x / 6;
+    
+    //barrier_init();
 
     background_sprite = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ6_îwåi.png");
     triangle_sprite = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ6_éOäp.png");
     barrier_sprite = sprite_load(L"./Data/Images/ÉQÅ[ÉÄ6_è·äQï®.png");
 }
 
-void title_deinit()
+void Game6_Manager::Game6_Manager_deinit()
 {
     music::stop(0);
 
+    float MOVE_SPEED = 0.0f;
     safe_delete(background_sprite);
     safe_delete(triangle_sprite);
     safe_delete(barrier_sprite);
 }
 
-void title_update()
+void Game6_Manager::Game6_Manager_update()
 {
-    switch (title_state)
-    {
-    case 0:
-        //////// èâä˙ê›íË ////////
-        title_state++;
+    background.pos = back[5].pos;
 
-        /*fallthrough*/
-    case 1:
-        //////// ÉpÉâÉÅÅ[É^ÇÃê›íË ////////
-        GameLib::setBlendMode(Blender::BS_ALPHA);
-        music::play(0, FALSE);
-        //éläp
-        triangle.scale = { 0.5f, 0.5f };
-        triangle.texPos = { 0,0 };
-        triangle.texSize = { 200, 160 };
-        triangle.pivot = triangle.texSize / 2;
-        triangle.angle = 0;
-        triangle.Dradius = 32.0f;
-        //îwåi
-        background.pos = CENTER;
-        background.scale = { 1, 1 };
-        background.texPos = { 0,0 };
-        background.texSize = { 1280, 540 };
-        background.pivot = background.texSize / 2;
-        background.angle = 0;
-        //è·äQï®
-        barrier.pos = CENTER;
-        barrier.scale = { 1, 1 };
-        barrier.texPos = { 0,0 };
-        barrier.texSize = { 60, 160 };
-        barrier.pivot = barrier.texSize / 2;
-        barrier.angle = 0;
-        barrier.Dradius = 32;
-        /*fallthrough*/
-        //èâä˙à íu
-        upperpos += {0, -background.texSize.y * 0.5f + triangle.pivot.y};
-        downerpos += {0, background.texSize.y * 0.5f - triangle.pivot.y};
-        triangle.pos = downerpos;
-        triangle.pos.x -= 500.0f;
-        barrier_init();
-
-        title_state++;
-    case 2:
-        //////// í èÌéû ////////
-        //ÉfÉoÉbÉOóp
-        debug::setString("title_state:%d", title_state);
-        debug::setString("title_timer:%d", title_timer);
-        debug::setString("Triangle Velocity: %f %f", triangle.velocity.x, triangle.velocity.y);
-        debug::setString("Triangle Position: %f %f", upperpos.y, downerpos.y);
-        debug::setString("Barrier Position: %f %f", barrier.pos.x, barrier.pos.y);
-
-        if (TRG(0) & PAD_START)
-        {
-            nextScene = SCENE_GAME;
-            break;
-        }
-
-        triangle_move();
-        barrier_move();
-        break;
-    }
-
-
-    title_timer++;
+    triangle_move();
+    barrier_move();
+    Game6_timer++;
 }
 
-void title_render()
+void Game6_Manager::Game6_Manager_render()
 {
-    // âÊñ Çê¬Ç≈ìhÇËÇ¬Ç‘Ç∑
-    GameLib::clear(0.3f, 0.5f, 1.0f);
     //îwåi
     for (int i = 0; i < 5000; i++)
     {
         sprite_render(
             background_sprite,
-            background.pos.x * i - (title_timer * MOVE_SPEED), background.pos.y,
+            background.pos.x + i * background.texSize.x - (Game6_timer * MOVE_SPEED), background.pos.y,
             background.scale.x, background.scale.y,
             background.texPos.x, background.texPos.y,
             background.texSize.x, background.texSize.y,
@@ -172,10 +129,12 @@ void title_render()
 #endif
 }
 
-void triangle_move()
+void Game6_Manager::triangle_move()
 {
+    triangle.pos.x = background.pos.x + background.texSize.x / 6;
+
     //ç∂âEÇ…îΩì]
-    if (TRG(0) & PAD_TRG1 && !(0 < triangle_easetimer && triangle_easetimer < DURATION - COYOTE_TIME))
+    if (TRG(0) & PAD_L3 && !(0 < triangle_easetimer && triangle_easetimer < DURATION - COYOTE_TIME))
     {
         reverse = !reverse;
         triangle_easetimer = 0;
@@ -198,15 +157,19 @@ void triangle_move()
     }
 }
 
-void barrier_init()
+void Game6_Manager::barrier_init()
 {
+    MOVE_SPEED = 5.0f;
+
     //è„â∫Ç«ÇøÇÁÇ©ê›íË
     int choise = rand() % 2;
+
     //â∫
     if (choise == 0)
     {
-        barrier.pos.y = SCREEN_H / 2 - interval;
+        barrier.pos.y = SCREEN_H  - interval;
     }
+
     //è„
     else
     {
@@ -216,7 +179,7 @@ void barrier_init()
     barrier.pos.x = SPAWN_POS_X;
 }
 
-void barrier_move()
+void Game6_Manager::barrier_move()
 {
     //âÊñ äOÇ…èoÇΩÇÁÉäÉXÉ|Å[Éì
     if (barrier.pos.x < DESPAWN_POS_X)

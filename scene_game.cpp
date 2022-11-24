@@ -52,6 +52,7 @@ Game1_Manager game1_manager;
 Game3_Manager game3_manager;
 Game4_Manager game4_manager;
 Game5_Manager game5_manager;
+Game6_Manager game6_manager;
 
 /*
 * 基本scene_game.cppでのクラスの呼び出しはメンバ関数のみ
@@ -83,6 +84,7 @@ void game_init()
     game4_manager.Game4_Manager_init();
 
     game5_manager.Game5_Manager_init();
+    game6_manager.Game6_Manager_init();
 
     isPaused = false;
 }
@@ -95,6 +97,7 @@ void game_deinit()
     game1_manager.Game1_Manager_deinit();
     game3_manager.Game3_Manager_deinit();
     game5_manager.Game5_Manager_deinit();
+    game6_manager.Game6_Manager_deinit();
 }
 
 //--------------------------------------
@@ -128,10 +131,6 @@ void game_update()
         Game4_hole = sprite_load(L"./Data/Images/ゲーム5_穴.png");
         Game4_beruto = sprite_load(L"Data/Images/ゲーム5_ベルトコンベア.png");*/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy2
         Back[0] = sprite_load(L"./Data/Images/ゲーム1_背景.png");
         Back[1] = sprite_load(L"./Data/Images/ゲーム2_背景.png");
         Back[2] = sprite_load(L"./Data/Images/ゲーム4_背景.png");
@@ -181,10 +180,6 @@ void game_update()
         //back[0].pivot = { 640/2,460/2 };
 
         back[1].pos = { SCREEN_W,0 };
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy2
         back[1].scale = { 1,1 };
         back[1].pivot = { 0,0 };
         back[1].texSize = { 1920, 1080 };
@@ -196,10 +191,6 @@ void game_update()
 
         //back[1].pivot = { 960 / 2, 1080 / 2 };
         //back[1].pos = { 1920 + back[1].pivot.x, 1080 / 2 };
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy2
         
         back[2].texSize = { 1920, 1080 };
         back[2].pivot = { 1920 / 2, 1080 / 2 };
@@ -248,6 +239,7 @@ void game_update()
         game3_manager.Game3_Manager_init();
         game4_manager.Game4_Manager_init();
         game5_manager.Game5_Manager_init();
+        game6_manager.Game6_Manager_init();
 
 
         game_state++;
@@ -289,9 +281,11 @@ void game_update()
         debug::setString("game5_manager.hole.pos.x:%f", game5_manager.hole.pos.x);
         debug::setString("game3_manager.bullet.pos.x:%f", game3_manager.bullet.pos.x);
         debug::setString("game3_manager.bullet.pos.y:%f", game3_manager.bullet.pos.y);
+        debug::setString("game6_manager.triangle.pos.x:%f", game6_manager.triangle.pos.x);
+        debug::setString("game6_manager.triangle.pos.y:%f", game6_manager.triangle.pos.y);
 
 
-        debug::setString("back[4].pos.x:%f", back[4].pos.x);
+        debug::setString("back[5].pos.x:%f", back[5].pos.x);
 
 #endif
 
@@ -304,7 +298,7 @@ void game_update()
 
         /////// Game2__Manager_updata ///////
 #if 1
-        VECTOR2 shot_pos[2] = { back[1].pos , back[4].pos };
+        VECTOR2 shot_pos[2] = { { back[1].pos.x , 0 },{back[4].pos.x,0} };
         float height = square.frame_getPos()-((square.frame_getTexS()/2) * square.frame_getScale()); // tex_size.y * scale
         game2_center = (back[1].pos.x + back[4].pos.x) / 2;
 
@@ -317,6 +311,7 @@ void game_update()
         game3_manager.Game3_Manager_update();
         game4_manager.Game4_Manager_update();
         game5_manager.Game5_Manager_update();
+        game6_manager.Game6_Manager_update();
 
         back_update();
         break;
@@ -380,10 +375,11 @@ void back_update() {
     }
 
     /////// 3回目のスライド処理 ///////
-    if (game_timer == 60000) scroll_timer[2] = 0;
+    if (game_timer == 600) scroll_timer[2] = 0;
     if (scroll_timer[2] < duration) {
         scroll_timer[2]++;
         float t = (float)scroll_timer[2] / duration;
+        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W/2, t);
         back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W / 2, t);
         game3_manager.Game3_Manager_slide(SCREEN_W / 4);
         game3_manager.Game3_Manager_shrink();
@@ -391,7 +387,7 @@ void back_update() {
     }
 
     /////// 4回目のスライド処理 ///////
-    if (game_timer == 80000)scroll_timer[3] = 0;
+    if (game_timer == 800)scroll_timer[3] = 0;
     if (scroll_timer[3] < duration) {
         scroll_timer[3]++;
         float t = (float)scroll_timer[3] / duration;
@@ -412,12 +408,15 @@ void back_update() {
     }
 
     /////// 5回目のスライド処理 ///////
-    if (game_timer == 100000)scroll_timer[4] = 0;
+    if (game_timer == 1000) {
+        scroll_timer[4] = 0;
+        game6_manager.barrier_init();
+    }
     if (scroll_timer[4] < duration) {
         scroll_timer[4]++;
         float t = (float)scroll_timer[4] / duration;
-        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, 0, -SCREEN_W / 6, t);
-        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W / 2, SCREEN_W / 3 - 120 / 2, t);
+        back[2].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, -SCREEN_W/2, -SCREEN_W / 4, t);
+        back[3].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W / 2, SCREEN_W / 2 - back[3].texSize.x / 2, t);
         back[5].pos.x = Easing::step(eType::SMOOTHER_STEP_OUT, SCREEN_W, SCREEN_W - SCREEN_W / 3, t);
         game3_manager.Game3_Manager_slide(SCREEN_W / 6);
     }
@@ -441,13 +440,19 @@ void game_render()
         back[4].pivot.x, back[4].pivot.y);
     
     game5_manager.Game5_Manager_render();
+    
 
+    /////// スクロールするために下に描画 ///////
+    sprite_render(Back[5],
+        back[5].pos.x, back[5].pos.y,
+        back[5].scale.x, back[5].scale.y,
+        0, 0,
+        back[5].texSize.x, back[5].texSize.y,
+        back[5].pivot.x, back[5].pivot.y);
 
-<<<<<<< HEAD
-    GameLib::clear(1,1,1);
+    game6_manager.Game6_Manager_render();
+    
 
-=======
->>>>>>> tomy2
     sprite_render(Back[0],
         back[0].pos.x, back[0].pos.y,
         back[0].scale.x,back[0].scale.y,
@@ -477,10 +482,6 @@ void game_render()
         back[1].texSize.x, back[1].texSize.y,
         back[1].pivot.x, back[1].pivot.y);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy2
     square.square_render();
     shot.shot_render();
 
@@ -517,16 +518,6 @@ void game_render()
 
     game4_manager.Game4_render();
 
-<<<<<<< HEAD
-=======
-        
->>>>>>> tomy2
-    sprite_render(Back[5],
-        back[5].pos.x, back[5].pos.y,
-        back[5].scale.x, back[5].scale.y,
-        0, 0,
-        back[5].texSize.x, back[5].texSize.y,
-        back[5].pivot.x, back[5].pivot.y);
 
 
     //ポーズ中

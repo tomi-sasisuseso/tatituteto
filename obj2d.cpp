@@ -331,14 +331,14 @@ void SHOOTER::judge(OBJ2D &obj)
     if (bullet->parameter.isLiving) {
         if (circle_collision(bullet->parameter.pos, obj.pos,
             bullet->parameter.Dradius, obj.Dradius)) {
-            //nextScene = SCENE_SCORE;
+            nextScene = SCENE_SCORE;
         }
     }
 }
 
 void Game4_Manager::Game4_Manager_update()
 {
-    belt_conveyor.pos.x = back[3].pos.x+240;
+    belt_conveyor.pos.x = back[3].pos.x+255;
     belt_conveyor.pos.y = back[3].pos.y;
     
 
@@ -384,12 +384,14 @@ void Game4_Manager::Game4_judge()
 
 void Game4_Manager::hole_update()
 {
-    if (TRG(0) & PAD_RIGHT ) {
+    if (TRG(0) & PAD_TRG4 && !animeFlag_LeftCheck) //右
+    {
         animeFlag = true;
 
     }
 
-    else if (TRG(0) & PAD_LEFT ) {
+    else if (TRG(0) & PAD_TRG3 && !animeFlag ) //左
+    {
         animeFlag_LeftCheck = true;
     }
 
@@ -439,7 +441,7 @@ void Game4_Manager::box_update()
     if (box_timer >= spwanFlag) {
         box.isLiving = true;
         box.scale = { 1,1 };
-        int r = rand() % 2;
+        int r = rand() % 1;
         if (r == 0) {
             box.pos.x = belt_conveyor.pos.x + box_difference+box.offset.x;
             box.pos.y = belt_conveyor.pos.y - box.offset.y;
@@ -461,19 +463,40 @@ void Game4_Manager::box_update()
 
 void Game4_Manager::LivingCheck()
 {
-    if (box.pos.y+box.offset.y >= hole.pos.y&&(animeFlag==true||animeFlag_LeftCheck==true)) {
-        /*
-        * 変更必要　judgh関数であなにおとせるようにする。
-        */
+   
+    if (box.pos.x < belt_conveyor.pos.x + box_difference + belt_conveyor_while + belt_conveyor_width + box.offset.x) {
+        if (box.pos.y + box.offset.y >= hole.pos.y && animeFlag_LeftCheck == true) {
+            /*
+            * 変更必要　judgh関数であなにおとせるようにする。
+            */
 
-        /////// 落ちる処理 ///////
-        fallCheck = true;
-        box.speed = { 0,0 };
-        box.pivot.x = 150 / 2;
-        box.pivot.y = 150 / 2;
-        box.scale.x *= 0.91;
-        box.scale.y *= 0.91;
+            /////// 落ちる処理 ///////
+            fallCheck = true;
+            box.speed = { 0,0 };
+            box.pivot.x = 150 / 2;
+            box.pivot.y = 150 / 2;
+            box.scale.x *= 0.91;
+            box.scale.y *= 0.91;
+        }
     }
+
+    else {
+        if (box.pos.y + box.offset.y >= hole.pos.y && animeFlag == true) {
+            /*
+            * 変更必要　judgh関数であなにおとせるようにする。
+            */
+
+            /////// 落ちる処理 ///////
+            fallCheck = true;
+            box.speed = { 0,0 };
+            box.pivot.x = 150 / 2;
+            box.pivot.y = 150 / 2;
+            box.scale.x *= 0.91;
+            box.scale.y *= 0.91;
+        }
+    }
+
+
 
     if (box.scale.x <= 0.01) {
         box.isLiving = false;

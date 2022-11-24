@@ -42,19 +42,10 @@ namespace Easing
 	{
 		//開始と終了が同じ
 		if (start == end)	return start;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> tomy2
 
 		//開始と終了が同じ
 		if (start == end)	return start;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> tomy2
 		//開始と終了が同じ
 		if (start == end)	return start;
 

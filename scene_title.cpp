@@ -19,7 +19,7 @@ Sprite* title_str_sprite;
 Sprite* title_str_load1;
 Sprite* title_str_load2;
 
-void title_init()
+void Game6_Manager_init()
 {
     title_state = 0;
     title_timer = 0;
@@ -31,19 +31,15 @@ void title_init()
     title_background_sprite = sprite_load(L"./Data/Images/ƒ^ƒCƒgƒ‹.png");
     title_str_load1 = sprite_load(L"./Data/Images/PRESS_1.png");
     title_str_load2 = sprite_load(L"./Data/Images/PRESS_2.png");
-<<<<<<< HEAD
-
-=======
->>>>>>> tomy2
 }
 
-void title_deinit()
+void Game6_Manager_deinit()
 {
     music::stop(0);
 
 }
 
-void title_update()
+void Game6_Manager_update()
 {
     switch (title_state)
     {
@@ -92,7 +88,7 @@ void title_update()
     title_timer++;
 }
 
-void title_render()
+void Game6_Manager_render()
 {
     // ‰æ–Ê‚ğÂ‚Å“h‚è‚Â‚Ô‚·
     GameLib::clear(0.3f, 0.5f, 1.0f);

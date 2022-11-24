@@ -19,7 +19,6 @@ void Game3_Manager::Game3_Manager_init()
     circle.Dradius = 150.0f;
     circle.angle = 0;
 
-    bullet_init();
     bullet.scale = { 1, 1 };
 
     circle_sprite = sprite_load(L"./Data/Images/ゲーム4_円.png");
@@ -29,6 +28,7 @@ void Game3_Manager::Game3_Manager_init()
 void Game3_Manager::Game3_Manager_deinit()
 {
     music::stop(0);
+    bullet_init();
     safe_delete(circle_sprite);
     safe_delete(bullet_sprite);
 }
@@ -78,16 +78,20 @@ void Game3_Manager::Game3_Manager_render()
         circle.angle,
         1.0f, 1.0f, 1.0f, 1.0f
     );
-    sprite_render(
-        bullet_sprite,
-        bullet.pos.x, bullet.pos.y,
-        bullet.scale.x, bullet.scale.y,
-        bullet.texPos.x, bullet.texPos.y,
-        bullet.texSize.x, bullet.texSize.y,
-        bullet.pivot.x, bullet.pivot.y,
-        bullet.angle,
-        1.0f, 1.0f, 1.0f, 1.0f
-    );
+
+    if (bullet.pos.y >= SCREEN_H / 2) {
+        sprite_render(
+            bullet_sprite,
+            bullet.pos.x, bullet.pos.y,
+            bullet.scale.x, bullet.scale.y,
+            bullet.texPos.x, bullet.texPos.y,
+            bullet.texSize.x, bullet.texSize.y,
+            bullet.pivot.x, bullet.pivot.y,
+            bullet.angle,
+            1.0f, 1.0f, 1.0f, 1.0f
+        );
+    }
+
 #if 0
     //当たり判定
     //円
@@ -154,8 +158,8 @@ void Game3_Manager::bullet_init()
 
     //位置を設定
     float angle = rand() % 360;
-    float x = (circle.pos.x) + cosf(angle) * back[3].pos.x;
-    float y = (circle.pos.y) + sinf(angle) * back[2].texSize.y;
+    float x = (circle.pos.x) + cosf(angle) * SCREEN_W;
+    float y = (circle.pos.y) + sinf(angle) * SCREEN_H;
     bullet.pos = { x, y };
 
     //カウンターをリセット
@@ -188,7 +192,7 @@ void Game3_Manager::is_safe()
     //ミスをした場合
     if (circle_collision(circle.pos, bullet.pos, circle.Dradius, bullet.Dradius) && product < SAFE_ANGLE)
     {
-        nextScene = SCENE_SCORE;
-        //bullet_init();
+        //nextScene = SCENE_SCORE;
+        bullet_init();
     }
 }
